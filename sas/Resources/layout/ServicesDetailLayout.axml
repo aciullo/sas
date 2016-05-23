@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="1"
+        android:stretchColumns="1">
+    <!-- everything you already have -->
+        <TableRow>
+            <TextView
+                android:text="Nro Solicitud:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtNroSolicitud"
+                android:enabled="true"
+                android:editable="false" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Nombre Paciente:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView5" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtNombrePaciente"
+                android:editable="false" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Edad:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView7" />
+            <EditText
+                android:id="@+id/txtEdad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Solicitante:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView8" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtSolicitante"
+                android:editable="false" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Dirección 1: "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView9" />
+            <EditText
+                android:inputType="textMultiLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtDireccion1"
+                android:editable="false" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Dirección 2: "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView9" />
+            <EditText
+                android:inputType="textMultiLine"
+                android:layout_column="1"
+                android:editable="false"
+                android:id="@+id/txtDireccion2" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Motivos: "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView9" />
+            <TableLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_column="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tableLayout1">
+                <TableRow>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMotivo1"
+                        android:editable="false" />
+                </TableRow>
+                <TableRow>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMotivo2"
+                        android:editable="false" />
+                </TableRow>
+                <TableRow>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMotivo3"
+                        android:editable="false" />
+                </TableRow>
+                <TableRow
+                    android:layout_height="42.5dp">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="42.5dp"
+                        android:id="@+id/txtOtroMotivo"
+                        android:editable="false" />
+                </TableRow>
+            </TableLayout>
+        </TableRow>
+        <TableRow>
+        </TableRow>
+        <TableLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_column="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tableLayout1">
+            <Button
+                android:text="Iniciar Servicio"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnIniciarServicio"
+                android:layout_column="1" />
+        </TableLayout>
+    </TableLayout>
+<!--   </LinearLayout>-->
+</ScrollView>
