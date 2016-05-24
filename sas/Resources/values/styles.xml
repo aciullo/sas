@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-  <style name="button_text" >
+
+  <style name="button_text">
     <item name="android:layout_width" >fill_parent</item>
     <item name="android:layout_height" >wrap_content</item>
     <item name="android:textColor" >#ffffff</item>
@@ -14,7 +15,9 @@
     <item name="android:shadowRadius" >2</item>
   </style>
 
-<style name="MyTheme" parent="@android:style/Theme.Material.Light.DarkActionBar">
+
+
+  <style name="MyTheme" parent="@android:style/Theme.Material.Light.DarkActionBar">
     <item name="android:windowNoTitle">true</item>
     <!--We will be using the toolbar so no need to show ActionBar-->
     <item name="android:windowActionBar">false</item>
@@ -26,7 +29,8 @@
     <!-- colorAccent is used as the default value for colorControlActivated
          which is used to tint widgets -->
     <item name="android:colorAccent">#FF4081</item>
-  	<!-- You can also set colorControlNormal, colorControlActivated
+    <!-- You can also set colorControlNormal, colorControlActivated
          colorControlHighlight and colorSwitchThumbNormal. -->
   </style>
+  
 </resources>

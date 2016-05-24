@@ -37,13 +37,15 @@ namespace sas
         public string codMotivo3 { get; set; }
         public string OtroMotivo { get; set; }
         public string codTipo { get; set; }
+        public string codInstitucion { get; set; }
+        public string codDesenlace { get; set; }
         /*CONSTRUCTOR*/
         public ServiciosModel(int id_solicitud, int NumeroSolicitud, DateTime  fecha_Llamado, string hora_Llamado
             , string cod_TipoServicio,string nombrePaciente, string Tel, decimal edadPaciente, string nombreSolicitante,
             string direccionReferecia, string direccionReferecia2, string numeroCasa, string referencia, string Motivo, 
             string nroSalida, string codMovil, string codChofer, string Acompañante, string observacion, string Estado, 
             string codEstado, string HoraEstado, string codMotivo1, string codMotivo2, string codMotivo3, string OtroMotivo
-           , string codTipo)
+           , string codTipo, string codInstitucion, string codDesenlace)
         {
             this.id_Solicitud = id_solicitud;
             this.NumeroSolicitud = NumeroSolicitud;
@@ -74,10 +76,10 @@ namespace sas
             this.codMotivo3 = codMotivo3;
             this.OtroMotivo = OtroMotivo;
             this.codTipo = codTipo;
+            this.codInstitucion = codInstitucion;
+            this.codDesenlace = codDesenlace;
 
-
-
-    }
+        }
 
         public int DescribeContents()
         {
@@ -115,6 +117,8 @@ namespace sas
             dest.WriteString(this.codMotivo3);
             dest.WriteString(this.OtroMotivo);
             dest.WriteString(this.codTipo);
+            dest.WriteString(this.codInstitucion);
+            dest.WriteString(this.codDesenlace);
         }
 
         [ExportField("CREATOR")]
@@ -158,7 +162,8 @@ namespace sas
                 string codMotivo3 = source.ReadString();
                 string OtroMotivo = source.ReadString();
                 string codTipo = source.ReadString();
-
+                string codInstitucion = source.ReadString();
+                string codDesenlace = source.ReadString();
 
 
                 return new ServiciosModel( id_solicitud,  NumeroSolicitud, DateTime.Parse(fecha_Llamado),  hora_Llamado
@@ -166,7 +171,7 @@ namespace sas
                  direccionReferecia,  direccionReferecia2,  numeroCasa,  referencia,  Motivo,
                 nroSalida,  codMovil,  codChofer,  Acompañante,  observacion,  Estado,
                  codEstado,  HoraEstado,  codMotivo1,  codMotivo2,  codMotivo3,  OtroMotivo
-                ,  codTipo);
+                ,  codTipo, codInstitucion, codDesenlace);
             }
 
             Java.Lang.Object[] IParcelableCreator.NewArray(int size)

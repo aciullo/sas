@@ -79,11 +79,11 @@ namespace sas
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
 
-                client.BaseAddress = new Uri("http://192.168.0.13");
+                client.BaseAddress = new Uri("http://181.120.121.221:88");
 
 
-                // string url = string.Format("/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                string url = string.Format("/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", "10", "001", "P");
+                // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
+                string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", "10", "001", "P");
 
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
@@ -142,11 +142,11 @@ namespace sas
                     HttpClient client = new HttpClient();
                     client.MaxResponseContentBufferSize = 256000;
 
-                    client.BaseAddress = new Uri("http://192.168.0.13");
+                    client.BaseAddress = new Uri("http://181.120.121.221:88");
 
 
-                    // string url = string.Format("/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                    string url = string.Format("/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", "10", "001", "P");
+                    // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
+                    string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", "10", "001", "P");
 
                     var response = await client.GetAsync(url);
                     result = response.Content.ReadAsStringAsync().Result;

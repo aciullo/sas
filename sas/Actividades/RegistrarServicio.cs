@@ -14,7 +14,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 
-namespace sas.Actividades
+namespace sas
 {
     [Activity(Label = "Registrar Servicio")]
     public class RegistrarServicio : Activity
@@ -32,6 +32,9 @@ namespace sas.Actividades
         TextView lblDescrpcionDestinoDesenlace;
         EditText txtDestinoDesenlace;
 
+        private string codEstadoRecibido = "";
+        private string codInstitucionRecibido = "";
+        private string codDesenlace = "";
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -58,31 +61,142 @@ namespace sas.Actividades
             txtNombrePaciente.Text = servicio.nombrePaciente;
             txtEdad.Text = servicio.edadPaciente.ToString();
 
+            //variables
+            codEstadoRecibido =  servicio.codEstado;
+            codInstitucionRecibido = servicio.codInstitucion;
+            codDesenlace = servicio.codDesenlace;
+
+            //mostrar botones segun ÚLTIMO estado
+            LoadStateButtons(codEstadoRecibido);
+
             btnRegistroInicial.Click += BtnRegistroInicial_Click;
             btnVolverBase.Click += BtnVolverBase_Click;
             btnRegistrarResultado.Click += BtnRegistrarResultado_Click;
             btnTranslado.Click += BtnTranslado_Click;
 
-            txtDestinoDesenlace.KeyPress += (object sender, View.KeyEventArgs e) => {
-                e.Handled = false;
-                if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
-                {
-                    //Toast.MakeText(this, txtDestinoDesenlace.Text, ToastLength.Short).Show();
-                    GetIndexDato(txtDestinoDesenlace.Text);
-                    e.Handled = true;
-                }
-            };
+            //txtDestinoDesenlace.KeyPress += async (object sender, View.KeyEventArgs e) =>
+            //{
+            //    e.Handled = false;
+            //    if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
+            //    {
+            //        //Toast.MakeText(this, txtDestinoDesenlace.Text, ToastLength.Short).Show();
+            //        await GetIndexDato(txtDestinoDesenlace.Text);
+            //        e.Handled = true;
+            //    }
+            //};
 
+            txtDestinoDesenlace.KeyPress += TxtDestinoDesenlace_KeyPress;
             txtDestinoDesenlace.FocusChange += TxtDestinoDesenlace_FocusChange;
         }
 
-        private void TxtDestinoDesenlace_FocusChange(object sender, View.FocusChangeEventArgs e)
+        private async void LoadStateButtons(string codEstadoRecibido)
+        {
+            switch (codEstadoRecibido)
+            {
+                case ("001"):
+                    btnRegistroInicial.Text = "Registrar Salida Base";
+                    break;
+                case ("002"):
+                    btnRegistroInicial.Text = "Registrar Salida Base";
+                    break;
+                case "003":
+                    btnRegistroInicial.Text = "Registrar Llegada a Servicio";
+                    break;
+                case "004":
+                    btnRegistroInicial.Enabled = false;
+                    btnVolverBase.Enabled = true;
+                    btnTranslado.Enabled = true;
+
+                    break;
+                case "005":
+                    btnRegistroInicial.Enabled = false;
+                    btnVolverBase.Enabled = false;
+                    btnTranslado.Enabled = false;
+                    btnRegistrarResultado.Visibility = ViewStates.Visible;
+                    if (string.IsNullOrEmpty(codInstitucionRecibido)&& (string.IsNullOrEmpty(codDesenlace)))
+                    {
+                        txtDestinoDesenlace.Visibility = ViewStates.Invisible;
+                        lblDestinoDesenlace.Visibility = ViewStates.Invisible;
+                        txtDestinoDesenlace.Visibility = ViewStates.Invisible;
+                        btnRegistrarResultado.Text = "Registrar Llegada a Base";
+                    }
+                    else
+                    {
+                        txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                        lblDestinoDesenlace.Visibility = ViewStates.Visible;
+                        txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                        //mostrar institucion
+                        txtDestinoDesenlace.Text = codInstitucionRecibido;
+                        await GetIndexDato(txtDestinoDesenlace.Text);
+                        btnRegistrarResultado.Text = "Registrar Llegada a Institución";
+                        txtDestinoDesenlace.Enabled = false;
+                    }
+                    break;
+                case "006":
+                    btnRegistroInicial.Enabled = false;
+                    btnVolverBase.Enabled = false;
+                    btnTranslado.Enabled = false;
+                    btnRegistrarResultado.Visibility = ViewStates.Visible;
+
+                    txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                    lblDestinoDesenlace.Visibility = ViewStates.Visible;
+                    txtDestinoDesenlace.Visibility = ViewStates.Visible;
+
+                    lblDestinoDesenlace.Text = "Institución";
+                    txtDestinoDesenlace.Text = codInstitucionRecibido;
+                    await GetIndexDato(txtDestinoDesenlace.Text);
+                    txtDestinoDesenlace.Enabled = false;
+                    btnRegistrarResultado.Text = "Registrar Salida de Institución";
+                    break;
+                case "007":
+                    btnRegistroInicial.Enabled = false;
+                    btnVolverBase.Enabled = false;
+                    btnTranslado.Enabled = false;
+                    btnRegistrarResultado.Visibility = ViewStates.Visible;
+
+                    btnRegistrarResultado.Text = "Registrar Llegada a Base";
+
+                    break;
+                case "008":
+                    btnRegistroInicial.Enabled = false;
+                    btnVolverBase.Enabled = false;
+                    btnTranslado.Enabled = false;
+                    btnRegistrarResultado.Visibility = ViewStates.Visible;
+
+                    btnRegistrarResultado.Text = "Registrar Desenlace";
+                    txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                    lblDestinoDesenlace.Visibility = ViewStates.Visible;
+                    txtDestinoDesenlace.Visibility = ViewStates.Visible;
+
+                    txtDestinoDesenlace.Enabled = true;
+
+                    lblDestinoDesenlace.Text = "Desenlace";
+
+                    txtDestinoDesenlace.Text = string.Empty;
+                    lblDescrpcionDestinoDesenlace.Text = string.Empty;
+                    break;
+
+            }
+        }
+
+        private async void TxtDestinoDesenlace_KeyPress(object sender, View.KeyEventArgs e)
+        {
+            e.Handled = false;
+            if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
+            {
+                //Toast.MakeText(this, txtDestinoDesenlace.Text, ToastLength.Short).Show();
+                await GetIndexDato(txtDestinoDesenlace.Text);
+                e.Handled = true;
+            }
+        }
+
+        private async void TxtDestinoDesenlace_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (!e.HasFocus)
             {
                 //Toast.MakeText(this, txtDestinoDesenlace.Text, ToastLength.Short).Show();
-                GetIndexDato(txtDestinoDesenlace.Text);
-               
+                await GetIndexDato(txtDestinoDesenlace.Text);
+
             }
         }
 
@@ -100,7 +214,7 @@ namespace sas.Actividades
 
             txtDestinoDesenlace.Enabled = true;
 
-            lblDestinoDesenlace.Text = "Ingresar Institución";
+            lblDestinoDesenlace.Text = "Institución";
 
             txtDestinoDesenlace.Text = string.Empty;
             lblDescrpcionDestinoDesenlace.Text = string.Empty;
@@ -120,16 +234,16 @@ namespace sas.Actividades
                 case "Registrar Salida a Base":
                     idestado = "005";
                     //volverBaseButton.BackgroundColor = Color.Green;
-                    btnRegistrarResultado.Text = "Servicio Finalizado";
-
-                    break;
-
-                case "Servicio Finalizado":
-                    idestado = "009";
-                    //volverBaseButton.BackgroundColor = Color.Purple;
+                    // btnRegistrarResultado.Text = "Servicio Finalizado";
                     btnRegistrarResultado.Text = "Registrar Llegada a Base";
-
                     break;
+
+                //case "Servicio Finalizado":
+                //    idestado = "009";
+                //    //volverBaseButton.BackgroundColor = Color.Purple;
+                //    btnRegistrarResultado.Text = "Registrar Llegada a Base";
+
+                //    break;
                 case "Registrar Llegada a Base":
                     idestado = "008";
                     // volverBaseButton.BackgroundColor = Color.Maroon;
@@ -141,7 +255,7 @@ namespace sas.Actividades
 
                     txtDestinoDesenlace.Enabled = true;
 
-                    lblDestinoDesenlace.Text = "Ingresar desenlace";
+                    lblDestinoDesenlace.Text = "Desenlace";
 
                     txtDestinoDesenlace.Text = string.Empty;
                     lblDescrpcionDestinoDesenlace.Text = string.Empty;
@@ -150,7 +264,7 @@ namespace sas.Actividades
                     break;
                 case "Registrar Desenlace":
                     await GetIndexDato(txtDestinoDesenlace.Text);
-
+                    idestado = "009";
                     if (string.IsNullOrEmpty(txtDestinoDesenlace.Text))
                     {
 
@@ -308,10 +422,10 @@ namespace sas.Actividades
                 client.MaxResponseContentBufferSize = 256000;
 
 
-                client.BaseAddress = new Uri("http://192.168.0.13");
-                //var uri = new Uri (string.Format ("http://192.168.0.13/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
+                client.BaseAddress = new Uri("http://181.120.121.221:88");
+                //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
 
-                string url = string.Format("/sas_Futura/api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", regservicio.id_Solicitud, regservicio.idestado, regservicio.hora_Llegada);
+                string url = string.Format("/api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", regservicio.id_Solicitud, regservicio.idestado, regservicio.hora_Llegada);
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
@@ -370,22 +484,22 @@ namespace sas.Actividades
                 //transladoButton.IsEnabled = false;
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
-                //	client.BaseAddress = new Uri ("http://192.168.0.13");
+                //	client.BaseAddress = new Uri ("http://181.120.121.221:88");
 
                 System.Net.Http.HttpResponseMessage response;
 
                 if (servTranslado.codProductoFinal == "Null")
                 {
-                    var uri = new Uri(string.Format("http://192.168.0.13/sas_Futura/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codServicioFinal));
+                    var uri = new Uri(string.Format("http://181.120.121.221:88/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codServicioFinal));
                     response = await client.GetAsync(uri);
                 }
                 else
                 {
-                    var uri = new Uri(string.Format("http://192.168.0.13/sas_Futura/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codServicioFinal, servTranslado.codProductoFinal));
+                    var uri = new Uri(string.Format("http://181.120.121.221:88/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codServicioFinal, servTranslado.codProductoFinal));
                     response = await client.GetAsync(uri);
 
                 }
-                //string url = string.Format ("/sas_Futura/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&IdProductoFinal={3}", servTranslado.id_Solicitud,servTranslado.NumeroSolicitud,servTranslado.codServicioFinal, servTranslado.codProductoFinal);
+                //string url = string.Format ("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&IdProductoFinal={3}", servTranslado.id_Solicitud,servTranslado.NumeroSolicitud,servTranslado.codServicioFinal, servTranslado.codProductoFinal);
                 //?idsolicitud={idsolicitud}&nrosolicitud={nrosolicitud}&destino={destino}&IdProductoFinal={IdProductoFinal}
                 //var response= await client.GetAsync(uri);
                 result = response.Content.ReadAsStringAsync().Result;
@@ -439,10 +553,10 @@ namespace sas.Actividades
                 client.MaxResponseContentBufferSize = 256000;
 
 
-                client.BaseAddress = new Uri("http://192.168.0.13");
-                //var uri = new Uri (string.Format ("http://192.168.0.13/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
+                client.BaseAddress = new Uri("http://181.120.121.221:88");
+                //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
                 string codtabla = "";
-                if (lblDestinoDesenlace.Text == "Ingresar desenlace")
+                if (lblDestinoDesenlace.Text == "Desenlace")
                 {
                     codtabla = "07";
                 }
@@ -450,7 +564,7 @@ namespace sas.Actividades
                 {
                     codtabla = "06";
                 }
-                string url = string.Format("/sas_Futura/api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
+                string url = string.Format("/api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);

@@ -37,8 +37,8 @@ namespace sas
 
             // Create your application here
              strUser = Intent.Extras.GetString("user");
-                            var deviceUser = JsonConvert.DeserializeObject<List<DeviceUserModel>>(strUser);
-                            user = deviceUser;
+             var deviceUser = JsonConvert.DeserializeObject<List<DeviceUserModel>>(strUser);
+             user = deviceUser;
           //  ActionBar.Title = "Ingreso al sistema";
 
            
@@ -53,7 +53,7 @@ namespace sas
 
             if (user != null)
             {
-                ActionBar.Title = string.Format("Bienvenid@  {0}", user[0].nombres + " " + user[0].apellidos);
+                txtTitulo.Text = string.Format("Bienvenid@  {0}", user[0].nombres + " " + user[0].apellidos);
             }
 
 
@@ -87,7 +87,7 @@ namespace sas
             // timer.Dispose();
             // Timer_Elapsed(null, null);
                 timer = new System.Timers.Timer();
-                timer.Interval = 15000;
+                timer.Interval = 150000;
                 timer.Elapsed += Timer_Elapsed;
                 timer.Start();
           
@@ -115,11 +115,11 @@ namespace sas
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
 
-                client.BaseAddress = new Uri("http://192.168.0.13");
+                client.BaseAddress = new Uri("http://181.120.121.221:88");
 
 
-                // string url = string.Format("/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                string url = string.Format("/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", user[0].codMovil.TrimEnd(), "001", "P");
+                // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
+                string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user[0].codMovil.TrimEnd(), "001", "P");
 
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
@@ -179,8 +179,8 @@ namespace sas
             // notification.ContentIntent = pendingIntent;
             nMgr.Notify(0, built.Build());
             timer.Stop();
-           // nMgr.Notify(0, notification);
-
+            // nMgr.Notify(0, notification);
+            return;
         }
         protected override async void OnStart()
         {
@@ -212,9 +212,20 @@ namespace sas
             var t = servicio[e.Position];
             //Android.Widget.Toast.MakeText(this, t.nombrePaciente, Android.Widget.ToastLength.Short).Show();
             //Console.WriteLine("Clicked on " + t.nombrePaciente);
-            var ServiciosDet = new Intent(this, typeof(ServiciosDetalle));
-            ServiciosDet.PutExtra("ServiciosDet", t);
-            StartActivity(ServiciosDet);
+            if (t.codEstado != "001" )
+            {
+                var newActivity = new Intent(this, typeof(RegistrarServicio));
+                newActivity.PutExtra("ServiciosDet", t);
+                StartActivity(newActivity);
+            }
+            else
+            {
+             var newActivity = new Intent(this, typeof(ServiciosDetalle));
+                 newActivity.PutExtra("ServiciosDet", t);
+                 StartActivity(newActivity);
+
+            }
+           
           
 
         }
@@ -232,11 +243,11 @@ namespace sas
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
 
-                client.BaseAddress = new Uri("http://192.168.0.13");
+                client.BaseAddress = new Uri("http://181.120.121.221:88");
 
 
-                // string url = string.Format("/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                string url = string.Format("/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", user[0].codMovil.TrimEnd(), "001", "P");
+                // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
+                string url = string.Format("/api/sas_ServiciosApi/00?idmovil={0}", user[0].codMovil.TrimEnd());
 
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
@@ -257,7 +268,9 @@ namespace sas
 
                 if (string.IsNullOrEmpty(result) || result == "null")
                 {
-                   // servicio = new List<ServiciosModel>();
+                    // servicio = new List<ServiciosModel>();
+                    servicio = new List<ServiciosModel>();
+
                     servicio.Clear();
                    // return;
                   

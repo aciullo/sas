@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="sas.sas" android:versionCode="1" android:versionName="1.0">
-  <uses-sdk android:minSdkVersion="16" />
-  <application android:label="sas"></application>
-  <service android:name="com.xamarin.sas" />
+	<uses-sdk android:minSdkVersion="16" />
+	<application android:label="sas"></application>
+	<service android:name="com.xamarin.sas" />
 </manifest>

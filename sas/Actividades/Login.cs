@@ -25,7 +25,7 @@ namespace sas
         {
             base.OnCreate(bundle);
 
-            ActionBar.Title = "Ingreso al sistema";
+            //ActionBar.Title = "Ingreso al sistema";
            
             // Set our view from the "main" layout resource
 
@@ -99,8 +99,8 @@ namespace sas
 
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
-                //client.BaseAddress = new Uri ("http://192.168.0.13");
-                var uri = new Uri(string.Format("http://192.168.0.13/sas_futura/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text));
+                //client.BaseAddress = new Uri ("http://181.120.121.221:88");
+                var uri = new Uri(string.Format("http://181.120.121.221:88/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text));
 
                 //string url = string.Format ("/restfull/api/personas/{0}/{1}", userEntry.Text, passwordEntry.Text);
                 var response = await client.GetAsync(uri);

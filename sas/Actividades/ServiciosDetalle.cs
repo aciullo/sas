@@ -11,7 +11,7 @@ using Android.Views;
 using Android.Widget;
 using System.Net.Http;
 using Newtonsoft.Json;
-using sas.Actividades;
+
 
 namespace sas
 {
@@ -101,10 +101,10 @@ namespace sas
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
 
-                client.BaseAddress = new Uri("http://192.168.0.13");
-                //var uri = new Uri (string.Format ("http://192.168.0.13/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
+                client.BaseAddress = new Uri("http://181.120.121.221:88");
+                //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
 
-                string url = string.Format("/sas_Futura/api/MotivosModelsApi/{0}", servicio.codMotivo1.TrimEnd());
+                string url = string.Format("/api/MotivosModelsApi/{0}", servicio.codMotivo1.TrimEnd());
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
@@ -149,10 +149,10 @@ namespace sas
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
 
-                client.BaseAddress = new Uri("http://192.168.0.13");
-                //var uri = new Uri (string.Format ("http://192.168.0.13/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
+                client.BaseAddress = new Uri("http://181.120.121.221:88");
+                //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
 
-                string url = string.Format("/sas_Futura/api/MotivosModelsApi/{0}", servicio.codMotivo2.TrimEnd());
+                string url = string.Format("/api/MotivosModelsApi/{0}", servicio.codMotivo2.TrimEnd());
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
@@ -196,10 +196,10 @@ namespace sas
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
 
-                client.BaseAddress = new Uri("http://192.168.0.13");
-                //var uri = new Uri (string.Format ("http://192.168.0.13/sas_Futura/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
+                client.BaseAddress = new Uri("http://181.120.121.221:88");
+                //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
 
-                string url = string.Format("/sas_Futura/api/MotivosModelsApi/{0}", servicio.codMotivo3.TrimEnd());
+                string url = string.Format("/api/MotivosModelsApi/{0}", servicio.codMotivo3.TrimEnd());
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
