@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace sas
 {
-    [Activity(Label = "sas", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "Ingreso al sistema", MainLauncher = true, Icon = "@drawable/icon", Theme = "@style/MyCustomTheme")]
     public class MainActivity : Activity
     {
         EditText txtUsuario;
@@ -25,7 +25,7 @@ namespace sas
         {
             base.OnCreate(bundle);
 
-            //ActionBar.Title = "Ingreso al sistema";
+           // ActionBar.Title = "Ingreso al sistema";
            
             // Set our view from the "main" layout resource
 
@@ -62,6 +62,7 @@ namespace sas
 
         private async void BtnIngresar_Click(object sender, EventArgs e)
         {
+           
 
             mProgress.Indeterminate = true;
             mProgress.Visibility = ViewStates.Visible;

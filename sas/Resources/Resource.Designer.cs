@@ -80,8 +80,8 @@ namespace sas
 			// aapt resource value: 0x7f060011
 			public const int btnRegistrarResultado = 2131099665;
 			
-			// aapt resource value: 0x7f06000e
-			public const int btnRegistroInicial = 2131099662;
+			// aapt resource value: 0x7f06000d
+			public const int btnRegistroInicial = 2131099661;
 			
 			// aapt resource value: 0x7f060010
 			public const int btnTranslado = 2131099664;
@@ -95,14 +95,14 @@ namespace sas
 			// aapt resource value: 0x7f060012
 			public const int lblDestinoDesenlace = 2131099666;
 			
-			// aapt resource value: 0x7f060008
-			public const int mProgress = 2131099656;
-			
-			// aapt resource value: 0x7f06000d
-			public const int tableLayout1 = 2131099661;
-			
 			// aapt resource value: 0x7f060000
-			public const int textView2 = 2131099648;
+			public const int mProgress = 2131099648;
+			
+			// aapt resource value: 0x7f06000c
+			public const int tableLayout1 = 2131099660;
+			
+			// aapt resource value: 0x7f06000e
+			public const int tableLayout2 = 2131099662;
 			
 			// aapt resource value: 0x7f060001
 			public const int textView3 = 2131099649;
@@ -116,8 +116,8 @@ namespace sas
 			// aapt resource value: 0x7f060006
 			public const int textView6 = 2131099654;
 			
-			// aapt resource value: 0x7f06000b
-			public const int textView7 = 2131099659;
+			// aapt resource value: 0x7f06000a
+			public const int textView7 = 2131099658;
 			
 			// aapt resource value: 0x7f060015
 			public const int textView8 = 2131099669;
@@ -137,8 +137,8 @@ namespace sas
 			// aapt resource value: 0x7f060019
 			public const int txtDireccion2 = 2131099673;
 			
-			// aapt resource value: 0x7f06000c
-			public const int txtEdad = 2131099660;
+			// aapt resource value: 0x7f06000b
+			public const int txtEdad = 2131099659;
 			
 			// aapt resource value: 0x7f06001a
 			public const int txtMotivo1 = 2131099674;
@@ -149,11 +149,11 @@ namespace sas
 			// aapt resource value: 0x7f06001c
 			public const int txtMotivo3 = 2131099676;
 			
-			// aapt resource value: 0x7f06000a
-			public const int txtNombrePaciente = 2131099658;
-			
 			// aapt resource value: 0x7f060009
-			public const int txtNroSolicitud = 2131099657;
+			public const int txtNombrePaciente = 2131099657;
+			
+			// aapt resource value: 0x7f060008
+			public const int txtNroSolicitud = 2131099656;
 			
 			// aapt resource value: 0x7f06001d
 			public const int txtOtroMotivo = 2131099677;
@@ -228,7 +228,13 @@ namespace sas
 		{
 			
 			// aapt resource value: 0x7f050001
-			public const int MyTheme = 2131034113;
+			public const int Layouts = 2131034113;
+			
+			// aapt resource value: 0x7f050002
+			public const int MyCustomTheme = 2131034114;
+			
+			// aapt resource value: 0x7f050003
+			public const int MyTheme = 2131034115;
 			
 			// aapt resource value: 0x7f050000
 			public const int button_text = 2131034112;

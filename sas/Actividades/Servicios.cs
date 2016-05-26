@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace sas
 {
-    [Activity(Label = "Servicios")]
+    [Activity(Label = "Servicios", Theme = "@style/MyCustomTheme")]
     public class Servicios  : Activity
     {
         private List<ServiciosModel> servicio;
@@ -199,7 +199,7 @@ namespace sas
             //  StartService(new Intent("com.xamarin.sas"));
             timer = new System.Timers.Timer();
             // timer.Interval = 180000;
-            timer.Interval = 30000;
+            timer.Interval = 150000;
             timer.Elapsed += Timer_Elapsed;
             // }
             timer.Start();
@@ -212,6 +212,21 @@ namespace sas
             var t = servicio[e.Position];
             //Android.Widget.Toast.MakeText(this, t.nombrePaciente, Android.Widget.ToastLength.Short).Show();
             //Console.WriteLine("Clicked on " + t.nombrePaciente);
+            var serPendientes = servicio.FindAll(x => x.codEstado != "001" && x.codEstado != "009");
+            
+            int cantidad = serPendientes.Count;
+            if (cantidad >= 1 && t.codEstado=="001")
+            {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.SetTitle("Alerta");
+                builder.SetMessage("Finalize los servicios antes de iniciar uno nuevo.");
+                builder.SetCancelable(false);
+                builder.SetPositiveButton("OK", delegate { return; });
+                builder.Show();
+                return;
+            }
+
             if (t.codEstado != "001" )
             {
                 var newActivity = new Intent(this, typeof(RegistrarServicio));
@@ -252,6 +267,10 @@ namespace sas
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
+                if (!(response.IsSuccessStatusCode))
+                {
+                    return;
+                }
 
             }
             catch (Exception ex)

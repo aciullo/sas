@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 
 namespace sas
 {
-    [Activity(Label = "Servicios Detalle")]
+    [Activity(Label = "Servicios Detalle", Theme = "@style/MyCustomTheme")]
     public class ServiciosDetalle : Activity
     {
         private ServiciosModel servicio;

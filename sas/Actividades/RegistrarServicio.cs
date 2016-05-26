@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace sas
 {
-    [Activity(Label = "Registrar Servicio")]
+    [Activity(Label = "Registrar Servicio", Theme = "@style/MyCustomTheme")]
     public class RegistrarServicio : Activity
     {
         private ServiciosModel servicio;
@@ -31,6 +31,7 @@ namespace sas
         TextView lblDestinoDesenlace;
         TextView lblDescrpcionDestinoDesenlace;
         EditText txtDestinoDesenlace;
+        ProgressBar mProgress;
 
         private string codEstadoRecibido = "";
         private string codInstitucionRecibido = "";
@@ -54,6 +55,8 @@ namespace sas
             lblDestinoDesenlace = FindViewById<TextView>(Resource.Id.lblDestinoDesenlace);
             lblDescrpcionDestinoDesenlace = FindViewById<TextView>(Resource.Id.lblDescrpcionDestinoDesenlace);
             txtDestinoDesenlace = FindViewById<EditText>(Resource.Id.txtDestinoDesenlace);
+            mProgress = FindViewById<ProgressBar>(Resource.Id.mProgress);
+            mProgress.Visibility = ViewStates.Invisible;
 
             servicio = this.Intent.GetParcelableExtra("ServiciosDet") as ServiciosModel;
 
@@ -225,7 +228,28 @@ namespace sas
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async   void BtnRegistrarResultado_Click(object sender, EventArgs e)
+        private  void BtnRegistrarResultado_Click(object sender, EventArgs e)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.SetTitle("Confirmación");
+            builder.SetMessage("Se encuetra a punto de actualizar el servicio. ¿Continuar?.");
+            builder.SetCancelable(true);
+            builder.SetPositiveButton("Si", delegate
+            {
+
+                mProgress.Indeterminate = true;
+                mProgress.Visibility = ViewStates.Visible;
+                GuardarResultados();
+
+            });
+            builder.SetNegativeButton("No", delegate { return; });
+            builder.Show();
+
+                     
+            
+        }
+
+        private async void GuardarResultados()
         {
             string idestado = "";
 
@@ -259,7 +283,7 @@ namespace sas
 
                     txtDestinoDesenlace.Text = string.Empty;
                     lblDescrpcionDestinoDesenlace.Text = string.Empty;
-                    
+
                     //volverBaseButton.IsEnabled = false;
                     break;
                 case "Registrar Desenlace":
@@ -268,7 +292,7 @@ namespace sas
                     if (string.IsNullOrEmpty(txtDestinoDesenlace.Text))
                     {
 
-                        
+
                         Toast.MakeText(this, "Debe ingresar un desenlace", ToastLength.Long).Show();
                         return;
                     }
@@ -281,7 +305,7 @@ namespace sas
                             codServicioFinal = "Null",
                             codProductoFinal = txtDestinoDesenlace.Text
                         };
-                       await actualizarInstitucionDesenlace(regservicio2);
+                        await actualizarInstitucionDesenlace(regservicio2);
                     }
 
                     Intent intent = new Intent();
@@ -305,7 +329,7 @@ namespace sas
                     {
 
                         Toast.MakeText(this, "Debe ingresar una institución", ToastLength.Long).Show();
-                      
+
                         return;
                     }
                     else
@@ -318,7 +342,7 @@ namespace sas
                             codProductoFinal = "Null"
 
                         };
-                       await actualizarInstitucionDesenlace(regservicio);
+                        await actualizarInstitucionDesenlace(regservicio);
                     }
 
                     //regTransladoButton.BackgroundColor = Color.Purple;
@@ -352,10 +376,10 @@ namespace sas
 
                 };
 
-                GuardarDatos(regservicio);
+                await GuardarDatos(regservicio);
+                mProgress.Visibility = ViewStates.Gone;
             }
         }
-
         private void BtnVolverBase_Click(object sender, EventArgs e)
         {
 
@@ -369,13 +393,32 @@ namespace sas
 
         private void BtnRegistroInicial_Click(object sender, EventArgs e)
         {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.SetTitle("Confirmación");
+            builder.SetMessage("Se encuetra a punto de actualizar el servicio. ¿Continuar?.");
+            builder.SetCancelable(true);
+            builder.SetPositiveButton("Si", delegate
+            {
+
+                mProgress.Indeterminate = true;
+                mProgress.Visibility = ViewStates.Visible;
+                GuardarEstadoInicial();
+               
+             });
+            builder.SetNegativeButton("No", delegate { return; });
+            builder.Show();
+         
+        }
+
+        private async void GuardarEstadoInicial()
+        {
             string idestado = "";
 
             switch (btnRegistroInicial.Text)
             {
                 case "Registrar Salida Base":
                     idestado = "003";
-                   // btnRegistroInicial.BackgroundTintList= Color.Navy;
+                    // btnRegistroInicial.BackgroundTintList= Color.Navy;
                     btnRegistroInicial.Text = "Registrar Llegada a Servicio";
 
                     break;
@@ -384,11 +427,11 @@ namespace sas
                     btnRegistroInicial.Enabled = false;
                     btnVolverBase.Enabled = true;
                     btnTranslado.Enabled = true;
-                                    
+
 
                     break;
                 default:
-
+                    idestado = "";
                     break;
             }
 
@@ -403,11 +446,14 @@ namespace sas
 
             };
 
-            GuardarDatos(regservicio);
+            await GuardarDatos(regservicio);
+
+            mProgress.Visibility = ViewStates.Gone;
+
         }
 
         #region "Metodos actualizacion BD"
-        private async void GuardarDatos(RegistrarServicioModel regservicio)
+        private async Task GuardarDatos(RegistrarServicioModel regservicio)
         {
 
             string result;

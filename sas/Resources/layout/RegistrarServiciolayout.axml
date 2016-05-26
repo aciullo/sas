@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    style="@style/Layouts">
     <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:shrinkColumns="1"
         android:stretchColumns="1">
     <!-- everything you already have -->
+        <TableRow>
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:id="@+id/mProgress" />
+        </TableRow>
         <TableRow>
             <TextView
                 android:text="Nro Solicitud:"
@@ -40,7 +48,7 @@
             <TextView
                 android:text="Edad:"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView7" />
             <EditText
@@ -58,36 +66,31 @@
             android:id="@+id/tableLayout1">
             <Button
                 android:text="Registrar Salida Base"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnRegistroInicial"
                 android:layout_column="1"
-                android:foregroundTint="#00ffffff" />
+                />
         </TableLayout>
         <TableLayout
-            android:minWidth="25px"
+            android:layout_weight="100"
             android:minHeight="25px"
             android:layout_column="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tableLayout1"
-            android:stretchColumns="0"
-            android:shrinkColumns="0">
+            android:id="@+id/tableLayout2">
             <TableRow>
                 <Button
-                    android:text="Registrar Vuelta a Base"
+                    android:text="Regresar a Base"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
                     android:id="@+id/btnVolverBase"
-                    android:layout_column="1"
-                    android:foregroundTint="#00ffffff"
-                    android:enabled="false" />
+                    android:layout_column="0"
+                    android:layout_weight="50"
+                     android:enabled="false" />
                 <Button
-                    android:text="Registrar Translado"
+                    android:text="Translado"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_weight="50"
                     android:id="@+id/btnTranslado"
-                    android:foregroundTint="#00ffffff"
                     android:enabled="false" />
             </TableRow>
             <Button
@@ -96,7 +99,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btnRegistrarResultado"
                 android:layout_column="2"
-                android:foregroundTint="#00ffffff"
                 android:visibility="invisible" />
             <TableLayout
                 android:minWidth="25px"
@@ -120,7 +122,7 @@
                 <TableRow>
                     <EditText
                         android:id="@+id/txtDestinoDesenlace"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="invisible" />
                 </TableRow>

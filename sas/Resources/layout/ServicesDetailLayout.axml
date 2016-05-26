@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    style="@style/Layouts">
     <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -17,11 +18,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/textView3" />
             <EditText
+                android:enabled="true"
+                android:editable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtNroSolicitud"
-                android:enabled="true"
-                android:editable="false" />
+                android:id="@+id/txtNroSolicitud" />
         </TableRow>
         <TableRow>
             <TextView
@@ -73,8 +74,8 @@
                 android:inputType="textMultiLine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtDireccion1"
-                android:editable="false" />
+                android:editable="false"
+                android:id="@+id/txtDireccion1" />
         </TableRow>
         <TableRow>
             <TextView
@@ -107,30 +108,30 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txtMotivo1"
-                        android:editable="false" />
+                        android:editable="false"
+                        android:id="@+id/txtMotivo1" />
                 </TableRow>
                 <TableRow>
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txtMotivo2"
-                        android:editable="false" />
+                        android:editable="false"
+                        android:id="@+id/txtMotivo2" />
                 </TableRow>
                 <TableRow>
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txtMotivo3"
-                        android:editable="false" />
+                        android:editable="false"
+                        android:id="@+id/txtMotivo3" />
                 </TableRow>
                 <TableRow
                     android:layout_height="42.5dp">
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="42.5dp"
-                        android:id="@+id/txtOtroMotivo"
-                        android:editable="false" />
+                        android:editable="false"
+                        android:id="@+id/txtOtroMotivo" />
                 </TableRow>
             </TableLayout>
         </TableRow>

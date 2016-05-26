@@ -41,18 +41,37 @@ namespace sas
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             var item = items[position];
-
+            string estado="";
             // SIMPLE LIST ITEM 1
             //View view = convertView;
             //if (view == null)
             //    view = context.LayoutInflater.Inflate(Android.Resource.Layout.SimpleListItem1, null);
-                //view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = item.nombrePaciente;
+            //view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = item.nombrePaciente;
 
             // SIMPLE LIST ITEM 2
-            View view = context.LayoutInflater.Inflate(Android.Resource.Layout.SimpleListItem2, null);
-            view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = item.nombrePaciente;
-            view.FindViewById<TextView>(Android.Resource.Id.Text2).Text = item.direccionReferecia;
+            //View view = context.LayoutInflater.Inflate(Android.Resource.Layout.SimpleListItem2, null);
+            //view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = item.nombrePaciente;
+            //view.FindViewById<TextView>(Android.Resource.Id.Text2).Text = item.direccionReferecia;
+            switch (item.codEstado)
+            {
+                case ("001"):
+                    estado = "Pendiente";
+                    break;
+              
+                case "009":
+                    estado = "Concluído";
+                    break;
+                default:
+                    estado = "En Proceso";
+                    break;
 
+            }
+
+            // TWO LINE LIST ITEM
+            View view = context.LayoutInflater.Inflate(Android.Resource.Layout.TwoLineListItem, null);
+            view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = estado + ", " +  item.nombrePaciente ;
+            view.FindViewById<TextView>(Android.Resource.Id.Text2).Text = item.direccionReferecia;
+         
             // SIMPLE e LIST ITEM
             // View view = context.LayoutInflater.Inflate(Android.Resource.Layout.SimpleSelectableListItem, null);
             // view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = item.Heading;

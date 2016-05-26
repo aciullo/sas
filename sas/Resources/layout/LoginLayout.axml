@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    style="@style/Layouts">
 <!--<TextView
         android:text="Ingreso al Sistema"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -10,11 +11,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView1"
         android:gravity="center_horizontal" />-->
-    <TextView
-        android:textAppearance="?android:attr/textAppearanceMedium"
+    <ProgressBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2" />
+        android:id="@+id/mProgress" />
     <TextView
         android:text="Usuario:"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -24,7 +24,9 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtUsuario" />
+        android:hint="Ingrese usuario"
+        android:id="@+id/txtUsuario"
+        android:typeface="normal" />
     <TextView
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
@@ -40,7 +42,9 @@
         android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtClave" />
+        android:hint="Ingrese clave"
+        android:id="@+id/txtClave"
+        android:typeface="normal" />
     <TextView
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
@@ -53,8 +57,4 @@
         android:id="@+id/btnIngresar"
         android:background="@drawable/blue_button"
         style="@style/button_text" />
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/mProgress" />
 </LinearLayout>
