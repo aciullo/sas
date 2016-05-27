@@ -69,8 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnRegistroInicial"
-                android:layout_column="1"
-                />
+                android:layout_column="1" />
         </TableLayout>
         <TableLayout
             android:layout_weight="100"
@@ -85,7 +84,7 @@
                     android:id="@+id/btnVolverBase"
                     android:layout_column="0"
                     android:layout_weight="50"
-                     android:enabled="false" />
+                    android:enabled="false" />
                 <Button
                     android:text="Translado"
                     android:layout_width="fill_parent"
@@ -134,6 +133,14 @@
                         android:id="@+id/lblDescrpcionDestinoDesenlace"
                         android:visibility="visible"
                         android:layout_marginRight="0.0dp" />
+                </TableRow>
+                <TableRow>
+                    <Button
+                        android:text="Buscar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnBuscar"
+                        android:background="@drawable/blue_button" />
                 </TableRow>
             </TableLayout>
         </TableLayout>

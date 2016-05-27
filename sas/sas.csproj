@@ -72,11 +72,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actividades\Buscar.cs" />
     <Compile Include="Actividades\Login.cs" />
     <Compile Include="Actividades\RegistrarServicio.cs" />
+    <Compile Include="Clases\BusquedaAdapter.cs" />
     <Compile Include="Clases\DemoMessengerService.cs" />
     <Compile Include="Clases\DemoService.cs" />
     <Compile Include="Clases\MyIntentService.cs" />
+    <Compile Include="Clases\UserSessionManager.cs" />
     <Compile Include="Models\ABMServicioModel.cs" />
     <Compile Include="Models\DeviceUserModel.cs" />
     <Compile Include="Models\MotivosModel.cs" />
@@ -105,6 +108,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\RegistrarServiciolayout.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\BuscarLayout.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

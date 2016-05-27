@@ -13,6 +13,8 @@ using Android.Graphics;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using sas.Actividades;
+using sas.Clases;
 
 namespace sas
 {
@@ -21,6 +23,7 @@ namespace sas
     {
         private ServiciosModel servicio;
         private List<SasDatosModel> sasdatos;
+        private SasDatosModel sasdatosBusqueda;
         EditText txtNroSolicitud;
         EditText txtNombrePaciente;
         EditText txtEdad;
@@ -28,10 +31,15 @@ namespace sas
         Button btnVolverBase;
         Button btnTranslado;
         Button btnRegistrarResultado;
+        Button btnBuscar;
         TextView lblDestinoDesenlace;
         TextView lblDescrpcionDestinoDesenlace;
         EditText txtDestinoDesenlace;
         ProgressBar mProgress;
+
+        UserSessionManager session;
+        string IPCONN = "";
+
 
         private string codEstadoRecibido = "";
         private string codInstitucionRecibido = "";
@@ -41,8 +49,12 @@ namespace sas
             base.OnCreate(savedInstanceState);
 
             // Create your application here
-
+            //asignar el diseño
             SetContentView(Resource.Layout.RegistrarServiciolayout);
+
+            //recuperar IP con WEBAPI
+            session = new UserSessionManager(this);
+            IPCONN = session.getAccessConn();
 
             //asignar los controles del layout
             txtNroSolicitud = FindViewById<EditText>(Resource.Id.txtNroSolicitud);
@@ -57,12 +69,27 @@ namespace sas
             txtDestinoDesenlace = FindViewById<EditText>(Resource.Id.txtDestinoDesenlace);
             mProgress = FindViewById<ProgressBar>(Resource.Id.mProgress);
             mProgress.Visibility = ViewStates.Invisible;
+            btnBuscar = FindViewById<Button>(Resource.Id.btnBuscar);
 
+            //recibir datos de la actividad predecesora
             servicio = this.Intent.GetParcelableExtra("ServiciosDet") as ServiciosModel;
+           // sasdatosBusqueda = this.Intent.GetParcelableExtra("sasDatos") as SasDatosModel;
 
+
+
+            //mostrar los datos recibidos
             txtNroSolicitud.Text = servicio.NumeroSolicitud.ToString();
             txtNombrePaciente.Text = servicio.nombrePaciente;
             txtEdad.Text = servicio.edadPaciente.ToString();
+
+
+            //mostrar de la busqueda
+            //if (sasdatosBusqueda != null)
+            //{
+            //    txtDestinoDesenlace.Text = sasdatosBusqueda.codigo;
+            //    GetIndexDato(txtDestinoDesenlace.Text);
+
+            //}
 
             //variables
             codEstadoRecibido =  servicio.codEstado;
@@ -72,6 +99,7 @@ namespace sas
             //mostrar botones segun ÚLTIMO estado
             LoadStateButtons(codEstadoRecibido);
 
+            //asignar los eventos a los controles
             btnRegistroInicial.Click += BtnRegistroInicial_Click;
             btnVolverBase.Click += BtnVolverBase_Click;
             btnRegistrarResultado.Click += BtnRegistrarResultado_Click;
@@ -90,6 +118,46 @@ namespace sas
 
             txtDestinoDesenlace.KeyPress += TxtDestinoDesenlace_KeyPress;
             txtDestinoDesenlace.FocusChange += TxtDestinoDesenlace_FocusChange;
+            btnBuscar.Click += BtnBuscar_Click;
+        }
+
+
+        protected override async void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+
+            if (resultCode == Result.Ok)
+            {
+                sasdatosBusqueda = data.GetParcelableExtra("sasDatos") as SasDatosModel;
+
+
+                if (sasdatosBusqueda != null)
+                {
+                    txtDestinoDesenlace.Text = sasdatosBusqueda.codigo;
+                    await GetIndexDato(txtDestinoDesenlace.Text);
+
+                }
+            }
+
+        }
+        private void BtnBuscar_Click(object sender, EventArgs e)
+        {
+            string codtabla="";
+            var newActivity = new Intent(this, typeof(Buscar));
+            newActivity.PutExtra("ServiciosDet", servicio);
+            if (lblDestinoDesenlace.Text == "Desenlace")
+            {
+                codtabla = "07";
+            }
+            else
+            {
+                codtabla = "06";
+            }
+
+            newActivity.PutExtra("codtabla", codtabla);
+            StartActivityForResult(newActivity,0);
+
+           // StartActivity(newActivity);
         }
 
         private async void LoadStateButtons(string codEstadoRecibido)
@@ -468,7 +536,7 @@ namespace sas
                 client.MaxResponseContentBufferSize = 256000;
 
 
-                client.BaseAddress = new Uri("http://181.120.121.221:88");
+                client.BaseAddress = new Uri(IPCONN);
                 //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
 
                 string url = string.Format("/api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", regservicio.id_Solicitud, regservicio.idestado, regservicio.hora_Llegada);
@@ -534,15 +602,17 @@ namespace sas
 
                 System.Net.Http.HttpResponseMessage response;
 
+                client.BaseAddress = new Uri(IPCONN);
+
                 if (servTranslado.codProductoFinal == "Null")
                 {
-                    var uri = new Uri(string.Format("http://181.120.121.221:88/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codServicioFinal));
-                    response = await client.GetAsync(uri);
+                    var url = string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codServicioFinal);
+                    response = await client.GetAsync(url);
                 }
                 else
                 {
-                    var uri = new Uri(string.Format("http://181.120.121.221:88/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codServicioFinal, servTranslado.codProductoFinal));
-                    response = await client.GetAsync(uri);
+                    var url = (string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codServicioFinal, servTranslado.codProductoFinal));
+                    response = await client.GetAsync(url);
 
                 }
                 //string url = string.Format ("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&IdProductoFinal={3}", servTranslado.id_Solicitud,servTranslado.NumeroSolicitud,servTranslado.codServicioFinal, servTranslado.codProductoFinal);
@@ -599,7 +669,7 @@ namespace sas
                 client.MaxResponseContentBufferSize = 256000;
 
 
-                client.BaseAddress = new Uri("http://181.120.121.221:88");
+                client.BaseAddress = new Uri(IPCONN);
                 //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
                 string codtabla = "";
                 if (lblDestinoDesenlace.Text == "Desenlace")

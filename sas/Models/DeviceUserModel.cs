@@ -55,13 +55,11 @@ namespace sas
         }
 
 
-      
-        /*CONSTRUCTOR*/
         public DeviceUserModel(string usuario,
-                         string pass,
+                        string pass,
                          string codMovil,
                          string nombres,
-                         string apellidos)
+                         string apellidos) : base()
         {
             this.usuario = usuario;
             this.pass = pass;
@@ -70,6 +68,30 @@ namespace sas
             this.apellidos = apellidos;
 
         }
+
+        /*CONSTRUCTOR*/
+        //public  DeviceUserModel(string usuario,
+        //                 string pass,
+        //                 string codMovil,
+        //                 string nombres,
+        //                 string apellidos)
+        //{
+        //    this.usuario = usuario;
+        //    this.pass = pass;
+        //    this.codMovil = codMovil;
+        //    this.nombres = nombres;
+        //    this.apellidos = apellidos;
+
+        //}
+        /*CONSTRUCTOR*/
+        //public DeviceUserModel(string nombres,
+        //                       string codMovil)
+                        
+                       
+        //{
+        //    this.codMovil = codMovil;
+        //    this.nombres = nombres;
+        // }
     }
 }
 

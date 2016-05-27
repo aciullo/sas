@@ -10,6 +10,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Threading;
+using sas.Clases;
 
 namespace sas
 {
@@ -17,43 +18,76 @@ namespace sas
     public class Servicios  : Activity
     {
         private List<ServiciosModel> servicio;
-        private List<DeviceUserModel> user;
+        private DeviceUserModel user;
         string strUser = "";
         TextView txtTitulo;
         ListView lstServicios;
         ProgressBar mProgress;
-
+        Button btnCerrarSesion;
         // private ArrayAdapter<ServiciosModel> ListAdapter;
         private System.Timers.Timer timer = new System.Timers.Timer();
-       
+
+        // Session Manager Class
+        UserSessionManager session;
+        string IPCONN = "";
         //bool isBound = false;
         //bool isConfigurationChange = false;
-       // DemoServiceBinder binder;
-       // DemoServiceConnection demoServiceConnection;
+        // DemoServiceBinder binder;
+        // DemoServiceConnection demoServiceConnection;
 
         protected override  void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            SetContentView(Resource.Layout.ServicesLayout);
+
+            // Session class instance
+            session = new UserSessionManager(this);
+
+            //Toast.MakeText(this, "User Login Status: " + session.isLoggedIn(), ToastLength.Long).Show();
+
+            /**
+        * Call this function whenever you want to check user login
+        * This will redirect user to LoginActivity is he is not
+        * logged in
+        * */
+            session.checkLogin();
+
+
+
 
             // Create your application here
-             strUser = Intent.Extras.GetString("user");
-             var deviceUser = JsonConvert.DeserializeObject<List<DeviceUserModel>>(strUser);
-             user = deviceUser;
-          //  ActionBar.Title = "Ingreso al sistema";
+            //strUser = Intent.Extras.GetString("user");
+            //var deviceUser = JsonConvert.DeserializeObject<List<DeviceUserModel>>(strUser);
+            //user = deviceUser;
+            //  ActionBar.Title = "Ingreso al sistema";
+            
+            
+            // get user data from session
+          //  Dictionary<string, string> userLOG = session.getUserDetails();
 
-           
+            //  string nombre;
+            //userLOG.TryGetValue(UserSessionManager.PREFERENCE_USER, out nombre);
+            //string codmovil;
+            //userLOG.TryGetValue(UserSessionManager.PREFERENCE_IDMOVIL, out codmovil);
+            string nombre = session.getAccessKey();
+            string codmovil = session.getAccessIdmovil();
+
+            IPCONN = session.getAccessConn();
+
+         
+            user = new DeviceUserModel("","",codmovil.ToString(),nombre.ToString(),"");
                 
           
-            SetContentView(Resource.Layout.ServicesLayout);
+            
             //user= new DeviceUserModel(user.usuario, user. pass, )
 
             mProgress = FindViewById<ProgressBar>(Resource.Id.mProgress);
             lstServicios = FindViewById<ListView>(Resource.Id.android_lstServicios);
             txtTitulo = FindViewById<TextView>(Resource.Id.txtTitulo);
-
+            btnCerrarSesion = FindViewById<Button>(Resource.Id.btnCerrarSesion);
             if (user != null)
             {
-                txtTitulo.Text = string.Format("Bienvenid@  {0}", user[0].nombres + " " + user[0].apellidos);
+                txtTitulo.Text = string.Format("Bienvenid@  {0}", user.nombres);
             }
 
 
@@ -64,6 +98,8 @@ namespace sas
             //mProgress.Visibility = ViewStates.Gone;
 
             lstServicios.ItemClick += LstServicios_ItemClick; ;
+            btnCerrarSesion.Click += BtnCerrarSesion_Click;
+            
 
             // StartService(new Intent(this, typeof(DemoService)));
 
@@ -93,6 +129,10 @@ namespace sas
           
         }
 
+        private void BtnCerrarSesion_Click(object sender, EventArgs e)
+        {
+            session.logoutUser();
+        }
 
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -115,11 +155,11 @@ namespace sas
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
 
-                client.BaseAddress = new Uri("http://181.120.121.221:88");
-
+                // client.BaseAddress = new Uri("http://181.120.121.221:88");
+                client.BaseAddress = new Uri(IPCONN);
 
                 // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user[0].codMovil.TrimEnd(), "001", "P");
+                string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
 
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
@@ -258,11 +298,12 @@ namespace sas
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
 
-                client.BaseAddress = new Uri("http://181.120.121.221:88");
-
+                // client.BaseAddress = new Uri("http://181.120.121.221:88");
+                client.BaseAddress = new Uri(IPCONN);
+               
 
                 // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                string url = string.Format("/api/sas_ServiciosApi/00?idmovil={0}", user[0].codMovil.TrimEnd());
+                string url = string.Format("/api/sas_ServiciosApi/00?idmovil={0}", user.codMovil.TrimEnd());
 
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;

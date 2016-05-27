@@ -8,6 +8,8 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using sas.Clases;
+using Android.Util;
 
 namespace sas
 {
@@ -17,9 +19,15 @@ namespace sas
         EditText txtUsuario;
         EditText txtClave;
         Button btnIngresar;
+
         private ProgressBar mProgress;
         
         private Handler mHandler = new Handler();
+
+        // Session Manager Class
+        UserSessionManager session;
+        string IPCONN = "";
+
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -35,7 +43,9 @@ namespace sas
             // and attach an event to it
             //
 
-            
+            // Session Manager
+            session = new UserSessionManager(this);
+           
 
             txtUsuario = FindViewById<EditText>(Resource.Id.txtUsuario);
              txtClave = FindViewById<EditText>(Resource.Id.txtClave);
@@ -46,7 +56,9 @@ namespace sas
 
             btnIngresar.Click += BtnIngresar_Click;
             mProgress.Visibility = ViewStates.Invisible;
-          
+
+            //session.saveAccessIP("http://192.168.0.102:88");
+            IPCONN = session.getAccessConn();
             // Start lengthy operation in a background thread
             //mProgress.Max = 100;
             //mProgress.Progress = 0;
@@ -58,6 +70,12 @@ namespace sas
             //};
 
 
+
+            if (session.isLoggedIn()){ 
+            Intent newActivity = new Intent(this, typeof(Servicios));
+
+            StartActivity(newActivity);
+            }
         }
 
         private async void BtnIngresar_Click(object sender, EventArgs e)
@@ -100,11 +118,16 @@ namespace sas
 
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
-                //client.BaseAddress = new Uri ("http://181.120.121.221:88");
-                var uri = new Uri(string.Format("http://181.120.121.221:88/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text));
 
-                //string url = string.Format ("/restfull/api/personas/{0}/{1}", userEntry.Text, passwordEntry.Text);
-                var response = await client.GetAsync(uri);
+                //client.BaseAddress = new Uri ("http://181.120.121.221:88");
+                client.BaseAddress = new Uri(IPCONN);
+
+
+               // var uri = new Uri(string.Format("http://181.120.121.221:88/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text));
+
+                string url = string.Format ("/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text);
+
+                var response = await client.GetAsync(url);
 
                 var result = response.Content.ReadAsStringAsync();
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
@@ -113,34 +136,56 @@ namespace sas
 
                 if (string.IsNullOrEmpty(result.Result) || result.Result == "null")
                 {
-
-                    Toast.MakeText(this, "Usuario o clave no validos", ToastLength.Long).Show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.SetTitle("Aviso");
+                    builder.SetMessage("Usuario o clave no válidos.");
+                    builder.SetCancelable(false);
+                    builder.SetPositiveButton("OK", delegate { return; });
+                    builder.Show();
+                    //Toast.MakeText(this, "Usuario o clave no validos", ToastLength.Long).Show();
                     btnIngresar.Enabled = true;
                     return;
                 }
 
-                Toast.MakeText(this, "Ingreso correcto", ToastLength.Long).Show();
+                Toast.MakeText(this, "Ingresando...", ToastLength.Short).Show();
+
+              
 
                 var deviceUser = JsonConvert.DeserializeObject<List<DeviceUserModel>>(result.Result);
 
 
-                Bundle valuesForActivity = new Bundle();
-                valuesForActivity.PutString("user", result.Result);
+                session.createLoginSession((deviceUser[0].nombres + " " + deviceUser[0].apellidos), deviceUser[0].codMovil);
+
+            
+                //Bundle valuesForActivity = new Bundle();
+                //valuesForActivity.PutString("user", result.Result);
                // valuesForActivity.PutStringArrayList("user", deviceUser);
                 Intent newActivity = new Intent(this, typeof(Servicios));
 
-                newActivity.PutExtras(valuesForActivity);
+                //newActivity.PutExtras(valuesForActivity);
 
                StartActivity(newActivity);
                // Toast.MakeText(this, "OK", ToastLength.Long).Show();
                 btnIngresar.Enabled = true;
+                
+                Finish();
 
             }
             catch (Exception ex)
             {
 
-                Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+                //Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.SetTitle("Aviso");
+                builder.SetMessage("No hay conexión intente más tarde");
+                builder.SetCancelable(true);
+                builder.SetPositiveButton("OK", delegate { return; });
+                builder.Show();
+
                 btnIngresar.Enabled = true;
+
+                Log.Debug("Error en login", ex.Message);
 
                 return;
             }

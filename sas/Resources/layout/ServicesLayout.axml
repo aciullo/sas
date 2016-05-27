@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
     android:minWidth="25px"
     android:minHeight="25px"
+    android:layout_height="400dp"
     style="@style/Layouts">
     <ProgressBar
         android:layout_width="match_parent"
@@ -20,6 +20,12 @@
         android:minWidth="25px"
         android:minHeight="25px"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:id="@+id/android:lstServicios" />
+    <Button
+        android:text="Cerrar Sesión"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/btnCerrarSesion"
+        android:background="@drawable/blue_button" />
 </LinearLayout>
