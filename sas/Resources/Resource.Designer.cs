@@ -71,8 +71,8 @@ namespace sas
 			// aapt resource value: 0x7f060024
 			public const int android_lstServicios = 2131099684;
 			
-			// aapt resource value: 0x7f060018
-			public const int btnBuscar = 2131099672;
+			// aapt resource value: 0x7f060017
+			public const int btnBuscar = 2131099671;
 			
 			// aapt resource value: 0x7f060025
 			public const int btnCerrarSesion = 2131099685;
@@ -83,8 +83,8 @@ namespace sas
 			// aapt resource value: 0x7f060022
 			public const int btnIniciarServicio = 2131099682;
 			
-			// aapt resource value: 0x7f060014
-			public const int btnRegistrarResultado = 2131099668;
+			// aapt resource value: 0x7f060018
+			public const int btnRegistrarResultado = 2131099672;
 			
 			// aapt resource value: 0x7f060010
 			public const int btnRegistroInicial = 2131099664;
@@ -98,11 +98,11 @@ namespace sas
 			// aapt resource value: 0x7f060000
 			public const int lblBuscar = 2131099648;
 			
-			// aapt resource value: 0x7f060017
-			public const int lblDescrpcionDestinoDesenlace = 2131099671;
+			// aapt resource value: 0x7f060016
+			public const int lblDescrpcionDestinoDesenlace = 2131099670;
 			
-			// aapt resource value: 0x7f060015
-			public const int lblDestinoDesenlace = 2131099669;
+			// aapt resource value: 0x7f060014
+			public const int lblDestinoDesenlace = 2131099668;
 			
 			// aapt resource value: 0x7f060002
 			public const int lstSasDatos = 2131099650;
@@ -143,8 +143,8 @@ namespace sas
 			// aapt resource value: 0x7f060008
 			public const int txtClave = 2131099656;
 			
-			// aapt resource value: 0x7f060016
-			public const int txtDestinoDesenlace = 2131099670;
+			// aapt resource value: 0x7f060015
+			public const int txtDestinoDesenlace = 2131099669;
 			
 			// aapt resource value: 0x7f06001c
 			public const int txtDireccion1 = 2131099676;

@@ -92,13 +92,6 @@
                     android:id="@+id/btnTranslado"
                     android:enabled="false" />
             </TableRow>
-            <Button
-                android:text="Registrar Salida a Institución"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnRegistrarResultado"
-                android:layout_column="2"
-                android:visibility="invisible" />
             <TableLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -140,9 +133,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/btnBuscar"
-                        android:background="@drawable/blue_button" />
+                        android:layout_marginBottom="0.0dp"
+                        android:layout_marginTop="0.0dp"
+                        android:visibility="invisible" />
                 </TableRow>
             </TableLayout>
+            <Button
+                android:text="Registrar Salida a Institución"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnRegistrarResultado"
+                android:layout_column="2"
+                android:visibility="invisible" />
         </TableLayout>
     </TableLayout>
 </ScrollView>

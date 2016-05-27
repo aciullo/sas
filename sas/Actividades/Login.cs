@@ -48,17 +48,19 @@ namespace sas
            
 
             txtUsuario = FindViewById<EditText>(Resource.Id.txtUsuario);
-             txtClave = FindViewById<EditText>(Resource.Id.txtClave);
-             btnIngresar = FindViewById<Button>(Resource.Id.btnIngresar);
-             mProgress = FindViewById<ProgressBar>(Resource.Id.mProgress);
+            txtClave = FindViewById<EditText>(Resource.Id.txtClave);
+            btnIngresar = FindViewById<Button>(Resource.Id.btnIngresar);
+            mProgress = FindViewById<ProgressBar>(Resource.Id.mProgress);
 
             //button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
 
             btnIngresar.Click += BtnIngresar_Click;
             mProgress.Visibility = ViewStates.Invisible;
 
-            //session.saveAccessIP("http://192.168.0.102:88");
-            IPCONN = session.getAccessConn();
+          //recuperar la base para la coneccion
+                IPCONN = session.getAccessConn();
+
+
             // Start lengthy operation in a background thread
             //mProgress.Max = 100;
             //mProgress.Progress = 0;

@@ -175,6 +175,7 @@ namespace sas
                     break;
                 case "004":
                     btnRegistroInicial.Enabled = false;
+                    btnRegistroInicial.Visibility = ViewStates.Invisible;
                     btnVolverBase.Enabled = true;
                     btnTranslado.Enabled = true;
 
@@ -183,12 +184,17 @@ namespace sas
                     btnRegistroInicial.Enabled = false;
                     btnVolverBase.Enabled = false;
                     btnTranslado.Enabled = false;
+                    btnRegistroInicial.Visibility = ViewStates.Invisible;
+                    btnVolverBase.Visibility = ViewStates.Invisible;
+                    btnTranslado.Visibility = ViewStates.Invisible;
+
                     btnRegistrarResultado.Visibility = ViewStates.Visible;
                     if (string.IsNullOrEmpty(codInstitucionRecibido)&& (string.IsNullOrEmpty(codDesenlace)))
                     {
                         txtDestinoDesenlace.Visibility = ViewStates.Invisible;
                         lblDestinoDesenlace.Visibility = ViewStates.Invisible;
                         txtDestinoDesenlace.Visibility = ViewStates.Invisible;
+                        btnBuscar.Visibility= ViewStates.Invisible;
                         btnRegistrarResultado.Text = "Registrar Llegada a Base";
                     }
                     else
@@ -196,6 +202,7 @@ namespace sas
                         txtDestinoDesenlace.Visibility = ViewStates.Visible;
                         lblDestinoDesenlace.Visibility = ViewStates.Visible;
                         txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                        btnBuscar.Visibility = ViewStates.Visible;
                         //mostrar institucion
                         txtDestinoDesenlace.Text = codInstitucionRecibido;
                         await GetIndexDato(txtDestinoDesenlace.Text);
@@ -207,11 +214,16 @@ namespace sas
                     btnRegistroInicial.Enabled = false;
                     btnVolverBase.Enabled = false;
                     btnTranslado.Enabled = false;
+                    btnRegistroInicial.Visibility = ViewStates.Invisible;
+                    btnVolverBase.Visibility = ViewStates.Invisible;
+                    btnTranslado.Visibility = ViewStates.Invisible;
+
                     btnRegistrarResultado.Visibility = ViewStates.Visible;
 
                     txtDestinoDesenlace.Visibility = ViewStates.Visible;
                     lblDestinoDesenlace.Visibility = ViewStates.Visible;
                     txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                    btnBuscar.Visibility = ViewStates.Visible;
 
                     lblDestinoDesenlace.Text = "Institución";
                     txtDestinoDesenlace.Text = codInstitucionRecibido;
@@ -223,6 +235,11 @@ namespace sas
                     btnRegistroInicial.Enabled = false;
                     btnVolverBase.Enabled = false;
                     btnTranslado.Enabled = false;
+
+                    btnRegistroInicial.Visibility = ViewStates.Invisible;
+                    btnVolverBase.Visibility = ViewStates.Invisible;
+                    btnTranslado.Visibility = ViewStates.Invisible;
+
                     btnRegistrarResultado.Visibility = ViewStates.Visible;
 
                     btnRegistrarResultado.Text = "Registrar Llegada a Base";
@@ -232,13 +249,18 @@ namespace sas
                     btnRegistroInicial.Enabled = false;
                     btnVolverBase.Enabled = false;
                     btnTranslado.Enabled = false;
+
+                    btnRegistroInicial.Visibility = ViewStates.Invisible;
+                    btnVolverBase.Visibility = ViewStates.Invisible;
+                    btnTranslado.Visibility = ViewStates.Invisible;
+
                     btnRegistrarResultado.Visibility = ViewStates.Visible;
 
                     btnRegistrarResultado.Text = "Registrar Desenlace";
                     txtDestinoDesenlace.Visibility = ViewStates.Visible;
                     lblDestinoDesenlace.Visibility = ViewStates.Visible;
                     txtDestinoDesenlace.Visibility = ViewStates.Visible;
-
+                    btnBuscar.Visibility = ViewStates.Visible;
                     txtDestinoDesenlace.Enabled = true;
 
                     lblDestinoDesenlace.Text = "Desenlace";
@@ -275,6 +297,11 @@ namespace sas
         {
             btnVolverBase.Enabled = false;
             btnTranslado.Enabled = false;
+
+            btnRegistroInicial.Visibility = ViewStates.Invisible;
+            btnVolverBase.Visibility = ViewStates.Invisible;
+            btnTranslado.Visibility = ViewStates.Invisible;
+
             btnRegistrarResultado.Text = "Registrar Salida a Institución";
             btnRegistrarResultado.Visibility = ViewStates.Visible;
           
@@ -282,7 +309,7 @@ namespace sas
             txtDestinoDesenlace.Visibility = ViewStates.Visible;
             lblDestinoDesenlace.Visibility = ViewStates.Visible;
             txtDestinoDesenlace.Visibility = ViewStates.Visible;
-
+            btnBuscar.Visibility = ViewStates.Visible;
             txtDestinoDesenlace.Enabled = true;
 
             lblDestinoDesenlace.Text = "Institución";
@@ -344,7 +371,7 @@ namespace sas
                     txtDestinoDesenlace.Visibility = ViewStates.Visible;
                     lblDestinoDesenlace.Visibility = ViewStates.Visible;
                     txtDestinoDesenlace.Visibility = ViewStates.Visible;
-
+                    btnBuscar.Visibility = ViewStates.Visible;
                     txtDestinoDesenlace.Enabled = true;
 
                     lblDestinoDesenlace.Text = "Desenlace";
@@ -457,6 +484,10 @@ namespace sas
             btnVolverBase.Enabled = false;
             btnTranslado.Enabled = false;
 
+            btnRegistroInicial.Visibility = ViewStates.Invisible;
+            btnVolverBase.Visibility = ViewStates.Invisible;
+            btnTranslado.Visibility = ViewStates.Invisible;
+
         }
 
         private void BtnRegistroInicial_Click(object sender, EventArgs e)
@@ -496,6 +527,9 @@ namespace sas
                     btnVolverBase.Enabled = true;
                     btnTranslado.Enabled = true;
 
+                    btnRegistroInicial.Visibility = ViewStates.Invisible;
+                    btnVolverBase.Visibility = ViewStates.Visible;
+                    btnTranslado.Visibility = ViewStates.Visible;
 
                     break;
                 default:
