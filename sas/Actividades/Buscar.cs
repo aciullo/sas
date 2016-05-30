@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace sas.Actividades
 {
-    [Activity(Label = "Buscar")]
+    [Activity(Label = "Buscar", Theme = "@style/MyCustomTheme")]
     public class Buscar : Activity
     {
         private ServiciosModel servicio;

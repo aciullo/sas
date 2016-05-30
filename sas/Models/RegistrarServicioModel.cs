@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite.Net.Attributes;
+using System;
 
 
 namespace sas
@@ -7,8 +8,8 @@ namespace sas
         //esta clase se utiliza para el registro local de las actividades
 
 	{
-		
-		public int id_registro { get; set; }
+        [PrimaryKey, AutoIncrement]
+        public int id_registro { get; set; }
 
 		public int id_Solicitud { get; set; }
 		public int NumeroSolicitud { get; set; }
@@ -17,9 +18,10 @@ namespace sas
 		public string idestado { get; set;}
 		//public Nullable<System.DateTime> Audit_Fecha { get; set; }
 		public string Audit_Usuario { get; set; }
+        public string idDesenlace { get; set; }
+        public string idInstitucion { get; set; }
 
-
-		public string Audit_Fecha
+        public string Audit_Fecha
 		{
 			get
 			{

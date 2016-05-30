@@ -18,7 +18,7 @@ using sas.Clases;
 
 namespace sas
 {
-    [Activity(Label = "Registrar Servicio", Theme = "@style/MyCustomTheme")]
+    [Activity(Label = "Registrar Servicio", Theme = "@style/MyCustomTheme", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class RegistrarServicio : Activity
     {
         private ServiciosModel servicio;
@@ -32,6 +32,7 @@ namespace sas
         Button btnTranslado;
         Button btnRegistrarResultado;
         Button btnBuscar;
+        Button btnRegistroLocal;
         TextView lblDestinoDesenlace;
         TextView lblDescrpcionDestinoDesenlace;
         EditText txtDestinoDesenlace;
@@ -70,6 +71,7 @@ namespace sas
             mProgress = FindViewById<ProgressBar>(Resource.Id.mProgress);
             mProgress.Visibility = ViewStates.Invisible;
             btnBuscar = FindViewById<Button>(Resource.Id.btnBuscar);
+            btnRegistroLocal = FindViewById<Button>(Resource.Id.btnRegistroLocal);
 
             //recibir datos de la actividad predecesora
             servicio = this.Intent.GetParcelableExtra("ServiciosDet") as ServiciosModel;
@@ -104,7 +106,7 @@ namespace sas
             btnVolverBase.Click += BtnVolverBase_Click;
             btnRegistrarResultado.Click += BtnRegistrarResultado_Click;
             btnTranslado.Click += BtnTranslado_Click;
-
+            btnRegistroLocal.Click += BtnRegistroLocal_Click;
             //txtDestinoDesenlace.KeyPress += async (object sender, View.KeyEventArgs e) =>
             //{
             //    e.Handled = false;
@@ -121,6 +123,11 @@ namespace sas
             btnBuscar.Click += BtnBuscar_Click;
         }
 
+        private void BtnRegistroLocal_Click(object sender, EventArgs e)
+        {
+            var newActivity = new Intent(this, typeof(RegistrarServicioLocal));
+            StartActivity(newActivity);
+        }
 
         protected override async void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
@@ -139,6 +146,23 @@ namespace sas
                 }
             }
 
+        }
+
+        public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+
+            if (newConfig.Orientation == Android.Content.Res.Orientation.Portrait)
+            {
+                Toast.MakeText(this, "Changed to portrait", ToastLength.Long).Show();
+
+               
+            }
+            else if (newConfig.Orientation == Android.Content.Res.Orientation.Landscape)
+            {
+                Toast.MakeText(this, "Changed to landscape", ToastLength.Long).Show();
+              
+            }
         }
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
@@ -393,12 +417,12 @@ namespace sas
                     }
                     else
                     {
-                        var regservicio2 = new ABMServicioModel
+                        var regservicio2 = new RegistrarServicioModel
                         {
                             id_Solicitud = servicio.id_Solicitud,
                             NumeroSolicitud = servicio.NumeroSolicitud,
-                            codServicioFinal = "Null",
-                            codProductoFinal = txtDestinoDesenlace.Text
+                            idInstitucion = "Null",
+                            idDesenlace = txtDestinoDesenlace.Text
                         };
                         await actualizarInstitucionDesenlace(regservicio2);
                     }
@@ -429,12 +453,12 @@ namespace sas
                     }
                     else
                     {
-                        var regservicio = new ABMServicioModel
+                        var regservicio = new RegistrarServicioModel
                         {
                             id_Solicitud = servicio.id_Solicitud,
                             NumeroSolicitud = servicio.NumeroSolicitud,
-                            codServicioFinal = txtDestinoDesenlace.Text,
-                            codProductoFinal = "Null"
+                            idInstitucion = txtDestinoDesenlace.Text,
+                            idDesenlace = "Null"
 
                         };
                         await actualizarInstitucionDesenlace(regservicio);
@@ -581,11 +605,11 @@ namespace sas
                 if (result.Contains("Error"))
                 {
                     Toast.MakeText(this, "Error", ToastLength.Long).Show();
-                   
-                    //using (var datos = new DataAccess())
-                    //{
-                    //    datos.InsertEmpleado(regservicio);
-                    //}
+
+                    using (var datos = new DataAccess())
+                    {
+                        datos.InsertServicio(regservicio);
+                    }
 
 
                 }
@@ -595,13 +619,13 @@ namespace sas
             catch (Exception ex)
             {
                 Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
-                
-                //using (var datos = new DataAccess())
-                //{
-                //    datos.InsertEmpleado(regservicio);
-                //}
 
-              
+                using (var datos = new DataAccess())
+                {
+                    datos.InsertServicio(regservicio);
+                }
+
+
 
 
                 return;
@@ -616,7 +640,7 @@ namespace sas
         }
 
 
-        private async Task actualizarInstitucionDesenlace(ABMServicioModel servTranslado)
+        private async Task actualizarInstitucionDesenlace(RegistrarServicioModel servTranslado)
         {
 
             string result;
@@ -638,14 +662,14 @@ namespace sas
 
                 client.BaseAddress = new Uri(IPCONN);
 
-                if (servTranslado.codProductoFinal == "Null")
+                if (servTranslado.idDesenlace == "Null")
                 {
-                    var url = string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codServicioFinal);
+                    var url = string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.idDesenlace);
                     response = await client.GetAsync(url);
                 }
                 else
                 {
-                    var url = (string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codServicioFinal, servTranslado.codProductoFinal));
+                    var url = (string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.idInstitucion, servTranslado.idDesenlace));
                     response = await client.GetAsync(url);
 
                 }
@@ -662,10 +686,10 @@ namespace sas
                 {
                     Toast.MakeText(this, "Error", ToastLength.Long).Show();
 
-                    //using (var datos = new DataAccess())
-                    //{
-                    //    datos.InsertEmpleado(regservicio);
-                    //}
+                    using (var datos = new DataAccess())
+                    {
+                        datos.InsertServicio(servTranslado);
+                    }
 
 
                 }
@@ -676,6 +700,11 @@ namespace sas
                 Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
                 // transladoButton.IsEnabled = true;
                 // waitActivityIndicator.IsRunning = false;
+                using (var datos = new DataAccess())
+                {
+                    datos.InsertServicio(servTranslado);
+                }
+
                 return;
             }
 

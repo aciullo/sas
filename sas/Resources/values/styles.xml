@@ -24,7 +24,10 @@
   
   <!-- Define a custom theme that derives from the light Material Theme -->
   <style name="MyCustomTheme" parent="android:Theme.Holo.Light">
-
+   
+   <!--  <item name="android:windowNoTitle">true</item>
+   We will be using the toolbar so no need to show ActionBar
+    <item name="android:windowActionBar">false</item>-->
   
     <!-- Override the app bar color 
     <item name="android:colorPrimary">#3498DB</item>-->

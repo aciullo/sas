@@ -13,7 +13,7 @@ using Android.Util;
 
 namespace sas
 {
-    [Activity(Label = "Ingreso al sistema", MainLauncher = true, Icon = "@drawable/icon", Theme = "@style/MyCustomTheme")]
+    [Activity(Label = "sas", MainLauncher = true, Icon = "@drawable/icon", Theme = "@style/MyCustomTheme")]
     public class MainActivity : Activity
     {
         EditText txtUsuario;
@@ -77,7 +77,9 @@ namespace sas
             Intent newActivity = new Intent(this, typeof(Servicios));
 
             StartActivity(newActivity);
+                Finish();
             }
+          
         }
 
         private async void BtnIngresar_Click(object sender, EventArgs e)

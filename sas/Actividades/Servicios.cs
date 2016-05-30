@@ -14,7 +14,7 @@ using sas.Clases;
 
 namespace sas
 {
-    [Activity(Label = "Servicios", Theme = "@style/MyCustomTheme")]
+    [Activity(Label = "Servicios", Theme = "@style/MyCustomTheme", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class Servicios  : Activity
     {
         private List<ServiciosModel> servicio;
@@ -39,6 +39,10 @@ namespace sas
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.ServicesLayout);
+           // var toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
+
+            //Toolbar will now take on default Action Bar characteristics
+          //  SetActionBar(toolbar);
 
             // Session class instance
             session = new UserSessionManager(this);
@@ -122,13 +126,27 @@ namespace sas
             //timer.Stop();
             // timer.Dispose();
             // Timer_Elapsed(null, null);
-                timer = new System.Timers.Timer();
-                timer.Interval = 150000;
-                timer.Elapsed += Timer_Elapsed;
-                timer.Start();
+                //timer = new System.Timers.Timer();
+                //timer.Interval = 150000;
+                //timer.Elapsed += Timer_Elapsed;
+                //timer.Start();
           
         }
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.home, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            //Toast.MakeText(this, "Top ActionBar pressed: " + item.TitleFormatted, ToastLength.Short).Show();
 
+            session.logoutUser();
+            return base.OnOptionsItemSelected(item);
+
+
+
+        }
         private void BtnCerrarSesion_Click(object sender, EventArgs e)
         {
             session.logoutUser();
@@ -169,7 +187,7 @@ namespace sas
             catch (Exception ex)
             {
 
-                Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+                Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
 
                 return;
             }
@@ -239,7 +257,7 @@ namespace sas
             //  StartService(new Intent("com.xamarin.sas"));
             timer = new System.Timers.Timer();
             // timer.Interval = 180000;
-            timer.Interval = 150000;
+            timer.Interval = 180000;
             timer.Elapsed += Timer_Elapsed;
             // }
             timer.Start();

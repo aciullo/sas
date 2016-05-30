@@ -33,9 +33,10 @@ namespace sas.Clases
             this.mContext = context;
             mSharedPrefs = PreferenceManager.GetDefaultSharedPreferences(mContext);
             mPrefsEditor = mSharedPrefs.Edit();
-            if (string.IsNullOrEmpty(getAccessConn()))
+            string conn = "http://sas.futura.com.py:88";
+            if (string.IsNullOrEmpty(getAccessConn()) || getAccessConn()!= conn)
             {
-                saveAccessIP("http://192.168.0.102:88");
+                saveAccessIP(conn);
             }
             
 

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:local="http://schemas.android.com/apk/res-auto">
+  <item
+       android:id="@+id/menu_share"
+      
+       android:title="Cerrar Sesión"
+       />
+  <!--Meter esta linea en item para asignarle un icono android:showAsAction="ifRoom"-->
+  <!--android:icon="@drawable/ic_action_social_share"-->
+</menu>

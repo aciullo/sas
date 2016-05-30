@@ -15,8 +15,8 @@
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -75,10 +75,13 @@
     <Compile Include="Actividades\Buscar.cs" />
     <Compile Include="Actividades\Login.cs" />
     <Compile Include="Actividades\RegistrarServicio.cs" />
+    <Compile Include="Actividades\RegistrarServicioLocal.cs" />
     <Compile Include="Clases\BusquedaAdapter.cs" />
+    <Compile Include="Clases\DataAccess.cs" />
     <Compile Include="Clases\DemoMessengerService.cs" />
     <Compile Include="Clases\DemoService.cs" />
     <Compile Include="Clases\MyIntentService.cs" />
+    <Compile Include="Clases\RegistroServicioLocalAdapter.cs" />
     <Compile Include="Clases\UserSessionManager.cs" />
     <Compile Include="Models\ABMServicioModel.cs" />
     <Compile Include="Models\DeviceUserModel.cs" />
@@ -113,6 +116,16 @@
     <AndroidResource Include="Resources\layout\BuscarLayout.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\toolBarLayout.axml" />
+    <AndroidResource Include="Resources\layout\toolbar2.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\ServicioLocalView.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\RegistroServiciosLocal.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml">
@@ -133,9 +146,14 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\notification.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\home.xml" />
+  </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values-v21\styles.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\photo_edit.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
