@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SasAndroid", "SasAndroid\Sa
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SasSharedCode", "SasSharedCode\SasSharedCode.shproj", "{579BD547-2865-4254-B242-8EB4DDB25288}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SasService", "SasService\SasService.csproj", "{03410D10-A679-406D-B2F4-6C551DF6680C}"
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SasSharedCode\SasSharedCode.projitems*{579bd547-2865-4254-b242-8eb4ddb25288}*SharedItemsImports = 13
@@ -25,12 +23,6 @@ Global
 		{B9D91D16-8AFD-4970-84C0-0D51C330B00E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9D91D16-8AFD-4970-84C0-0D51C330B00E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9D91D16-8AFD-4970-84C0-0D51C330B00E}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{03410D10-A679-406D-B2F4-6C551DF6680C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03410D10-A679-406D-B2F4-6C551DF6680C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03410D10-A679-406D-B2F4-6C551DF6680C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{03410D10-A679-406D-B2F4-6C551DF6680C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03410D10-A679-406D-B2F4-6C551DF6680C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03410D10-A679-406D-B2F4-6C551DF6680C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
