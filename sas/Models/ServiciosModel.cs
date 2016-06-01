@@ -2,6 +2,7 @@
 using System;
 using Android.Runtime;
 using Java.Interop;
+using SQLite.Net.Attributes;
 
 namespace sas
 {
@@ -10,9 +11,8 @@ namespace sas
     {
         public int id_Solicitud { get; set; }
         public int NumeroSolicitud { get; set; }
-        public Nullable<System.DateTime> fecha_Llamado { get; set; }
+        public DateTime fecha_Llamado { get; set; }
         public string hora_Llamado { get; set; }
-        public string cod_TipoServicio { get; set; }
         public string nombrePaciente { get; set; }
         public string Tel { get; set; }
         public decimal edadPaciente { get; set; }
@@ -39,19 +39,20 @@ namespace sas
         public string codTipo { get; set; }
         public string codInstitucion { get; set; }
         public string codDesenlace { get; set; }
+        public string producto { get; set; }
+
         /*CONSTRUCTOR*/
         public ServiciosModel(int id_solicitud, int NumeroSolicitud, DateTime  fecha_Llamado, string hora_Llamado
-            , string cod_TipoServicio,string nombrePaciente, string Tel, decimal edadPaciente, string nombreSolicitante,
+            , string nombrePaciente, string Tel, decimal edadPaciente, string nombreSolicitante,
             string direccionReferecia, string direccionReferecia2, string numeroCasa, string referencia, string Motivo, 
             string nroSalida, string codMovil, string codChofer, string Acompañante, string observacion, string Estado, 
             string codEstado, string HoraEstado, string codMotivo1, string codMotivo2, string codMotivo3, string OtroMotivo
-           , string codTipo, string codInstitucion, string codDesenlace)
+           , string codTipo, string codInstitucion, string codDesenlace, string producto)
         {
             this.id_Solicitud = id_solicitud;
             this.NumeroSolicitud = NumeroSolicitud;
             this.fecha_Llamado = fecha_Llamado;
             this.hora_Llamado = hora_Llamado;
-            this.cod_TipoServicio = cod_TipoServicio;
             this.nombrePaciente = nombrePaciente;
             this.Tel = Tel;
             this.edadPaciente = edadPaciente;
@@ -78,7 +79,7 @@ namespace sas
             this.codTipo = codTipo;
             this.codInstitucion = codInstitucion;
             this.codDesenlace = codDesenlace;
-
+            this.producto = producto;
         }
 
         public int DescribeContents()
@@ -92,7 +93,6 @@ namespace sas
             dest.WriteInt(NumeroSolicitud);
             dest.WriteString(this.fecha_Llamado.ToString());
             dest.WriteString(this.hora_Llamado);
-            dest.WriteString(this.cod_TipoServicio);
             dest.WriteString(this.nombrePaciente);
             dest.WriteString(this.Tel);
             dest.WriteString(this.edadPaciente.ToString());
@@ -119,6 +119,7 @@ namespace sas
             dest.WriteString(this.codTipo);
             dest.WriteString(this.codInstitucion);
             dest.WriteString(this.codDesenlace);
+            dest.WriteString(this.producto);
         }
 
         [ExportField("CREATOR")]
@@ -164,14 +165,14 @@ namespace sas
                 string codTipo = source.ReadString();
                 string codInstitucion = source.ReadString();
                 string codDesenlace = source.ReadString();
-
+                string producto = source.ReadString();
 
                 return new ServiciosModel( id_solicitud,  NumeroSolicitud, DateTime.Parse(fecha_Llamado),  hora_Llamado
-                ,  cod_TipoServicio,  nombrePaciente,  Tel, decimal.Parse(edadPaciente),  nombreSolicitante,
+                ,   nombrePaciente,  Tel, decimal.Parse(edadPaciente),  nombreSolicitante,
                  direccionReferecia,  direccionReferecia2,  numeroCasa,  referencia,  Motivo,
                 nroSalida,  codMovil,  codChofer,  Acompañante,  observacion,  Estado,
                  codEstado,  HoraEstado,  codMotivo1,  codMotivo2,  codMotivo3,  OtroMotivo
-                ,  codTipo, codInstitucion, codDesenlace);
+                ,  codTipo, codInstitucion, codDesenlace, producto);
             }
 
             Java.Lang.Object[] IParcelableCreator.NewArray(int size)

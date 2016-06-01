@@ -13,11 +13,11 @@ using sas;
 using sas.Core;
 namespace sas.Clases
 {
-    class RegistroServicioLocalAdapter : BaseAdapter <ServicioLocal>
+    class DetServicioLocalAdapter : BaseAdapter <ServicioLocal>
     {
         IList<ServicioLocal> items;
         Activity context;
-        public RegistroServicioLocalAdapter(Activity context, IList<ServicioLocal> items)
+        public DetServicioLocalAdapter(Activity context, IList<ServicioLocal> items)
         : base()
          {
             this.context = context;

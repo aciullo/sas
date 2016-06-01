@@ -73,11 +73,12 @@ namespace sas
 
 
 
-            if (session.isLoggedIn()){ 
-            Intent newActivity = new Intent(this, typeof(Servicios));
+            if (session.isLoggedIn())
+            { 
+                    Intent newActivity = new Intent(this, typeof(Servicios));
 
-            StartActivity(newActivity);
-                Finish();
+                    StartActivity(newActivity);
+                    Finish();
             }
           
         }

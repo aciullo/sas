@@ -26,6 +26,34 @@
         </TableRow>
         <TableRow>
             <TextView
+                android:text="Hora Llamada:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3" />
+            <EditText
+                android:enabled="true"
+                android:editable="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtHoraLlamada" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Tipo:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3" />
+            <EditText
+                android:enabled="true"
+                android:editable="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtTipo" />
+        </TableRow>
+        <TableRow>
+            <TextView
                 android:text="Nombre Paciente:"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
@@ -65,7 +93,7 @@
         </TableRow>
         <TableRow>
             <TextView
-                android:text="Dirección 1: "
+                android:text="Dirección:"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,17 +106,6 @@
                 android:id="@+id/txtDireccion1" />
         </TableRow>
         <TableRow>
-            <TextView
-                android:text="Dirección 2: "
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView9" />
-            <EditText
-                android:inputType="textMultiLine"
-                android:layout_column="1"
-                android:editable="false"
-                android:id="@+id/txtDireccion2" />
         </TableRow>
         <TableRow>
             <TextView
@@ -106,36 +123,13 @@
                 android:id="@+id/tableLayout1">
                 <TableRow>
                     <EditText
+                        android:inputType="textMultiLine"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
                         android:id="@+id/txtMotivo1" />
                 </TableRow>
-                <TableRow>
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:id="@+id/txtMotivo2" />
-                </TableRow>
-                <TableRow>
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:id="@+id/txtMotivo3" />
-                </TableRow>
-                <TableRow
-                    android:layout_height="42.5dp">
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="42.5dp"
-                        android:editable="false"
-                        android:id="@+id/txtOtroMotivo" />
-                </TableRow>
             </TableLayout>
-        </TableRow>
-        <TableRow>
         </TableRow>
         <TableLayout
             android:minWidth="25px"

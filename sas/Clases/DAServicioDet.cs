@@ -6,12 +6,12 @@ using SQLite.Net.Interop;
 
 namespace sas
 {
-	public class DataAccess: IDisposable
+	public class DAServicioDet: IDisposable
 	{
 		private SQLiteConnection connection;
         private string directorioDB;
         private ISQLitePlatform plataforma;
-        public DataAccess()
+        public DAServicioDet()
 		{
 
             

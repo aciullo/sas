@@ -28,7 +28,7 @@ namespace sas.Actividades
             listView = FindViewById<ListView>(Resource.Id.List); // get reference to the ListView in the layout
                                                                  // populate the listview with data
 
-            using (var datos = new DataAccess())
+            using (var datos = new DAServicioDet())
             {
                 listView.Adapter = new RegistroServicioLocalAdapter(this, datos.GetServicios());
             }
@@ -43,14 +43,14 @@ namespace sas.Actividades
             try
             {
               var t = new List<RegistrarServicioModel>();
-                        using (var datos = new DataAccess())
+                        using (var datos = new DAServicioDet())
                         {
                             t = datos.GetServicios();
                         }
           
                        var itemEliminar= t[e.Position];
 
-                        using (var datos = new DataAccess())
+                        using (var datos = new DAServicioDet())
                         {
                             datos.DeleteServicio(itemEliminar);
                         }
@@ -61,7 +61,7 @@ namespace sas.Actividades
                 return;
             }
             Toast.MakeText(this, "Servicio borrado correctamente", ToastLength.Long).Show();
-            using (var datos = new DataAccess())
+            using (var datos = new DAServicioDet())
             {
                 listView.Adapter = new RegistroServicioLocalAdapter(this, datos.GetServicios());
             }

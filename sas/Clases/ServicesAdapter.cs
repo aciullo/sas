@@ -9,16 +9,17 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using sas.Core;
 
 namespace sas
 {
 
-    public class ServicesAdapter : BaseAdapter<ServiciosModel>
+    public class ServicesAdapter : BaseAdapter<ServicioLocal>
     {
-        List<ServiciosModel> items;
+        IList<ServicioLocal> items;
         Activity context;
 
-        public ServicesAdapter(Activity context, List<ServiciosModel> items)
+        public ServicesAdapter(Activity context, IList<ServicioLocal> items)
             : base()
         {
             this.context = context;
@@ -28,7 +29,7 @@ namespace sas
         {
             return position;
         }
-        public override ServiciosModel this[int position]
+        public override ServicioLocal this[int position]
         {
             get { return items[position]; }
         }

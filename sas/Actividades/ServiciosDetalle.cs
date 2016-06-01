@@ -11,72 +11,77 @@ using Android.Views;
 using Android.Widget;
 using System.Net.Http;
 using Newtonsoft.Json;
-
-
+using System.Threading.Tasks;
+using sas.Core;
 namespace sas
 {
     [Activity(Label = "Servicios Detalle", Theme = "@style/MyCustomTheme")]
     public class ServiciosDetalle : Activity
     {
-        private ServiciosModel servicio;
+        // private ServiciosModel servicio;
+        private ServicioLocal servicio;
         private MotivosModel motivo;
-
+        private int ID=0;
         EditText txtNroSolicitud;
         EditText txtNombrePaciente;
         EditText txtEdad;
         EditText txtSolicitante;
         EditText txtDireccion1;
-        EditText txtDireccion2;
         EditText txtMotivo1;
-        EditText txtMotivo2;
-        EditText txtMotivo3;
-        EditText txtOtroMotivo;
+        EditText txtHoraLlamada;
+        EditText txtTipo;
         Button btnIniciarServicio;
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
             // Create your application here
 
             SetContentView(Resource.Layout.ServicesDetailLayout);
-           
+
             //asignar los controles del layout
             txtNroSolicitud = FindViewById<EditText>(Resource.Id.txtNroSolicitud);
             txtNombrePaciente = FindViewById<EditText>(Resource.Id.txtNombrePaciente);
             txtEdad = FindViewById<EditText>(Resource.Id.txtEdad);
             txtSolicitante = FindViewById<EditText>(Resource.Id.txtSolicitante);
             txtDireccion1 = FindViewById<EditText>(Resource.Id.txtDireccion1);
-            txtDireccion2 = FindViewById<EditText>(Resource.Id.txtDireccion2);
             txtMotivo1 = FindViewById<EditText>(Resource.Id.txtMotivo1);
-            txtMotivo2 = FindViewById<EditText>(Resource.Id.txtMotivo2);
-            txtMotivo3 = FindViewById<EditText>(Resource.Id.txtMotivo3);
-            txtOtroMotivo = FindViewById<EditText>(Resource.Id.txtOtroMotivo);
+            txtHoraLlamada = FindViewById<EditText>(Resource.Id.txtHoraLlamada);
+            txtTipo = FindViewById<EditText>(Resource.Id.txtTipo);
+
             btnIniciarServicio = FindViewById<Button>(Resource.Id.btnIniciarServicio);
 
-            servicio = this.Intent.GetParcelableExtra("ServiciosDet") as ServiciosModel;
+            //   servicio = this.Intent.GetParcelableExtra("ServiciosDet") as ServiciosModel;
+          //  ID = this.Intent.GetStringExtra("ServiciosDet");
+            ID=  Intent.Extras.GetInt("ServiciosDet");
+
+            servicio = ServicioManager.GetTask(ID);
+
 
             txtNroSolicitud.Text = servicio.NumeroSolicitud.ToString();
             txtNombrePaciente.Text = servicio.nombrePaciente;
             txtEdad.Text = servicio.edadPaciente.ToString();
             txtSolicitante.Text = servicio.nombreSolicitante;
-            txtDireccion1.Text = servicio.direccionReferecia;
-            txtDireccion2.Text = servicio.direccionReferecia2;
-            txtOtroMotivo.Text = servicio.OtroMotivo;
+            txtDireccion1.Text = servicio.direccionReferecia + ", " + servicio.direccionReferecia2 + " Nro Casa" + servicio.numeroCasa;
+            txtHoraLlamada.Text = servicio.hora_Llamado;
+            txtTipo.Text = servicio.producto;
 
 
-            if (!string.IsNullOrEmpty(servicio.codMotivo1))
-            {
-                LoadMotivo1();
-            }
+            //if (!string.IsNullOrEmpty(servicio.codMotivo1))
+            //{
+            //    await LoadMotivo1();
+            //}
 
-            if (!string.IsNullOrEmpty(servicio.codMotivo2))
-            {
-                LoadMotivo2();
-            }
-            if (!string.IsNullOrEmpty(servicio.codMotivo3))
-            {
-                LoadMotivo3();
-            }
+            //if (!string.IsNullOrEmpty(servicio.codMotivo2))
+            //{
+            //    await LoadMotivo2();
+            //}
+            //if (!string.IsNullOrEmpty(servicio.codMotivo3))
+            //{
+            //    await LoadMotivo3();
+            //}
+
+            txtMotivo1.Text = txtMotivo1.Text + ", " + servicio.OtroMotivo;
 
             btnIniciarServicio.Click += BtnIniciarServicio_Click;
 
@@ -85,12 +90,16 @@ namespace sas
         private void BtnIniciarServicio_Click(object sender, EventArgs e)
         {
             var newActivity = new Intent(this, typeof(RegistrarServicio));
-            newActivity.PutExtra("ServiciosDet", servicio);
+            // newActivity.PutExtra("ServiciosDet", servicio.ID);
+            Bundle valuesForActivity = new Bundle();
+            valuesForActivity.PutInt("ServiciosDet", ID);
+            newActivity.PutExtras(valuesForActivity);
+
             StartActivity(newActivity);
             Finish();
         }
 
-        private async void LoadMotivo1()
+        private async Task LoadMotivo1()
         {
             string result;
           
@@ -121,7 +130,7 @@ namespace sas
             {
               
                 motivo = JsonConvert.DeserializeObject<MotivosModel>(result);
-                txtMotivo1.Text = motivo.descripcionMotivo;
+                txtMotivo1.Text = txtMotivo1.Text + ", " + motivo.descripcionMotivo;
                 //motivosListView.ItemsSource = motivo;
                 //se carga el picker recorriendo
 
@@ -138,7 +147,7 @@ namespace sas
         }
 
 
-        private async void LoadMotivo2()
+        private async  Task LoadMotivo2()
         {
             string result;
           
@@ -168,7 +177,7 @@ namespace sas
             {
                
                 motivo = JsonConvert.DeserializeObject<MotivosModel>(result);
-                txtMotivo2.Text = motivo.descripcionMotivo;
+                txtMotivo1.Text = txtMotivo1.Text + ", " + motivo.descripcionMotivo;
                 //motivosListView.ItemsSource = motivo;
                 //se carga el picker recorriendo
 
@@ -185,7 +194,7 @@ namespace sas
         }
 
 
-        private async void LoadMotivo3()
+        private async Task LoadMotivo3()
         {
             string result;
            
@@ -216,7 +225,7 @@ namespace sas
             {
                 
                 motivo = JsonConvert.DeserializeObject<MotivosModel>(result);
-                txtMotivo3.Text = motivo.descripcionMotivo;
+                txtMotivo1.Text = txtMotivo1.Text + ", " + motivo.descripcionMotivo;
                 //motivosListView.ItemsSource = motivo;
                 //se carga el picker recorriendo
 

@@ -19,7 +19,7 @@ namespace sas.Actividades
     [Activity(Label = "Buscar", Theme = "@style/MyCustomTheme")]
     public class Buscar : Activity
     {
-        private ServiciosModel servicio;
+       // private ServiciosModel servicio;
         private List<SasDatosModel> sasdatos;
         private List<SasDatosModel> resultado;
         string codtabla;
@@ -44,7 +44,7 @@ namespace sas.Actividades
             lstSasDatos.ItemClick += LstSasDatos_ItemClick;
            // txtBusqueda.KeyPress += TxtBusqueda_KeyPress;
             //recibir datos servicios
-            servicio= this.Intent.GetParcelableExtra("ServiciosDet") as ServiciosModel;
+          //  servicio= this.Intent.GetParcelableExtra("ServiciosDet") as ServiciosModel;
             //recibir codigo tabla
             codtabla = this.Intent.GetStringExtra("codtabla");
 
@@ -117,7 +117,7 @@ namespace sas.Actividades
 
                
 
-                intent.PutExtra("ServiciosDet", servicio);
+              //  intent.PutExtra("ServiciosDet", servicio);
                 intent.PutExtra("sasDatos", t);
 
                 //intent.SetFlags(ActivityFlags.ReorderToFront);
@@ -133,7 +133,7 @@ namespace sas.Actividades
 
             t = sasdatos[e.Position];
 
-            intent.PutExtra("ServiciosDet", servicio);
+          //  intent.PutExtra("ServiciosDet", servicio);
             intent.PutExtra("sasDatos", t);
 
             //intent.SetFlags(ActivityFlags.ReorderToFront);

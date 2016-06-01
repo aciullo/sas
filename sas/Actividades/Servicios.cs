@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Threading;
 using sas.Clases;
+using sas.Models;
+using sas.Core;
 
 namespace sas
 {
@@ -19,7 +21,7 @@ namespace sas
     {
         private List<ServiciosModel> servicio;
         private DeviceUserModel user;
-        string strUser = "";
+        IList<ServicioLocal> servicios = new List<ServicioLocal>();
         TextView txtTitulo;
         ListView lstServicios;
         ProgressBar mProgress;
@@ -102,7 +104,8 @@ namespace sas
             //mProgress.Visibility = ViewStates.Gone;
 
             lstServicios.ItemClick += LstServicios_ItemClick; ;
-            btnCerrarSesion.Click += BtnCerrarSesion_Click;
+            
+            //btnCerrarSesion.Click += BtnCerrarSesion_Click;
             
 
             // StartService(new Intent(this, typeof(DemoService)));
@@ -140,106 +143,18 @@ namespace sas
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             //Toast.MakeText(this, "Top ActionBar pressed: " + item.TitleFormatted, ToastLength.Short).Show();
+            
 
             session.logoutUser();
+            Finish();
+
+
             return base.OnOptionsItemSelected(item);
 
 
 
         }
-        private void BtnCerrarSesion_Click(object sender, EventArgs e)
-        {
-            session.logoutUser();
-        }
 
-        private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            //DoWork();
-            var t = new Thread(() => {
-                BuscarServicios();
-            });
-
-            t.Start();
-        }
-
-        private async void BuscarServicios()
-        {
-            string result;
-
-
-            try
-            {
-
-                HttpClient client = new HttpClient();
-                client.MaxResponseContentBufferSize = 256000;
-
-                // client.BaseAddress = new Uri("http://181.120.121.221:88");
-                client.BaseAddress = new Uri(IPCONN);
-
-                // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-
-                var response = await client.GetAsync(url);
-                result = response.Content.ReadAsStringAsync().Result;
-                //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
-
-            }
-            catch (Exception ex)
-            {
-
-                Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
-
-                return;
-            }
-
-            if (string.IsNullOrEmpty(result) || result == "null")
-            {
-
-
-                return;
-              
-
-            }
-
-            SendNotification();
-            return;
-        }
-        void SendNotification()
-        {
-            var nMgr = (NotificationManager)GetSystemService(NotificationService);
-           // var notification = new Notification(Resource.Drawable.notification, "Existen Servicios pendientes");
-            Bundle valuesForActivity = new Bundle();
-            valuesForActivity.PutString("user", strUser);
-           // valuesForActivity.PutParcelable("userMobile", user);
-            Intent newActivity = new Intent(this, typeof(Servicios));
-            newActivity.PutExtras(valuesForActivity);
-
-            TaskStackBuilder stackBuilder = TaskStackBuilder.Create(this);
-            stackBuilder.AddParentStack(Java.Lang.Class.FromType(typeof(Servicios)));
-            stackBuilder.AddNextIntent(newActivity);
-
-            // Create the PendingIntent with the back stack:            
-            PendingIntent resultPendingIntent =
-                stackBuilder.GetPendingIntent(0, PendingIntentFlags.UpdateCurrent);
-
-            //var newActivity = new Intent(this, typeof(Servicios));
-            //newActivity.PutExtra("user", user);
-            //var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(Servicios)), 0);
-            // var pendingIntent = PendingIntent.GetActivity(this, 0, newActivity, PendingIntentFlags.UpdateCurrent);
-
-            Notification.Builder built = new Notification.Builder(this)
-                .SetAutoCancel(true)
-                .SetContentIntent(resultPendingIntent)
-                .SetContentText("Existen Servicios pendientes")
-                .SetSmallIcon(Resource.Drawable.notification);
-
-           // notification.SetLatestEventInfo(this, " Notificación ", "Existen Servicios pendientes", pendingIntent);
-            // notification.ContentIntent = pendingIntent;
-            nMgr.Notify(0, built.Build());
-            timer.Stop();
-            // nMgr.Notify(0, notification);
-            return;
-        }
         protected override async void OnStart()
         {
             base.OnStart();
@@ -255,24 +170,26 @@ namespace sas
         {
             base.OnUserLeaveHint();
             //  StartService(new Intent("com.xamarin.sas"));
-            timer = new System.Timers.Timer();
-            // timer.Interval = 180000;
-            timer.Interval = 180000;
-            timer.Elapsed += Timer_Elapsed;
-            // }
-            timer.Start();
+            //timer = new System.Timers.Timer();
+            //// timer.Interval = 180000;
+            //timer.Interval = 180000;
+            //timer.Elapsed += Timer_Elapsed;
+            //// }
+            //timer.Start();
 
             //Timer_Elapsed(null, null);
+
+            StartService(new Intent("com.xamarin.sas"));
         }
    
         private void LstServicios_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
-            var t = servicio[e.Position];
+            var t = servicios[e.Position];
             //Android.Widget.Toast.MakeText(this, t.nombrePaciente, Android.Widget.ToastLength.Short).Show();
             //Console.WriteLine("Clicked on " + t.nombrePaciente);
-            var serPendientes = servicio.FindAll(x => x.codEstado != "001" && x.codEstado != "009");
+            var cantidad = ServicioManager.CantidadPendiente();
             
-            int cantidad = serPendientes.Count;
+          
             if (cantidad >= 1 && t.codEstado=="001")
             {
 
@@ -285,20 +202,40 @@ namespace sas
                 return;
             }
 
+            if (t.codEstado== "009")
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.SetTitle("Alerta");
+                builder.SetMessage("Aca mostrar el traking del servicio.");
+                builder.SetCancelable(false);
+                builder.SetPositiveButton("OK", delegate { return; });
+                builder.Show();
+                return;
+            }
+
             if (t.codEstado != "001" )
             {
                 var newActivity = new Intent(this, typeof(RegistrarServicio));
-                newActivity.PutExtra("ServiciosDet", t);
+
+                Bundle valuesForActivity = new Bundle();
+                valuesForActivity.PutInt("ServiciosDet", t.ID);
+                newActivity.PutExtras(valuesForActivity);
+
+                //newActivity.PutExtra("ServiciosDet", t.ID);
                 StartActivity(newActivity);
+                Finish();
             }
             else
             {
              var newActivity = new Intent(this, typeof(ServiciosDetalle));
-                 newActivity.PutExtra("ServiciosDet", t);
-                 StartActivity(newActivity);
-
+                // newActivity.PutExtra("ServiciosDet", t.ID);
+                Bundle valuesForActivity = new Bundle();
+                valuesForActivity.PutInt("ServiciosDet", t.ID);
+                newActivity.PutExtras(valuesForActivity);
+                StartActivity(newActivity);
+                Finish();
             }
-           
+
           
 
         }
@@ -328,7 +265,7 @@ namespace sas
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
                 if (!(response.IsSuccessStatusCode))
                 {
-                    return;
+                   // return;
                 }
 
             }
@@ -347,9 +284,9 @@ namespace sas
                 if (string.IsNullOrEmpty(result) || result == "null")
                 {
                     // servicio = new List<ServiciosModel>();
-                    servicio = new List<ServiciosModel>();
+                    //servicio = new List<ServiciosModel>();
 
-                    servicio.Clear();
+                   // servicio.Clear();
                    // return;
                   
                 }
@@ -359,12 +296,80 @@ namespace sas
 
 
                 }
-                    //waitActivityIndicator.IsRunning = false;
-                 
-                
-                //   lstServicios. = servicio;
+
+
+                //  var servlocal = new ServiciosLocalModel(t.id_Solicitud, t.NumeroSolicitud, t.fecha_Llamado, t.hora_Llamado,
+                //t.nombrePaciente, t.Tel, t.edadPaciente, t.nombrePaciente, t.direccionReferecia, t.direccionReferecia2, t.numeroCasa, t.referencia,
+                //t.Motivo, t.nroSalida, t.codMovil, t.codChofer, t.Acompañante, t.observacion, t.Estado, t.codEstado, t.HoraEstado,
+                //t.codMotivo1, t.codMotivo2, t.codMotivo3, t.OtroMotivo, t.codTipo, t.codInstitucion, t.codDesenlace, t.producto);
+                //ServiciosLocalModel servlocal;
+                //servlocal = servicio[0].Class ;
+                //var datos = new DAServicioCab();
+
+                ServicioLocal sl = new ServicioLocal();
 
                
+                foreach (ServiciosModel t in servicio)
+                {
+                    if (!ServicioManager.CheckIsDataAlreadyInDBorNot("[ServicioCab]", "[id_solicitud]", t.id_Solicitud.ToString()))
+                        { 
+
+
+                                sl.id_Solicitud = t.id_Solicitud;
+                                sl.NumeroSolicitud = t.NumeroSolicitud;
+                                sl.fecha_Llamado = t.fecha_Llamado;
+                                sl.hora_Llamado = t.hora_Llamado;
+                                sl.nombrePaciente = t.nombrePaciente;
+                                sl.Tel = t.Tel;
+                                sl.edadPaciente=t.edadPaciente;
+                                sl.nombreSolicitante = t.nombreSolicitante;
+                                sl.direccionReferecia = t.direccionReferecia;
+                                sl.direccionReferecia2 = t.direccionReferecia2;
+                                sl.numeroCasa = t.numeroCasa;
+                                sl.referencia = t.referencia;
+                                sl.Motivo = t.Motivo;
+                                sl.nroSalida = t.nroSalida;
+                                sl.codMovil = t.codMovil;
+                                sl.codChofer = t.codChofer;
+                                sl.Acompañante = t.Acompañante;
+                                sl.observacion = t.observacion;
+                                sl.Estado = t.Estado;
+                                sl.codEstado = t.codEstado;
+                                sl.HoraEstado = t.HoraEstado;
+                                sl.codMotivo1 = t.codMotivo1;
+                                sl.codMotivo2 = t.codMotivo2;
+                                sl.codMotivo3 = t.codMotivo3;
+                                sl.OtroMotivo = t.OtroMotivo;
+                                sl.codTipo = t.codTipo;
+                                sl.codInstitucion = t.codInstitucion;
+                                sl.codDesenlace = t.codDesenlace;
+                                sl.producto = t.producto;
+
+                                ServicioManager.SaveTask(sl);
+                    }
+                    //servlocal = new ServiciosLocalModel(t.id_Solicitud, t.NumeroSolicitud, t.fecha_Llamado, t.hora_Llamado,
+                    //                                    t.nombrePaciente, t.Tel, t.edadPaciente, t.nombrePaciente,
+                    //                                    t.direccionReferecia, t.direccionReferecia2, t.numeroCasa, t.referencia,
+                    //                                    t.Motivo, t.nroSalida, t.codMovil, t.codChofer, t.Acompañante,
+                    //                                    t.observacion, t.Estado, t.codEstado, t.HoraEstado,
+                    //                                    t.codMotivo1, t.codMotivo2, t.codMotivo3, t.OtroMotivo, t.codTipo,
+                    //                                    t.codInstitucion, t.codDesenlace, t.producto);
+                    //using (datos)
+                    //{
+                    //    datos.InsertServicio(servlocal);
+                    //}
+                }
+
+              
+
+                servicios = ServicioManager.GetTasks();
+
+                //waitActivityIndicator.IsRunning = false;
+
+
+                //   lstServicios. = servicio;
+
+
 
                 //ListAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleExpandableListItem1, 0, items);
 
@@ -372,7 +377,7 @@ namespace sas
 
                 lstServicios.ChoiceMode = ChoiceMode.Single;
 
-                lstServicios.Adapter = new ServicesAdapter(this, servicio);
+                lstServicios.Adapter = new ServicesAdapter(this, servicios);
               //  RunOnUiThread(() => lstServicios.Adapter = new ServicesAdapter(this, servicio));
 
             }
@@ -390,7 +395,7 @@ namespace sas
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            timer.Stop();
+            //timer.Stop();
 
             //if (!isConfigurationChange)
             //{
@@ -401,6 +406,103 @@ namespace sas
             //    }
             //}
         }
+
+        #region "codigo comentado "
+
+
+        //private void BtnCerrarSesion_Click(object sender, EventArgs e)
+        //{
+        //    session.logoutUser();
+        //}
+
+        //private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        //{
+        //    //DoWork();
+        //    var t = new Thread(() => {
+        //        BuscarServicios();
+        //    });
+
+        //    t.Start();
+        //}
+
+        //private async void BuscarServicios()
+        //{
+        //    string result;
+
+
+        //    try
+        //    {
+
+        //        HttpClient client = new HttpClient();
+        //        client.MaxResponseContentBufferSize = 256000;
+
+        //        // client.BaseAddress = new Uri("http://181.120.121.221:88");
+        //        client.BaseAddress = new Uri(IPCONN);
+
+        //        // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
+        //        string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
+
+        //        var response = await client.GetAsync(url);
+        //        result = response.Content.ReadAsStringAsync().Result;
+        //        //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+
+        //        return;
+        //    }
+
+        //    if (string.IsNullOrEmpty(result) || result == "null")
+        //    {
+
+
+        //        return;
+
+
+        //    }
+
+        //    SendNotification();
+        //    return;
+        //}
+        //void SendNotification()
+        //{
+        //    var nMgr = (NotificationManager)GetSystemService(NotificationService);
+        //   // var notification = new Notification(Resource.Drawable.notification, "Existen Servicios pendientes");
+        //    //Bundle valuesForActivity = new Bundle();
+        //    //valuesForActivity.PutParcelable("user", user);
+        //   // valuesForActivity.PutParcelable("userMobile", user);
+        //    Intent newActivity = new Intent(this, typeof(Servicios));
+        //    //newActivity.PutExtras(valuesForActivity);
+
+        //    TaskStackBuilder stackBuilder = TaskStackBuilder.Create(this);
+        //    stackBuilder.AddParentStack(Java.Lang.Class.FromType(typeof(Servicios)));
+        //    stackBuilder.AddNextIntent(newActivity);
+
+        //    // Create the PendingIntent with the back stack:            
+        //    PendingIntent resultPendingIntent =
+        //        stackBuilder.GetPendingIntent(0, PendingIntentFlags.UpdateCurrent);
+
+        //    //var newActivity = new Intent(this, typeof(Servicios));
+        //    //newActivity.PutExtra("user", user);
+        //    //var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(Servicios)), 0);
+        //    // var pendingIntent = PendingIntent.GetActivity(this, 0, newActivity, PendingIntentFlags.UpdateCurrent);
+
+        //    Notification.Builder built = new Notification.Builder(this)
+        //        .SetAutoCancel(true)
+        //        .SetContentIntent(resultPendingIntent)
+        //        .SetContentText("Existen Servicios pendientes")
+        //        .SetSmallIcon(Resource.Drawable.notification);
+
+        //   // notification.SetLatestEventInfo(this, " Notificación ", "Existen Servicios pendientes", pendingIntent);
+        //    // notification.ContentIntent = pendingIntent;
+        //    nMgr.Notify(0, built.Build());
+        //    timer.Stop();
+        //    // nMgr.Notify(0, notification);
+        //    return;
+        //}
 
         // return the service connection if there is a configuration change
         //public override Java.Lang.Object OnRetainNonConfigurationInstance()
@@ -449,6 +551,6 @@ namespace sas
         //        activity.isBound = false;
         //    }
         //}
-
+        #endregion
     }
 }

@@ -71,47 +71,53 @@ namespace sas
 			// aapt resource value: 0x7f07001a
 			public const int Heading = 2131165210;
 			
+			// aapt resource value: 0x7f070030
+			public const int Image = 2131165232;
+			
 			// aapt resource value: 0x7f07001b
 			public const int List = 2131165211;
 			
+			// aapt resource value: 0x7f07001c
+			public const int List2 = 2131165212;
+			
+			// aapt resource value: 0x7f070028
+			public const int Text = 2131165224;
+			
 			// aapt resource value: 0x7f070029
-			public const int Text = 2131165225;
+			public const int Text1 = 2131165225;
 			
 			// aapt resource value: 0x7f07002a
-			public const int Text1 = 2131165226;
+			public const int Text2 = 2131165226;
 			
 			// aapt resource value: 0x7f07002b
-			public const int Text2 = 2131165227;
+			public const int Text3 = 2131165227;
 			
 			// aapt resource value: 0x7f07002c
-			public const int Text3 = 2131165228;
+			public const int Text4 = 2131165228;
 			
 			// aapt resource value: 0x7f07002d
-			public const int Text4 = 2131165229;
+			public const int Text5 = 2131165229;
 			
 			// aapt resource value: 0x7f07002e
-			public const int Text5 = 2131165230;
+			public const int Text6 = 2131165230;
 			
 			// aapt resource value: 0x7f07002f
-			public const int Text6 = 2131165231;
+			public const int Text7 = 2131165231;
 			
-			// aapt resource value: 0x7f070030
-			public const int Text7 = 2131165232;
-			
-			// aapt resource value: 0x7f070027
-			public const int android_lstServicios = 2131165223;
+			// aapt resource value: 0x7f070026
+			public const int android_lstServicios = 2131165222;
 			
 			// aapt resource value: 0x7f070017
 			public const int btnBuscar = 2131165207;
 			
-			// aapt resource value: 0x7f070028
-			public const int btnCerrarSesion = 2131165224;
+			// aapt resource value: 0x7f070027
+			public const int btnCerrarSesion = 2131165223;
 			
 			// aapt resource value: 0x7f07000a
 			public const int btnIngresar = 2131165194;
 			
-			// aapt resource value: 0x7f070025
-			public const int btnIniciarServicio = 2131165221;
+			// aapt resource value: 0x7f070024
+			public const int btnIniciarServicio = 2131165220;
 			
 			// aapt resource value: 0x7f070018
 			public const int btnRegistrarResultado = 2131165208;
@@ -167,11 +173,11 @@ namespace sas
 			// aapt resource value: 0x7f07000d
 			public const int textView7 = 2131165197;
 			
-			// aapt resource value: 0x7f07001c
-			public const int textView8 = 2131165212;
+			// aapt resource value: 0x7f07001f
+			public const int textView8 = 2131165215;
 			
-			// aapt resource value: 0x7f07001e
-			public const int textView9 = 2131165214;
+			// aapt resource value: 0x7f070021
+			public const int textView9 = 2131165217;
 			
 			// aapt resource value: 0x7f070032
 			public const int toolbar = 2131165234;
@@ -188,23 +194,17 @@ namespace sas
 			// aapt resource value: 0x7f070015
 			public const int txtDestinoDesenlace = 2131165205;
 			
-			// aapt resource value: 0x7f07001f
-			public const int txtDireccion1 = 2131165215;
-			
-			// aapt resource value: 0x7f070020
-			public const int txtDireccion2 = 2131165216;
+			// aapt resource value: 0x7f070022
+			public const int txtDireccion1 = 2131165218;
 			
 			// aapt resource value: 0x7f07000e
 			public const int txtEdad = 2131165198;
 			
-			// aapt resource value: 0x7f070021
-			public const int txtMotivo1 = 2131165217;
-			
-			// aapt resource value: 0x7f070022
-			public const int txtMotivo2 = 2131165218;
+			// aapt resource value: 0x7f07001d
+			public const int txtHoraLlamada = 2131165213;
 			
 			// aapt resource value: 0x7f070023
-			public const int txtMotivo3 = 2131165219;
+			public const int txtMotivo1 = 2131165219;
 			
 			// aapt resource value: 0x7f07000c
 			public const int txtNombrePaciente = 2131165196;
@@ -212,14 +212,14 @@ namespace sas
 			// aapt resource value: 0x7f07000b
 			public const int txtNroSolicitud = 2131165195;
 			
-			// aapt resource value: 0x7f070024
-			public const int txtOtroMotivo = 2131165220;
+			// aapt resource value: 0x7f070020
+			public const int txtSolicitante = 2131165216;
 			
-			// aapt resource value: 0x7f07001d
-			public const int txtSolicitante = 2131165213;
+			// aapt resource value: 0x7f07001e
+			public const int txtTipo = 2131165214;
 			
-			// aapt resource value: 0x7f070026
-			public const int txtTitulo = 2131165222;
+			// aapt resource value: 0x7f070025
+			public const int txtTitulo = 2131165221;
 			
 			// aapt resource value: 0x7f070005
 			public const int txtUsuario = 2131165189;

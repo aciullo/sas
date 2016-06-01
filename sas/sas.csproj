@@ -77,9 +77,11 @@
     <Compile Include="Actividades\RegistrarServicio.cs" />
     <Compile Include="Actividades\RegistrarServicioLocal.cs" />
     <Compile Include="Clases\BusquedaAdapter.cs" />
-    <Compile Include="Clases\DataAccess.cs" />
+    <Compile Include="Clases\DAServicioCab.cs" />
+    <Compile Include="Clases\DAServicioDet.cs" />
     <Compile Include="Clases\DemoMessengerService.cs" />
     <Compile Include="Clases\DemoService.cs" />
+    <Compile Include="Clases\DetServicioLocalAdapter.cs" />
     <Compile Include="Clases\MyIntentService.cs" />
     <Compile Include="Clases\RegistroServicioLocalAdapter.cs" />
     <Compile Include="Clases\UserSessionManager.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Models\MotivosModel.cs" />
     <Compile Include="Models\RegistrarServicioModel.cs" />
     <Compile Include="Models\SasDatosModel.cs" />
+    <Compile Include="Models\ServiciosLocalModel.cs" />
     <Compile Include="Models\ServiciosModel.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -154,6 +157,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\menu\photo_edit.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="sas.Core\sas.Core.Android.csproj">
+      <Project>{508e0d21-01e5-4a8c-a09f-ac121edadeb8}</Project>
+      <Name>sas.Core.Android</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

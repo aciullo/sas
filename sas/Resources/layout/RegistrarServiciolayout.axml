@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tableLayout1">
             <Button
-                android:text="Registrar Salida Base"
+                android:text="Registrar Salida de Base"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnRegistroInicial"

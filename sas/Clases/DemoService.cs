@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Timers;
 using System.Threading;
 using static sas.DemoService;
+using sas.Clases;
 
 namespace sas
 {
@@ -20,12 +21,15 @@ namespace sas
 
         private System.Timers.Timer timer= new System.Timers.Timer();
         private int counter = 0, incrementby = 1;
+        UserSessionManager session;
+        string IPCONN = "";
+
 
         public override StartCommandResult OnStartCommand(Android.Content.Intent intent, StartCommandFlags flags, int startId)
         {
             Log.Debug("sas", "DemoService started");
 
-            //StartServiceInForeground ();
+            StartServiceInForeground ();
 
             //DoWork ();
 
@@ -34,33 +38,38 @@ namespace sas
 
         void StartServiceInForeground()
         {
-            var ongoing = new Notification(Resource.Drawable.Icon, "DemoService in foreground");
+            var ongoing = new Notification(Resource.Drawable.Icon, "Sas en Segundo Plano");
             var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(Servicios)), 0);
-            ongoing.SetLatestEventInfo(this, "sas", "DemoService is running in the foreground", pendingIntent);
+            ongoing.SetLatestEventInfo(this, "sas", "Sas se está ejecutando en segundo plano", pendingIntent);
 
-            StartForeground((int)NotificationFlags.ForegroundService, ongoing);
+            StartForeground((int)NotificationFlags.AutoCancel, ongoing);
         }
 
         public override void OnCreate()
         {
             base.OnCreate();
             Log.Debug("sas", "Service Started.");
-            if (timer == null)
-            {
-                timer = new System.Timers.Timer();
-                timer.Interval = 15000;
-                timer.Elapsed += Timer_Elapsed;
-            }
+
+            session = new UserSessionManager(this);
+
+            IPCONN = session.getAccessConn();
+
+
+            timer = new System.Timers.Timer();
+            timer.Interval = 180000;
+            timer.Elapsed += Timer_Elapsed;
+          
             timer.Start();
 
-            Timer_Elapsed(null, null);
-
+           
 
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-           //DoWork();
+            //DoWork();
+
+         
             var t = new Thread(()  =>{
                 BuscarServicios();
             });
@@ -79,7 +88,7 @@ namespace sas
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
 
-                client.BaseAddress = new Uri("http://181.120.121.221:88");
+                client.BaseAddress = new Uri(IPCONN);
 
 
                 // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
@@ -110,21 +119,62 @@ namespace sas
         public override void OnDestroy ()
 		{
 			base.OnDestroy ();
-            timer.Stop();
-            
-			Log.Debug ("sas", "DemoService stopped");       
+          
+            if (!session.isLoggedIn())
+            {
+                timer.Stop();
+                Log.Debug("sas", "DemoService stopped");
+                StopForeground(true);
+                
+            }
+              
 		}
 
 		void SendNotification ()
 		{
-			var nMgr = (NotificationManager)GetSystemService (NotificationService);
-			var notification = new Notification (Resource.Drawable.Icon, "Existen Servicios pendientes");
-			var pendingIntent = PendingIntent.GetActivity (this, 0, new Intent (this, typeof(Servicios)),0);
-            notification.SetLatestEventInfo (this, " Notificación ", "Existen Servicios pendientes", pendingIntent);
-           // notification.ContentIntent = pendingIntent;
-            nMgr.Notify (0, notification);
-           
-		}
+            //original
+            //var nMgr = (NotificationManager)GetSystemService (NotificationService);
+            //var notification = new Notification (Resource.Drawable.Icon, "Existen Servicios pendientes");
+            //var pendingIntent = PendingIntent.GetActivity (this, 0, new Intent (this, typeof(Servicios)),0);
+            //         notification.SetLatestEventInfo (this, " Notificación ", "Existen Servicios pendientes", pendingIntent);
+            //        // notification.ContentIntent = pendingIntent;
+            //         nMgr.Notify (0, notification);
+
+            var nMgr = (NotificationManager)GetSystemService(NotificationService);
+            
+            //Bundle valuesForActivity = new Bundle();
+            //valuesForActivity.PutString("user", strUser);
+            
+            Intent newActivity = new Intent(this, typeof(Servicios));
+            //newActivity.PutExtras(valuesForActivity);
+
+            TaskStackBuilder stackBuilder = TaskStackBuilder.Create(this);
+            stackBuilder.AddParentStack(Java.Lang.Class.FromType(typeof(Servicios)));
+            stackBuilder.AddNextIntent(newActivity);
+
+            // Create the PendingIntent with the back stack:            
+            PendingIntent resultPendingIntent =
+                stackBuilder.GetPendingIntent(0, PendingIntentFlags.UpdateCurrent);
+
+            //var newActivity = new Intent(this, typeof(Servicios));
+            //newActivity.PutExtra("user", user);
+            //var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(Servicios)), 0);
+            // var pendingIntent = PendingIntent.GetActivity(this, 0, newActivity, PendingIntentFlags.UpdateCurrent);
+
+            Notification.Builder built = new Notification.Builder(this)
+                .SetAutoCancel(true)
+                .SetContentIntent(resultPendingIntent)
+                .SetContentText("Existen Servicios pendientes")
+                .SetSmallIcon(Resource.Drawable.notification);
+
+            // notification.SetLatestEventInfo(this, " Notificación ", "Existen Servicios pendientes", pendingIntent);
+            // notification.ContentIntent = pendingIntent;
+            nMgr.Notify(0, built.Build());
+            timer.Stop();
+            // nMgr.Notify(0, notification);
+            return;
+
+        }
 
 		public void DoWork ()
 		{

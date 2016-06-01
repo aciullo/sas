@@ -14,12 +14,14 @@ namespace sas
 		public int id_Solicitud { get; set; }
 		public int NumeroSolicitud { get; set; }
 		public string codMovil { get; set; }
-		public string hora_Llegada { get; set; }
-		public string idestado { get; set;}
-		//public Nullable<System.DateTime> Audit_Fecha { get; set; }
-		public string Audit_Usuario { get; set; }
-        public string idDesenlace { get; set; }
-        public string idInstitucion { get; set; }
+		public string HoraEstado { get; set; }
+		public string codEstado { get; set;}
+        public string Estado { get; set; }
+        //public Nullable<System.DateTime> Audit_Fecha { get; set; }
+        public string codInstitucion { get; set; }
+        public string codDesenlace { get; set; }
+        public bool sincronizado { get; set; }
+
 
         public string Audit_Fecha
 		{
