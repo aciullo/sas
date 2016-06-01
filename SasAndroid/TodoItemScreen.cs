@@ -65,7 +65,14 @@ namespace TaskyAndroid.Screens
 
 			ServicioItemManager.SaveTask(task);
 
-            StartService(new Intent("py.com.futura.SasService"));
+            //StartService(new Intent("py.com.futura.SasService"));
+
+            Intent serviceIntent = new Intent("py.com.futura.SasService"); 
+
+            serviceIntent.PutExtra("Tipo", "ES");
+   
+
+            StartService(serviceIntent);
 
             Finish();
 		}

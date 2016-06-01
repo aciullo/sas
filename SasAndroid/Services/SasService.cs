@@ -26,9 +26,24 @@ namespace SasAndroid.Services
         {
             Log.Debug("SasService", "SasService iniciado");
 
+            //Procesamos los parametros recibidos
+            string tipo = intent.GetStringExtra("Tipo");
+           
+
+            if (tipo == null)
+            {
+                Log.Debug("parametro", "null");
+                tipo = "BS";
+            }
+            else
+            {
+                Log.Debug("parametro", tipo);
+                
+            }
+
             StartServiceInForeground();
 
-            DoWork();
+            DoWork(tipo);
 
             return StartCommandResult.NotSticky;
         }
@@ -54,32 +69,36 @@ namespace SasAndroid.Services
             var nMgr = (NotificationManager)GetSystemService(NotificationService);
             var notification = new Notification(Resource.Drawable.Icon, mensaje);
             var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(HomeScreen)), 0);
-            notification.SetLatestEventInfo(this, "sas Service Notification", "Message from sas service", pendingIntent);
+            notification.SetLatestEventInfo(this, "sas Service Notification", mensaje, pendingIntent);
             
             nMgr.Notify(0, notification);
         }
 
-        public void DoWork()
+        public void DoWork(String Tipo)
         {
            // Toast.MakeText(this, "The sas service has started", ToastLength.Long).Show();
 
             var t = new Thread(() => {
 
+            switch (Tipo)
+            {
+                    case "ES":
+                        EnviarServicios();
+                        break;
+                    case "BS":
+                        BuscarServicios();
+                        break;
+                    case "AT":
+                        ActualizarTablas();
+                        break;
 
-                //Recuperar los datos a enviar al servidor
-                //Verificar si hay conexion para Enviar al servidor
-                //Enviar al servidor
-                //Si el servidor responde correctamente, actualizar el estado enviado en la tabla correspondiente.
+                    default:
+                        break;
+            }
 
-           
-                servicios = ServicioItemManager.GetServiciosToSend();
-                foreach (var item in servicios)
-                {
-                    Log.Debug("SasService", String.Format("Enviando {0}", item.NroServicio));
-                    SendNotification(String.Format("Enviando {0}", item.NroServicio));
-                }
+            
 
-                
+
 
                 //Thread.Sleep(5000);
 
@@ -97,6 +116,33 @@ namespace SasAndroid.Services
         {
             binder = new SasServiceBinder(this);
             return binder;
+        }
+
+        void BuscarServicios()
+        {
+
+            Log.Debug("SasService", "Buscando servicios");
+        }
+        void EnviarServicios()
+        {
+            //Recuperar los datos a enviar al servidor
+            //Verificar si hay conexion para Enviar al servidor
+            //Enviar al servidor
+            //Si el servidor responde correctamente, actualizar el estado enviado en la tabla correspondiente.
+
+
+            servicios = ServicioItemManager.GetServiciosToSend();
+            foreach (var item in servicios)
+            {
+                Log.Debug("SasService", String.Format("Enviando {0}", item.NroServicio));
+                SendNotification(String.Format("Enviando {0}", item.NroServicio));
+            }
+        }
+
+
+        void ActualizarTablas()
+        {
+            Log.Debug("SasService", "Actualizando Tablas");
         }
 
         public string GetText()
