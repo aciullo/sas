@@ -9,6 +9,7 @@
     <Import_RootNamespace>Sas.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Constantes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FlujoEvento.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SasDatabaseADO.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServicioItem.cs" />

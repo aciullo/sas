@@ -77,8 +77,12 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\GcmListenerService.cs" />
+    <Compile Include="Services\InstanceIdListenerService.cs" />
+    <Compile Include="Services\RegistrationIntentService.cs" />
     <Compile Include="Services\SasService.cs" />
     <Compile Include="ServicioItemListAdapter.cs" />
+    <Compile Include="TestGCM.cs" />
     <Compile Include="TodoItemScreen.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +93,9 @@
     <AndroidResource Include="Resources\layout\TaskListItem.axml" />
     <AndroidResource Include="Resources\layout\HomeScreen.axml" />
     <AndroidResource Include="Resources\layout\TaskDetails.axml" />
+    <AndroidResource Include="Resources\layout\TestGCM.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml" />
@@ -101,6 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_stat_ic_notification.png" />
   </ItemGroup>
   <Import Project="..\SasSharedCode\SasSharedCode.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

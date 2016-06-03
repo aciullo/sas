@@ -265,7 +265,10 @@ namespace SasAndroid
 			public const int common_plus_signin_btn_text_light_pressed = 2130837545;
 			
 			// aapt resource value: 0x7f02002a
-			public const int Icon = 2130837546;
+			public const int ic_stat_ic_notification = 2130837546;
+			
+			// aapt resource value: 0x7f02002b
+			public const int Icon = 2130837547;
 			
 			static Drawable()
 			{
@@ -334,6 +337,9 @@ namespace SasAndroid
 			// aapt resource value: 0x7f070014
 			public const int lstItemTask = 2131165204;
 			
+			// aapt resource value: 0x7f070015
+			public const int msgText = 2131165205;
+			
 			// aapt resource value: 0x7f070002
 			public const int none = 2131165186;
 			
@@ -383,6 +389,9 @@ namespace SasAndroid
 			
 			// aapt resource value: 0x7f030003
 			public const int TaskListItem = 2130903043;
+			
+			// aapt resource value: 0x7f030004
+			public const int TestGCM = 2130903044;
 			
 			static Layout()
 			{

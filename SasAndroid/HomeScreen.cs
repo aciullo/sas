@@ -15,7 +15,7 @@ namespace TaskyAndroid.Screens
 	/// </summary>
 	[Activity (Label = "Servicios",  
 		Icon="@drawable/icon",
-		MainLauncher = true,
+		//MainLauncher = false,
 		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
 		ScreenOrientation = ScreenOrientation.Portrait)]
 	public class HomeScreen : Activity 
