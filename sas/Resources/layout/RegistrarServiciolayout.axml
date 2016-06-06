@@ -33,7 +33,7 @@
         </TableRow>
         <TableRow>
             <TextView
-                android:text="Nombre Paciente:"
+                android:text="Paciente:"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

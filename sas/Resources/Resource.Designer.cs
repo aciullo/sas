@@ -71,9 +71,6 @@ namespace sas
 			// aapt resource value: 0x7f07001a
 			public const int Heading = 2131165210;
 			
-			// aapt resource value: 0x7f070030
-			public const int Image = 2131165232;
-			
 			// aapt resource value: 0x7f07001b
 			public const int List = 2131165211;
 			
@@ -103,6 +100,12 @@ namespace sas
 			
 			// aapt resource value: 0x7f07002f
 			public const int Text7 = 2131165231;
+			
+			// aapt resource value: 0x7f070030
+			public const int Text8 = 2131165232;
+			
+			// aapt resource value: 0x7f070031
+			public const int Text9 = 2131165233;
 			
 			// aapt resource value: 0x7f070026
 			public const int android_lstServicios = 2131165222;
@@ -149,8 +152,14 @@ namespace sas
 			// aapt resource value: 0x7f070003
 			public const int mProgress = 2131165187;
 			
-			// aapt resource value: 0x7f070033
-			public const int menu_share = 2131165235;
+			// aapt resource value: 0x7f070035
+			public const int menu_cerrarsesion = 2131165237;
+			
+			// aapt resource value: 0x7f070036
+			public const int menu_share = 2131165238;
+			
+			// aapt resource value: 0x7f070034
+			public const int menu_sincdatos = 2131165236;
 			
 			// aapt resource value: 0x7f07000f
 			public const int tableLayout1 = 2131165199;
@@ -179,11 +188,11 @@ namespace sas
 			// aapt resource value: 0x7f070021
 			public const int textView9 = 2131165217;
 			
-			// aapt resource value: 0x7f070032
-			public const int toolbar = 2131165234;
+			// aapt resource value: 0x7f070033
+			public const int toolbar = 2131165235;
 			
-			// aapt resource value: 0x7f070031
-			public const int toolbar1 = 2131165233;
+			// aapt resource value: 0x7f070032
+			public const int toolbar1 = 2131165234;
 			
 			// aapt resource value: 0x7f070001
 			public const int txtBusqueda = 2131165185;

@@ -13,15 +13,16 @@ using sas.Clases;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
-
+using sas.Core;
 namespace sas.Actividades
 {
     [Activity(Label = "Buscar", Theme = "@style/MyCustomTheme")]
     public class Buscar : Activity
     {
-       // private ServiciosModel servicio;
+        // private ServiciosModel servicio;
+        private IList<SasDatosItem> busqueda;
         private List<SasDatosModel> sasdatos;
-        private List<SasDatosModel> resultado;
+        private IList<SasDatosItem> resultado;
         string codtabla;
         EditText txtBusqueda;
         ListView lstSasDatos;
@@ -29,7 +30,7 @@ namespace sas.Actividades
         string IPCONN = "";
 
 
-        protected override async void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.BuscarLayout);
@@ -52,20 +53,26 @@ namespace sas.Actividades
             IPCONN = session.getAccessConn();
 
 
-            await GetIndexDato(codtabla);
+            //await GetIndexDato(codtabla);
+            busqueda = SasDatosManager.GetTasks(codtabla);
+            lstSasDatos.ChoiceMode = ChoiceMode.Single;
+            lstSasDatos.Adapter = new BusquedaAdapter(this, busqueda);
 
-
-            txtBusqueda.TextChanged += async (object sender, Android.Text.TextChangedEventArgs e) =>
+            txtBusqueda.TextChanged +=  (object sender, Android.Text.TextChangedEventArgs e) =>
             {
                 // filter on text changed
                 var searchTerm = txtBusqueda.Text;
                 if (string.IsNullOrEmpty(txtBusqueda.Text))
                 {
-                    await GetIndexDato(codtabla);
+                    // await GetIndexDato(codtabla);
+                    busqueda = SasDatosManager.GetTasks(codtabla);
+                    lstSasDatos.ChoiceMode = ChoiceMode.Single;
+                    lstSasDatos.Adapter = new BusquedaAdapter(this, busqueda);
+                    resultado.Clear();
                     return;
                 }
                 //Toast.MakeText(this, txtDestinoDesenlace.Text, ToastLength.Short).Show();
-                resultado = sasdatos.FindAll(x => (x.descripcion.ToUpper()).Contains(txtBusqueda.Text.ToUpper()));
+                resultado = busqueda.Where(x => (x.descripcion.ToUpper()).Contains(txtBusqueda.Text.ToUpper())).ToList();
 
                 lstSasDatos.ChoiceMode = ChoiceMode.Single;
                 lstSasDatos.Adapter = new BusquedaAdapter(this, resultado);
@@ -96,13 +103,13 @@ namespace sas.Actividades
         private void LstSasDatos_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
 
-            SasDatosModel t;
+            SasDatosItem t;
             Intent intent = new Intent(this, typeof(RegistrarServicio));
-
+            Bundle valuesForActivity = new Bundle();
             if (resultado != null)
             {
 
-                if (resultado.Count < sasdatos.Count  )
+                if (resultado.Count!=0 && resultado.Count < busqueda.Count  )
                 {
                     t = resultado[e.Position];
                    
@@ -111,17 +118,18 @@ namespace sas.Actividades
                 else
                 {
 
-                    t = sasdatos[e.Position];
+                    t = busqueda[e.Position];
 
                 }
 
-               
+                
 
               //  intent.PutExtra("ServiciosDet", servicio);
-                intent.PutExtra("sasDatos", t);
-
+                //intent.PutExtra("sasDatos", t);
+               
+                valuesForActivity.PutInt("sasDatos", t.ID);
                 //intent.SetFlags(ActivityFlags.ReorderToFront);
-
+                intent.PutExtras(valuesForActivity);
                 SetResult(Result.Ok, intent);
 
                 //StartActivity(intent);
@@ -131,12 +139,16 @@ namespace sas.Actividades
                 return;
             }
 
-            t = sasdatos[e.Position];
+            t = busqueda[e.Position];
 
-          //  intent.PutExtra("ServiciosDet", servicio);
-            intent.PutExtra("sasDatos", t);
+            //  intent.PutExtra("ServiciosDet", servicio);
+            //intent.PutExtra("sasDatos", t);
 
             //intent.SetFlags(ActivityFlags.ReorderToFront);
+           
+            valuesForActivity.PutInt("sasDatos", t.ID);
+
+            intent.PutExtras(valuesForActivity);
 
             SetResult(Result.Ok, intent);
 
@@ -147,47 +159,47 @@ namespace sas.Actividades
         }
 
       
-        async Task GetIndexDato( string codtabla,string Id=null)
-        {
+        //async Task GetIndexDato( string codtabla,string Id=null)
+        //{
 
-            string result;
+        //    string result;
 
-            try
-            {
+        //    try
+        //    {
 
-                HttpClient client = new HttpClient();
-                client.MaxResponseContentBufferSize = 256000;
-
-
-                //client.BaseAddress = new Uri("http://181.120.121.221:88");
-                client.BaseAddress = new Uri(IPCONN);
-                //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
+        //        HttpClient client = new HttpClient();
+        //        client.MaxResponseContentBufferSize = 256000;
 
 
-                string url = string.Format("/api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
-                var response = await client.GetAsync(url);
-                result = response.Content.ReadAsStringAsync().Result;
-                //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
+        //        //client.BaseAddress = new Uri("http://181.120.121.221:88");
+        //        client.BaseAddress = new Uri(IPCONN);
+        //        //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
+
+
+        //        string url = string.Format("/api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
+        //        var response = await client.GetAsync(url);
+        //        result = response.Content.ReadAsStringAsync().Result;
+        //        //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
 
 
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+        //        Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
 
-                return;
-            }
+        //        return;
+        //    }
 
 
-            sasdatos = JsonConvert.DeserializeObject<List<SasDatosModel>>(result);
+        //    sasdatos = JsonConvert.DeserializeObject<List<SasDatosModel>>(result);
 
-            lstSasDatos.ChoiceMode = ChoiceMode.Single;
+        //    lstSasDatos.ChoiceMode = ChoiceMode.Single;
 
-            lstSasDatos.Adapter = new BusquedaAdapter(this, sasdatos);
+        //    lstSasDatos.Adapter = new BusquedaAdapter(this, sasdatos);
 
-        }
+        //}
     }
 
    }

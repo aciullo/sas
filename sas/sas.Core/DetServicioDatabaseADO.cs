@@ -93,7 +93,8 @@ namespace sas.Core
 					}
 				}
 				connection.Close ();
-			}
+                GC.Collect();
+            }
 			return tl;
 		}
 
@@ -109,8 +110,8 @@ namespace sas.Core
                 {
                     contents.CommandText = "SELECT [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
                                            " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado] , AuditUsuario , " + 
-                                           " AuditId ,GeoData " + 
-                                           " from [ServiciosDet] where Enviado = 0";
+                                           " AuditId ,GeoData " +
+                                           " from [ServiciosDet] WHERE [Enviado] = 0  ";
                     var r = contents.ExecuteReader();
                     while (r.Read())
                     {
@@ -118,6 +119,7 @@ namespace sas.Core
                     }
                 }
                 connection.Close();
+                GC.Collect();
             }
             return tl;
         }
@@ -140,11 +142,41 @@ namespace sas.Core
 					}
 				}
 				connection.Close ();
-			}
+                GC.Collect();
+            }
 			return t;
 		}
 
-		public int SaveItem (ServicioItem item) 
+
+
+        public IEnumerable<ServicioItem> GetItemByForeingID(int id)
+        {
+            var tl = new List<ServicioItem>();
+
+            lock (locker)
+            {
+                connection = new SqliteConnection("Data Source=" + path);
+                connection.Open();
+                using (var contents = connection.CreateCommand())
+                {
+                    contents.CommandText = "SELECT  [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
+                                           " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], AuditUsuario , " +
+                                           " AuditId ,GeoData  from [ServiciosDet] WHERE [AuditId] = ?";
+                    contents.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = id });
+                    var r = contents.ExecuteReader();
+                    while (r.Read())
+                    {
+                        tl.Add(FromReader(r));
+                    }
+                }
+                connection.Close();
+                GC.Collect();
+            }
+            return tl;
+        }
+
+
+        public int SaveItem (ServicioItem item) 
 		{
 			int r;
 			lock (locker) {
@@ -160,7 +192,7 @@ namespace sas.Core
 						r = command.ExecuteNonQuery ();
 					}
 					connection.Close ();
-                 
+                    GC.Collect();
                     return r;
 				} else {
 					connection = new SqliteConnection ("Data Source=" + path);
@@ -180,7 +212,7 @@ namespace sas.Core
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.HoraEstado });
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.codInstitucion });
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.codDesenlace });
-                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.Enviado });
+                        command.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = item.Enviado });
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.AuditUsuario });
                         command.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = item.AuditId });
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.GeoData });
@@ -188,7 +220,8 @@ namespace sas.Core
                         r = command.ExecuteNonQuery ();
 					}
 					connection.Close ();
-					return r;
+                    GC.Collect();
+                    return r;
 				}
 
 			}
@@ -206,7 +239,8 @@ namespace sas.Core
 					r = command.ExecuteNonQuery ();
 				}
 				connection.Close ();
-				return r;
+                GC.Collect();
+                return r;
 			}
 		}
 	}

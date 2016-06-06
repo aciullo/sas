@@ -7,7 +7,8 @@ namespace sas.Core {
     public class ServicioRepositoryADO {
 		ServicioDatabase db = null;
         DetServicioDatabase dbdet = null;
-		protected static string dbLocation;		
+        SasDatosDatabase dbdatos = null;
+        protected static string dbLocation;		
 		protected static ServicioRepositoryADO me;		
 
 		static ServicioRepositoryADO()
@@ -25,9 +26,12 @@ namespace sas.Core {
 			db = new ServicioDatabase(dbLocation);
 
             dbdet = new DetServicioDatabase(dbLocation);
-		}
 
-		public static string DatabaseFilePath {
+            dbdatos = new SasDatosDatabase(dbLocation);
+
+        }
+
+        public static string DatabaseFilePath {
 			get { 
 				var sqliteFilename = "SasDatabase.db3";
 				#if NETFX_CORE
@@ -85,12 +89,16 @@ namespace sas.Core {
             return me.db.CantidadPendiente();
         }
 
-
+        // servios det 
         public static ServicioItem GetServicio(int id)
         {
             return me.dbdet.GetItem(id);
         }
 
+        public static IEnumerable<ServicioItem> GetItemByForeingID(int id)
+        {
+            return me.dbdet.GetItemByForeingID(id);
+        }
         public static IEnumerable<ServicioItem> GetServicios()
         {
             return me.dbdet.GetItems();
@@ -109,6 +117,35 @@ namespace sas.Core {
         public static int DeleteTaskDet(int id)
         {
             return me.dbdet.DeleteItem(id);
+        }
+
+        //sas datos
+        public static int SaveTaskDatos(SasDatosItem item)
+        {
+            return me.dbdatos.SaveItem(item);
+        }
+
+        public static int DeleteTaskDatos(int id)
+        {
+            return me.dbdatos.DeleteItem(id);
+        }
+
+        public static SasDatosItem GetSasDato(int id)
+        {
+            return me.dbdatos.GetItem(id);
+        }
+        public static SasDatosItem GetSasDatoTabCod(string idtabla, string codigo)
+        {
+            return me.dbdatos.GetItemTablaCodigo(idtabla, codigo);
+        }
+        public static IEnumerable<SasDatosItem> GetSasDatos(string idtabla)
+        {
+            return me.dbdatos.GetItems(idtabla);
+        }
+
+        public static bool CheckIsDataAlreadyInDBorNotSasDatos(string TableName, string where)
+        {
+            return me.dbdatos.CheckIsDataAlreadyInDBorNot(TableName, where);
         }
     }
 }

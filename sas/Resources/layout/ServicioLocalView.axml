@@ -20,50 +20,57 @@
             android:id="@+id/Text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14dip"
+            android:textSize="18dip"
             android:textColor="#FF267F00"
             android:paddingLeft="100dip" />
         <TextView
             android:id="@+id/Text3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14dip"
+            android:textSize="18dip"
             android:textColor="#FF267F00"
             android:paddingLeft="100dip" />
         <TextView
             android:id="@+id/Text4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14dip"
+            android:textSize="18dip"
             android:textColor="#FF267F00"
             android:paddingLeft="100dip" />
         <TextView
             android:id="@+id/Text5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14dip"
+            android:textSize="18dip"
             android:textColor="#FF267F00"
             android:paddingLeft="100dip" />
         <TextView
             android:id="@+id/Text6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14dip"
+            android:textSize="18dip"
             android:textColor="#FF267F00"
             android:paddingLeft="100dip" />
         <TextView
             android:id="@+id/Text7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14dip"
+            android:textSize="18dip"
             android:textColor="#FF267F00"
             android:paddingLeft="100dip" />
-        <ImageView
-            android:id="@+id/Image"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="5dp"
-            android:src="@drawable/icon"
-            android:layout_alignParentRight="true" />
+        <TextView
+            android:id="@+id/Text8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dip"
+            android:textColor="#FF267F00"
+            android:paddingLeft="100dip" />
+        <TextView
+            android:id="@+id/Text9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dip"
+            android:textColor="#FF267F00"
+            android:paddingLeft="100dip" />
     </LinearLayout>
 </RelativeLayout>

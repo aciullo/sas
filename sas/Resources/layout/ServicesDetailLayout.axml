@@ -54,7 +54,7 @@
         </TableRow>
         <TableRow>
             <TextView
-                android:text="Nombre Paciente:"
+                android:text="Paciente:"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,22 +114,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView9" />
-            <TableLayout
-                android:minWidth="25px"
-                android:minHeight="25px"
-                android:layout_column="1"
+            <EditText
+                android:inputType="textMultiLine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tableLayout1">
-                <TableRow>
-                    <EditText
-                        android:inputType="textMultiLine"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:id="@+id/txtMotivo1" />
-                </TableRow>
-            </TableLayout>
+                android:id="@+id/txtMotivo1"
+                android:editable="false" />
         </TableRow>
         <TableLayout
             android:minWidth="25px"

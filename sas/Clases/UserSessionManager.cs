@@ -33,7 +33,7 @@ namespace sas.Clases
             this.mContext = context;
             mSharedPrefs = PreferenceManager.GetDefaultSharedPreferences(mContext);
             mPrefsEditor = mSharedPrefs.Edit();
-            string conn = "http://192.168.0.102:88";
+            string conn = "http://sas.futura.com.py:88";
             if (string.IsNullOrEmpty(getAccessConn()) || getAccessConn()!= conn)
             {
                 saveAccessIP(conn);
@@ -147,7 +147,7 @@ namespace sas.Clases
             Intent i = new Intent(mContext, typeof(MainActivity));
 
             // Closing all the Activities
-            i.SetFlags(ActivityFlags.ClearTop);
+            i.SetFlags(ActivityFlags.ClearTask);
 
             // Add new Flag to start new Activity
             i.SetFlags(ActivityFlags.NewTask);

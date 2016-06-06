@@ -47,6 +47,9 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="DetServicioDatabaseADO.cs" />
+    <Compile Include="SasDatosDatabaseADO.cs" />
+    <Compile Include="SasDatosItem.cs" />
+    <Compile Include="SasDatosManager.cs" />
     <Compile Include="ServicioItem.cs" />
     <Compile Include="ServicioItemManager.cs" />
     <Compile Include="ServicioLocal.cs" />

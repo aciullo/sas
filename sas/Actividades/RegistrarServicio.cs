@@ -31,8 +31,8 @@ namespace sas
         private ServicioLocal servicio;
         private ServicioItem servicioDetalle;
         private int ID = 0;
-        private List<SasDatosModel> sasdatos;
-        private SasDatosModel sasdatosBusqueda;
+        //private List<SasDatosModel> sasdatos;
+        //private SasDatosModel sasdatosBusqueda;
         //variables para gps
         string _addressText;
         Location _currentLocation;
@@ -78,7 +78,7 @@ namespace sas
             movil = session.getAccessIdmovil();
 
             //referenciar al manager d e localizaciones
-            InitializeLocationManager();
+          //  InitializeLocationManager();
 
             //asignar los controles del layout
             txtNroSolicitud = FindViewById<EditText>(Resource.Id.txtNroSolicitud);
@@ -150,6 +150,8 @@ namespace sas
             txtDestinoDesenlace.KeyPress += TxtDestinoDesenlace_KeyPress;
             txtDestinoDesenlace.FocusChange += TxtDestinoDesenlace_FocusChange;
             btnBuscar.Click += BtnBuscar_Click;
+          //  GetAddress();
+
         }
 
         void InitializeLocationManager()
@@ -157,7 +159,10 @@ namespace sas
             _locationManager = (LocationManager)GetSystemService(LocationService);
             Criteria criteriaForLocationService = new Criteria
             {
-                Accuracy = Accuracy.Fine
+                Accuracy = Accuracy.Coarse,
+                PowerRequirement= Power.Medium
+                
+
             };
             IList<string> acceptableLocationProviders = _locationManager.GetProviders(criteriaForLocationService, true);
 
@@ -176,10 +181,15 @@ namespace sas
         protected override void OnResume()
         {
             base.OnResume();
-            _locationManager = GetSystemService(Context.LocationService) as LocationManager;
-            if (_locationManager.IsProviderEnabled(LocationManager.GpsProvider))
+
+            // _locationManager = GetSystemService(Context.LocationService) as LocationManager;
+            InitializeLocationManager();
+
+            //if (_locationManager.IsProviderEnabled(LocationManager.GpsProvider))
+            if ((!string.IsNullOrEmpty(_locationProvider)))
             {
-                _locationManager.RequestLocationUpdates(_locationProvider, 0, 0, this);
+                
+                _locationManager.RequestLocationUpdates(_locationProvider, 2000, 1, this);
                 Log.Debug(TAG, "Listening for location updates using " + _locationProvider + ".");
             }
             else
@@ -188,17 +198,18 @@ namespace sas
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.SetTitle("Location Services Not Active");
                 builder.SetMessage("Please enable Location Services and GPS");
-                builder.SetPositiveButton("OK", delegate {
+                builder.SetPositiveButton("OK", delegate
+                {
                     // Show location settings when the user acknowledges the alert dialog
                     Intent intent = new Intent(Android.Provider.Settings.ActionLocationSourceSettings);
                     StartActivity(intent);
-                    
+
                 });
 
                 Dialog alertDialog = builder.Create();
                 alertDialog.SetCanceledOnTouchOutside(false);
                 alertDialog.Show();
-              
+
             }
         }
 
@@ -210,48 +221,48 @@ namespace sas
         }
 
         #region"GPS"
-      
-        async void GetAddress()
-        {
-            if (_currentLocation == null)
-            {
-                _addressText = "Can't determine the current address. Try again in a few minutes.";
-                return;
-            }
 
-            Address address = await ReverseGeocodeCurrentLocation();
-            DisplayAddress(address);
-        }
+        //async void GetAddress()
+        //{
+        //    if (_currentLocation == null)
+        //    {
+        //        _addressText = "Can't determine the current address. Try again in a few minutes.";
+        //        return;
+        //    }
 
-        async Task<Address> ReverseGeocodeCurrentLocation()
-        {
-            Geocoder geocoder = new Geocoder(this);
-            IList<Address> addressList =
-                await geocoder.GetFromLocationAsync(_currentLocation.Latitude, _currentLocation.Longitude, 10);
+        //    Address address = await ReverseGeocodeCurrentLocation();
+        //    DisplayAddress(address);
+        //}
 
-            Address address = addressList.FirstOrDefault();
-            return address;
-        }
+        //async Task<Address> ReverseGeocodeCurrentLocation()
+        //{
+        //    Geocoder geocoder = new Geocoder(this);
+        //    IList<Address> addressList =
+        //        await geocoder.GetFromLocationAsync(_currentLocation.Latitude, _currentLocation.Longitude, 10);
 
-        void DisplayAddress(Address address)
-        {
-            if (address != null)
-            {
-                StringBuilder deviceAddress = new StringBuilder();
-                for (int i = 0; i < address.MaxAddressLineIndex; i++)
-                {
-                    deviceAddress.AppendLine(address.GetAddressLine(i));
-                }
-                // Remove the last comma from the end of the address.
-                _addressText = deviceAddress.ToString();
-            }
-            else
-            {
-                _addressText = "Unable to determine the address. Try again in a few minutes.";
-            }
-        }
+        //    Address address = addressList.FirstOrDefault();
+        //    return address;
+        //}
 
-        public async void OnLocationChanged(Location location)
+        //void DisplayAddress(Address address)
+        //{
+        //    if (address != null)
+        //    {
+        //        StringBuilder deviceAddress = new StringBuilder();
+        //        for (int i = 0; i < address.MaxAddressLineIndex; i++)
+        //        {
+        //            deviceAddress.AppendLine(address.GetAddressLine(i));
+        //        }
+        //        // Remove the last comma from the end of the address.
+        //        _addressText = deviceAddress.ToString();
+        //    }
+        //    else
+        //    {
+        //        _addressText = "Unable to determine the address. Try again in a few minutes.";
+        //    }
+        //}
+
+        public  void OnLocationChanged(Location location)
         {
             _currentLocation = location;
             if (_currentLocation == null)
@@ -261,8 +272,8 @@ namespace sas
             else
             {
                 _locationText = string.Format("{0:f6},{1:f6}", _currentLocation.Latitude, _currentLocation.Longitude);
-                Address address = await ReverseGeocodeCurrentLocation();
-                DisplayAddress(address);
+               // Address address = await ReverseGeocodeCurrentLocation();
+               // DisplayAddress(address);
 
             }
         }
@@ -291,19 +302,20 @@ namespace sas
             StartActivity(newActivity);
         }
 
-        protected override async void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
+        protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
 
             if (resultCode == Result.Ok)
             {
-                sasdatosBusqueda = data.GetParcelableExtra("sasDatos") as SasDatosModel;
+                int idresul = data.Extras.GetInt("sasDatos");
 
+                var  SasdatosItem  = SasDatosManager.GetTask(idresul);
 
-                if (sasdatosBusqueda != null)
+               if (SasdatosItem != null)
                 {
-                    txtDestinoDesenlace.Text = sasdatosBusqueda.codigo;
-                    await GetIndexDato(txtDestinoDesenlace.Text);
+                    txtDestinoDesenlace.Text = SasdatosItem.codigo;
+                    lblDescrpcionDestinoDesenlace.Text = SasdatosItem.descripcion;
 
                 }
             }
@@ -346,7 +358,7 @@ namespace sas
            // StartActivity(newActivity);
         }
 
-        private async void LoadStateButtons(string codEstadoRecibido)
+        private void LoadStateButtons(string codEstadoRecibido)
         {
             switch (codEstadoRecibido)
             {
@@ -375,7 +387,7 @@ namespace sas
                     btnTranslado.Visibility = ViewStates.Invisible;
 
                     btnRegistrarResultado.Visibility = ViewStates.Invisible;
-                    if (string.IsNullOrEmpty(codInstitucionRecibido)&& (string.IsNullOrEmpty(codDesenlace)))
+                    if (string.IsNullOrEmpty(codInstitucionRecibido) && (string.IsNullOrEmpty(codDesenlace)))
                     {
                         txtDestinoDesenlace.Visibility = ViewStates.Invisible;
                         lblDestinoDesenlace.Visibility = ViewStates.Invisible;
@@ -391,7 +403,7 @@ namespace sas
                         btnBuscar.Visibility = ViewStates.Visible;
                         //mostrar institucion
                         txtDestinoDesenlace.Text = codInstitucionRecibido;
-                        await GetIndexDato(txtDestinoDesenlace.Text);
+                        GetIndexDato(txtDestinoDesenlace.Text);
                         btnRegistroInicial.Text = "Registrar Llegada a Institución";
                         txtDestinoDesenlace.Enabled = false;
                     }
@@ -413,7 +425,7 @@ namespace sas
 
                     lblDestinoDesenlace.Text = "Institución";
                     txtDestinoDesenlace.Text = codInstitucionRecibido;
-                    await GetIndexDato(txtDestinoDesenlace.Text);
+                    GetIndexDato(txtDestinoDesenlace.Text);
                     txtDestinoDesenlace.Enabled = false;
                     btnRegistroInicial.Text = "Registrar Salida de Institución";
                     break;
@@ -464,7 +476,7 @@ namespace sas
             if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
             {
                 //Toast.MakeText(this, txtDestinoDesenlace.Text, ToastLength.Short).Show();
-                await GetIndexDato(txtDestinoDesenlace.Text);
+                 GetIndexDato(txtDestinoDesenlace.Text);
                 e.Handled = true;
             }
         }
@@ -474,17 +486,17 @@ namespace sas
             if (!e.HasFocus)
             {
                 //Toast.MakeText(this, txtDestinoDesenlace.Text, ToastLength.Short).Show();
-                await GetIndexDato(txtDestinoDesenlace.Text);
+                 GetIndexDato(txtDestinoDesenlace.Text);
 
             }
         }
 
         private void BtnTranslado_Click(object sender, EventArgs e)
         {
-            btnVolverBase.Enabled = false;
-            btnTranslado.Enabled = false;
+            //btnVolverBase.Enabled = false;
+            //btnTranslado.Enabled = false;
             txtDestinoDesenlace.Enabled = true;
-
+            btnRegistroInicial.Enabled = true;
             btnRegistroInicial.Text = "Registrar Salida a Institución";
             btnRegistroInicial.Visibility = ViewStates.Visible;
             btnVolverBase.Visibility = ViewStates.Invisible;
@@ -502,11 +514,12 @@ namespace sas
 
         private void BtnVolverBase_Click(object sender, EventArgs e)
         {
+            btnRegistroInicial.Enabled = true;
             btnRegistroInicial.Text = "Registrar Salida a Base";
             btnRegistrarResultado.Visibility= ViewStates.Invisible;
-            btnVolverBase.Enabled = false;
-            btnTranslado.Enabled = false;
-           // btnRegistroInicial.Visibility = ViewStates.Invisible;
+            //btnVolverBase.Enabled = false;
+            //btnTranslado.Enabled = false;
+            btnRegistroInicial.Visibility = ViewStates.Visible;
             btnVolverBase.Visibility = ViewStates.Invisible;
             btnTranslado.Visibility = ViewStates.Invisible;
         }
@@ -528,7 +541,7 @@ namespace sas
          
         }
 
-        private async void GuardarEstadoInicial()
+        private void GuardarEstadoInicial()
         {
             string idestado = "";
 
@@ -552,7 +565,7 @@ namespace sas
                     idestado = "005";
                     //volverBaseButton.BackgroundColor = Color.Green;
                     // btnRegistrarResultado.Text = "Servicio Finalizado";
-                    btnRegistrarResultado.Text = "Registrar Llegada a Base";
+                    btnRegistroInicial.Text = "Registrar Llegada a Base";
                     break;
                 //case "Servicio Finalizado":
                 //    idestado = "009";
@@ -563,7 +576,9 @@ namespace sas
                 case "Registrar Llegada a Base":
                     idestado = "008";
                     // volverBaseButton.BackgroundColor = Color.Maroon;
-                    btnRegistrarResultado.Text = "Registrar Desenlace";
+                    btnRegistroInicial.Text = "Registrar Desenlace";
+                    btnRegistroInicial.Visibility = ViewStates.Visible;
+                    btnRegistroInicial.Enabled = true;
                     txtDestinoDesenlace.Visibility = ViewStates.Visible;
                     lblDestinoDesenlace.Visibility = ViewStates.Visible;
                     txtDestinoDesenlace.Visibility = ViewStates.Visible;
@@ -575,7 +590,7 @@ namespace sas
                     //volverBaseButton.IsEnabled = false;
                     break;
                 case "Registrar Desenlace":
-                    await GetIndexDato(txtDestinoDesenlace.Text);
+                     GetIndexDato(txtDestinoDesenlace.Text);
                     idestado = "009";
                     if (string.IsNullOrEmpty(txtDestinoDesenlace.Text))
                     {
@@ -589,7 +604,9 @@ namespace sas
                             id_Solicitud = servicio.id_Solicitud,
                             NumeroSolicitud = servicio.NumeroSolicitud,
                             codInstitucion = "Null",
-                            codDesenlace = txtDestinoDesenlace.Text
+                            codDesenlace = txtDestinoDesenlace.Text,
+                            codEstado= idestado,
+                            Estado="C"
                         };
                         //var regservicio2 = servicio;
                         //regservicio2.HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now);
@@ -598,16 +615,16 @@ namespace sas
                         //regservicio2.codDesenlace = txtDestinoDesenlace.Text;
 
                         //actualizar localmente
-
-                        servicio.Estado = regservicio2.Estado;
-                        servicio.HoraEstado = regservicio2.HoraEstado;
-                        servicio.codEstado = regservicio2.codEstado;
+                        servicio.ID = ID;
+                        servicio.Estado = servicio.Estado;
+                        servicio.HoraEstado = servicio.HoraEstado;
+                        servicio.codEstado = servicio.codEstado;
                         servicio.codInstitucion = regservicio2.codInstitucion;
                         servicio.codDesenlace = regservicio2.codDesenlace;
                         ServicioManager.SaveTask(servicio);
 
 
-                        await actualizarInstitucionDesenlace(regservicio2);
+                        actualizarInstitucionDesenlace(regservicio2);
                     }
                     Intent intent = new Intent();
                     intent.SetClass(BaseContext, typeof(Servicios));
@@ -620,7 +637,7 @@ namespace sas
                     break;
                 case "Registrar Salida a Institución":
                     idestado = "005";
-                    await GetIndexDato(txtDestinoDesenlace.Text);
+                     GetIndexDato(txtDestinoDesenlace.Text);
                     if (string.IsNullOrEmpty(txtDestinoDesenlace.Text))
                     {
                         Toast.MakeText(this, "Debe ingresar una institución", ToastLength.Long).Show();
@@ -633,37 +650,38 @@ namespace sas
                             id_Solicitud = servicio.id_Solicitud,
                             NumeroSolicitud = servicio.NumeroSolicitud,
                             codInstitucion = txtDestinoDesenlace.Text,
-                            codDesenlace = "Null"
+                            codDesenlace = "Null",
+                            codEstado= idestado
                         };
                         //var regservicio = servicio;
                         //regservicio.HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now);
                         //regservicio.codEstado = idestado;
                         //regservicio.codInstitucion = txtDestinoDesenlace.Text ;
                         //regservicio.codDesenlace = "Null";
-
-                        servicio.Estado = regservicio.Estado;
-                        servicio.HoraEstado = regservicio.HoraEstado;
-                        servicio.codEstado = regservicio.codEstado;
+                        servicio.ID = ID;
+                        servicio.Estado = servicio.Estado;
+                        servicio.HoraEstado = servicio.HoraEstado;
+                        servicio.codEstado = servicio.codEstado;
                         servicio.codInstitucion = regservicio.codInstitucion;
                         servicio.codDesenlace = regservicio.codDesenlace;
                         ServicioManager.SaveTask(servicio);
 
-                        await actualizarInstitucionDesenlace(regservicio);
+                        actualizarInstitucionDesenlace(regservicio);
                     }
 
                     //regTransladoButton.BackgroundColor = Color.Purple;
-                    btnRegistrarResultado.Text = "Registrar Llegada a Institución";
+                    btnRegistroInicial.Text = "Registrar Llegada a Institución";
                     txtDestinoDesenlace.Enabled = false;
                     break;
                 case "Registrar Llegada a Institución":
                     idestado = "006";
                     // regTransladoButton.BackgroundColor = Color.Teal;
-                    btnRegistrarResultado.Text = "Registrar Salida de Institución";
+                    btnRegistroInicial.Text = "Registrar Salida de Institución";
                     break;
                 case "Registrar Salida de Institución":
                     idestado = "007";
                     //regTransladoButton.BackgroundColor = Color.Green;
-                    btnRegistrarResultado.Text = "Registrar Llegada a Base";
+                    btnRegistroInicial.Text = "Registrar Llegada a Base";
                     break;
 
                 default:
@@ -681,6 +699,7 @@ namespace sas
                     codEstado = idestado,
                     Estado= servicio.Estado
                     
+                    
                 };
                 //var regservicio = servicio;
                 //regservicio.HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now);
@@ -688,14 +707,15 @@ namespace sas
                 //regservicio.HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now);
 
                 //actualizar localmente
-                servicio.Estado = regservicio.Estado;
+                servicio.ID = ID;
+                //servicio.Estado = regservicio.Estado;
                 servicio.codEstado = regservicio.codEstado;
                 servicio.HoraEstado = regservicio.HoraEstado;
-                servicio.codInstitucion = regservicio.codInstitucion;
-                servicio.codDesenlace = regservicio.codDesenlace;
+                //servicio.codInstitucion = regservicio.codInstitucion;
+                //servicio.codDesenlace = regservicio.codDesenlace;
                 ServicioManager.SaveTask(servicio);
 
-                await GuardarDatos(regservicio);
+                GuardarDatos(regservicio);
                 
               
 
@@ -704,157 +724,253 @@ namespace sas
             }
         }
         #region "Metodos actualizacion BD"
-        private async Task GuardarDatos(RegistrarServicioModel regservicio)
+        private void GuardarDatos(RegistrarServicioModel regservicio)
         {
-            string result;
-            try
-            {
-                HttpClient client = new HttpClient();
-                client.MaxResponseContentBufferSize = 256000;
-                client.BaseAddress = new Uri(IPCONN);
-                //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
-                string url = string.Format("/api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", regservicio.id_Solicitud, regservicio.codEstado, regservicio.HoraEstado);
-                var response = await client.GetAsync(url);
-                result = response.Content.ReadAsStringAsync().Result;
-                //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
-                if (result.Contains("Error"))
-                {
-                    Toast.MakeText(this, "Error", ToastLength.Long).Show();
-                    //using (var datos = new DAServicioDet())
-                    //{
-                    //    datos.InsertServicio(regservicio);
-                    //}
-                }
-            }
-            catch (Exception ex)
-            {
-                Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
 
-                //using (var datos = new DAServicioDet())
-                //{
-                //    datos.InsertServicio(regservicio);
-                //}
+            //GetAddress();
 
-                GetAddress();
-
-                servicioDetalle = new ServicioItem();
-                servicioDetalle.id_Solicitud = servicio.id_Solicitud;
-                servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
-                servicioDetalle.Nombre = servicio.nombrePaciente;
-                servicioDetalle.Fecha = DateTime.Now;
-                servicioDetalle.codMovil = movil;
-                servicioDetalle.Estado= regservicio.Estado;
-                servicioDetalle.codEstado = regservicio.codEstado;
-                servicioDetalle.HoraEstado = regservicio.HoraEstado;
-                servicioDetalle.codInstitucion = regservicio.codInstitucion;
-                servicioDetalle.codDesenlace = regservicio.codDesenlace;
-                servicioDetalle.Enviado = false;
-                servicioDetalle.AuditUsuario = usuario;
-                servicioDetalle.AuditId = servicioDetalle.ID;
-                servicioDetalle.GeoData = _locationText;
-                ServicioItemManager.SaveTask(servicioDetalle);
-
-
-
-                return;
-            }
-            //waitActivityIndicator.IsRunning = false;
+            servicioDetalle = new ServicioItem();
+            servicioDetalle.id_Solicitud = servicio.id_Solicitud;
+            servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
+            servicioDetalle.Nombre = servicio.nombrePaciente;
+            servicioDetalle.Fecha = DateTime.Now;
+            servicioDetalle.codMovil = movil;
+            servicioDetalle.Estado = servicio.Estado;
+            servicioDetalle.codEstado = servicio.codEstado;
+            servicioDetalle.HoraEstado = servicio.HoraEstado;
+            servicioDetalle.codInstitucion = regservicio.codInstitucion;
+            servicioDetalle.codDesenlace = regservicio.codDesenlace;
+            servicioDetalle.Enviado = false;
+            servicioDetalle.AuditUsuario = usuario;
+            servicioDetalle.AuditId = servicio.ID;
+            servicioDetalle.GeoData = _locationText;
+            ServicioItemManager.SaveTask(servicioDetalle);
             Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
+
+            //string result;
+            //try
+            //{
+            //    HttpClient client = new HttpClient();
+            //    client.MaxResponseContentBufferSize = 256000;
+            //    client.BaseAddress = new Uri(IPCONN);
+            //    //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
+            //    string url = string.Format("/api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", regservicio.id_Solicitud, regservicio.codEstado, regservicio.HoraEstado);
+            //    var response = await client.GetAsync(url);
+            //    result = response.Content.ReadAsStringAsync().Result;
+            //    //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
+            //    if (result.Contains("Error"))
+            //    {
+            //        Toast.MakeText(this, "Error", ToastLength.Long).Show();
+            //        //using (var datos = new DAServicioDet())
+            //        //{
+            //        //    datos.InsertServicio(regservicio);
+            //        //}
+            //    }
+
+            //    GetAddress();
+
+            //    servicioDetalle = new ServicioItem();
+            //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
+            //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
+            //    servicioDetalle.Nombre = servicio.nombrePaciente;
+            //    servicioDetalle.Fecha = DateTime.Now;
+            //    servicioDetalle.codMovil = movil;
+            //    servicioDetalle.Estado = servicio.Estado;
+            //    servicioDetalle.codEstado = servicio.codEstado;
+            //    servicioDetalle.HoraEstado = servicio.HoraEstado;
+            //    servicioDetalle.codInstitucion = regservicio.codInstitucion;
+            //    servicioDetalle.codDesenlace = regservicio.codDesenlace;
+            //    servicioDetalle.Enviado = true;
+            //    servicioDetalle.AuditUsuario = usuario;
+            //    servicioDetalle.AuditId = servicio.ID;
+            //    servicioDetalle.GeoData = _locationText;
+            //    ServicioItemManager.SaveTask(servicioDetalle);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+
+            //    //using (var datos = new DAServicioDet())
+            //    //{
+            //    //    datos.InsertServicio(regservicio);
+            //    //}
+
+            //    GetAddress();
+
+            //    servicioDetalle = new ServicioItem();
+            //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
+            //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
+            //    servicioDetalle.Nombre = servicio.nombrePaciente;
+            //    servicioDetalle.Fecha = DateTime.Now;
+            //    servicioDetalle.codMovil = movil;
+            //    servicioDetalle.Estado= servicio.Estado;
+            //    servicioDetalle.codEstado = servicio.codEstado;
+            //    servicioDetalle.HoraEstado = servicio.HoraEstado;
+            //    servicioDetalle.codInstitucion = regservicio.codInstitucion;
+            //    servicioDetalle.codDesenlace = regservicio.codDesenlace;
+            //    servicioDetalle.Enviado = false;
+            //    servicioDetalle.AuditUsuario = usuario;
+            //    servicioDetalle.AuditId = servicio.ID;
+            //    servicioDetalle.GeoData = _locationText;
+            //    ServicioItemManager.SaveTask (servicioDetalle);
+
+
+
+            //    return;
+            //}
+            ////waitActivityIndicator.IsRunning = false;
+            //Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
         }
 
 
-        private async Task actualizarInstitucionDesenlace(RegistrarServicioModel servTranslado)
+        private void actualizarInstitucionDesenlace(RegistrarServicioModel servTranslado)
         {
+            //GetAddress();
 
-           
-            string result;
-            var jsonResquest = JsonConvert.SerializeObject(servTranslado);
-            var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
-            try
-            {
-                //transladoButton.IsEnabled = false;
-                HttpClient client = new HttpClient();
-                client.MaxResponseContentBufferSize = 256000;
-                //	client.BaseAddress = new Uri ("http://181.120.121.221:88");
-                System.Net.Http.HttpResponseMessage response;
-                client.BaseAddress = new Uri(IPCONN);
-                if (servTranslado.codDesenlace == "Null")
-                {
-                    var url = string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codInstitucion);
-                    response = await client.GetAsync(url);
-                }
-                else
-                {
-                    var url = (string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codInstitucion, servTranslado.codDesenlace));
-                    response = await client.GetAsync(url);
-                }
-                //string url = string.Format ("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&IdProductoFinal={3}", servTranslado.id_Solicitud,servTranslado.NumeroSolicitud,servTranslado.codServicioFinal, servTranslado.codProductoFinal);
-                //?idsolicitud={idsolicitud}&nrosolicitud={nrosolicitud}&destino={destino}&IdProductoFinal={IdProductoFinal}
-                //var response= await client.GetAsync(uri);
-                result = response.Content.ReadAsStringAsync().Result;
-                //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
-                // transladoButton.IsEnabled = true;
-                //guaardar localmente
-                if (result.Contains("Error"))
-                {
-                    Toast.MakeText(this, "Error", ToastLength.Long).Show();
-
-                    using (var datos = new DAServicioDet())
-                    {
-                        datos.InsertServicio(servTranslado);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                //guaardar localmente
-                Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
-                // transladoButton.IsEnabled = true;
-                // waitActivityIndicator.IsRunning = false;
-                //using (var datos = new DAServicioDet())
-                //{
-                //    datos.InsertServicio(servTranslado);
-                //}
-
-
-                GetAddress();
-
-                servicioDetalle = new ServicioItem();
-                servicioDetalle.id_Solicitud = servicio.id_Solicitud;
-                servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
-                servicioDetalle.Nombre = servicio.nombrePaciente;
-                servicioDetalle.Fecha = DateTime.Now;
-                servicioDetalle.codMovil = movil;
-                servicioDetalle.Estado = servTranslado.Estado;
-                servicioDetalle.codEstado = servTranslado.codEstado;
-                servicioDetalle.HoraEstado = servTranslado.HoraEstado;
-                servicioDetalle.codInstitucion = servTranslado.codInstitucion;
-                servicioDetalle.codDesenlace = servTranslado.codDesenlace;
-                servicioDetalle.Enviado = false;
-                servicioDetalle.AuditUsuario = usuario;
-                servicioDetalle.AuditId = servicioDetalle.ID;
-                servicioDetalle.GeoData = _locationText;
-                ServicioItemManager.SaveTask(servicioDetalle);
-
-
-                return;
-            }
-
+            servicioDetalle = new ServicioItem();
+            servicioDetalle.id_Solicitud = servicio.id_Solicitud;
+            servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
+            servicioDetalle.Nombre = servicio.nombrePaciente;
+            servicioDetalle.Fecha = DateTime.Now;
+            servicioDetalle.codMovil = movil;
+            servicioDetalle.Estado = servicio.Estado;
+            servicioDetalle.codEstado = servicio.codEstado;
+            servicioDetalle.HoraEstado = servicio.HoraEstado;
+            servicioDetalle.codInstitucion = servTranslado.codInstitucion;
+            servicioDetalle.codDesenlace = servTranslado.codDesenlace;
+            servicioDetalle.Enviado = false;
+            servicioDetalle.AuditUsuario = usuario;
+            servicioDetalle.AuditId = servicio.ID;
+            servicioDetalle.GeoData = _locationText;
+            ServicioItemManager.SaveTask(servicioDetalle);
             Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
-            // waitActivityIndicator.IsRunning = false;
-            //await Navigation.PushAsync (new PersonasPage(persona));
+            //string result;
+            //var jsonResquest = JsonConvert.SerializeObject(servTranslado);
+            //var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
+            //try
+            //{
+            //    //transladoButton.IsEnabled = false;
+            //    HttpClient client = new HttpClient();
+            //    client.MaxResponseContentBufferSize = 256000;
+            //    //	client.BaseAddress = new Uri ("http://181.120.121.221:88");
+            //    System.Net.Http.HttpResponseMessage response;
+            //    client.BaseAddress = new Uri(IPCONN);
+            //    if (servTranslado.codDesenlace == "Null")
+            //    {
+            //        var url = string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codInstitucion);
+            //        response = await client.GetAsync(url);
+            //    }
+            //    else
+            //    {
+            //        var url = (string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codInstitucion, servTranslado.codDesenlace));
+            //        response = await client.GetAsync(url);
+            //    }
+            //    //string url = string.Format ("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&IdProductoFinal={3}", servTranslado.id_Solicitud,servTranslado.NumeroSolicitud,servTranslado.codServicioFinal, servTranslado.codProductoFinal);
+            //    //?idsolicitud={idsolicitud}&nrosolicitud={nrosolicitud}&destino={destino}&IdProductoFinal={IdProductoFinal}
+            //    //var response= await client.GetAsync(uri);
+            //    result = response.Content.ReadAsStringAsync().Result;
+            //    //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
+            //    // transladoButton.IsEnabled = true;
+            //    //guaardar localmente
+            //    if (result.Contains("Error"))
+            //    {
+            //        Toast.MakeText(this, "Error", ToastLength.Long).Show();
+
+            //        //using (var datos = new DAServicioDet())
+            //        //{
+            //        //    datos.InsertServicio(servTranslado);
+            //        //}
+            //        GetAddress();
+
+            //        servicioDetalle = new ServicioItem();
+            //        servicioDetalle.id_Solicitud = servicio.id_Solicitud;
+            //        servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
+            //        servicioDetalle.Nombre = servicio.nombrePaciente;
+            //        servicioDetalle.Fecha = DateTime.Now;
+            //        servicioDetalle.codMovil = movil;
+            //        servicioDetalle.Estado = servicio.Estado;
+            //        servicioDetalle.codEstado = servicio.codEstado;
+            //        servicioDetalle.HoraEstado = servicio.HoraEstado;
+            //        servicioDetalle.codInstitucion = servTranslado.codInstitucion;
+            //        servicioDetalle.codDesenlace = servTranslado.codDesenlace;
+            //        servicioDetalle.Enviado = false;
+            //        servicioDetalle.AuditUsuario = usuario;
+            //        servicioDetalle.AuditId = servicio.ID;
+            //        servicioDetalle.GeoData = _locationText;
+            //        ServicioItemManager.SaveTask(servicioDetalle);
+            //        return;
+            //    }
+
+            //    GetAddress();
+
+            //    servicioDetalle = new ServicioItem();
+            //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
+            //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
+            //    servicioDetalle.Nombre = servicio.nombrePaciente;
+            //    servicioDetalle.Fecha = DateTime.Now;
+            //    servicioDetalle.codMovil = movil;
+            //    servicioDetalle.Estado = servicio.Estado;
+            //    servicioDetalle.codEstado = servicio.codEstado;
+            //    servicioDetalle.HoraEstado = servicio.HoraEstado;
+            //    servicioDetalle.codInstitucion = servTranslado.codInstitucion;
+            //    servicioDetalle.codDesenlace = servTranslado.codDesenlace;
+            //    servicioDetalle.Enviado = true;
+            //    servicioDetalle.AuditUsuario = usuario;
+            //    servicioDetalle.AuditId = servicio.ID;
+            //    servicioDetalle.GeoData = _locationText;
+            //    ServicioItemManager.SaveTask(servicioDetalle);
+            //}
+            //catch (Exception ex)
+            //{
+            //    //guaardar localmente
+            //    Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+            //    // transladoButton.IsEnabled = true;
+            //    // waitActivityIndicator.IsRunning = false;
+            //    //using (var datos = new DAServicioDet())
+            //    //{
+            //    //    datos.InsertServicio(servTranslado);
+            //    //}
+
+
+            //    GetAddress();
+
+            //    servicioDetalle = new ServicioItem();
+            //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
+            //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
+            //    servicioDetalle.Nombre = servicio.nombrePaciente;
+            //    servicioDetalle.Fecha = DateTime.Now;
+            //    servicioDetalle.codMovil = movil;
+            //    servicioDetalle.Estado = servicio.Estado;
+            //    servicioDetalle.codEstado = servicio.codEstado;
+            //    servicioDetalle.HoraEstado = servicio.HoraEstado;
+            //    servicioDetalle.codInstitucion = servTranslado.codInstitucion;
+            //    servicioDetalle.codDesenlace = servTranslado.codDesenlace;
+            //    servicioDetalle.Enviado = false;
+            //    servicioDetalle.AuditUsuario = usuario;
+            //    servicioDetalle.AuditId = servicio.ID;
+            //    servicioDetalle.GeoData = _locationText;
+            //    ServicioItemManager.SaveTask(servicioDetalle);
+
+
+            //    return;
+            //}
+
+            //Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
+            //// waitActivityIndicator.IsRunning = false;
+            ////await Navigation.PushAsync (new PersonasPage(persona));
 
         }
         #endregion
 
-        async Task GetIndexDato(string Id)
+      private void GetIndexDato(string Id)
         {
-            string result;
+            //string result;
+            var busqueda = new SasDatosItem();
             try
             {
-                HttpClient client = new HttpClient();
-                client.MaxResponseContentBufferSize = 256000;
-                client.BaseAddress = new Uri(IPCONN);
+                //HttpClient client = new HttpClient();
+                //client.MaxResponseContentBufferSize = 256000;
+                //client.BaseAddress = new Uri(IPCONN);
                 //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
                 string codtabla = "";
                 if (lblDestinoDesenlace.Text == "Desenlace")
@@ -865,28 +981,41 @@ namespace sas
                 {
                     codtabla = "06";
                 }
-                string url = string.Format("/api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
-                var response = await client.GetAsync(url);
-                result = response.Content.ReadAsStringAsync().Result;
+                //string url = string.Format("/api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
+                //var response = await client.GetAsync(url);
+                //result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
+
+              //  busqueda = SasDatosManager.GetTask(1);
+
+               busqueda= SasDatosManager.GetTaskTabCod(codtabla, Id);
+
             }
             catch (Exception ex)
             {
                 Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
                 return;
             }
-            sasdatos = JsonConvert.DeserializeObject<List<SasDatosModel>>(result);
-            if (sasdatos.Count > 0)
+            //sasdatos = JsonConvert.DeserializeObject<List<SasDatosModel>>(result);
+
+            if (busqueda != null)
             {
-                lblDescrpcionDestinoDesenlace.Text = string.Format("{0}", sasdatos[0].descripcion);
+                lblDescrpcionDestinoDesenlace.Text = string.Format("{0}", busqueda.descripcion);
             }
             else
             {
                 txtDestinoDesenlace.Text = string.Empty;
                 lblDescrpcionDestinoDesenlace.Text = string.Empty;
-               // institucionEntry.Focus();
+                // institucionEntry.Focus();
                 //await DisplayAlert("Error", "Código no existe", "Aceptar");
-                Toast.MakeText(this, "Código no existe", ToastLength.Long).Show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.SetTitle("Alerta");
+                builder.SetMessage("Código no existe");
+                builder.SetCancelable(false);
+                builder.SetPositiveButton("OK", delegate { return; });
+                builder.Show();
+
+               // Toast.MakeText(this, "Código no existe", ToastLength.Long).Show();
             }
                        
         }

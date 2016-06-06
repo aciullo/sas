@@ -40,8 +40,20 @@ namespace sas.Core
                 try
                 {
                     var commands = new[] {
-                    "CREATE TABLE [ServicioCab] (_id INTEGER PRIMARY KEY ASC, id_solicitud INTEGER, NumeroSolicitud INTEGER, fecha_Llamado TEXT ,  hora_Llamado TEXT, nombrePaciente TEXT, Tel TEXT, edadPaciente NUMERIC, nombreSolicitante TEXT, direccionReferecia TEXT, direccionReferecia2 TEXT, numeroCasa TEXT, referencia TEXT, Motivo TEXT,  nroSalida TEXT, codMovil TEXT, codChofer TEXT, Acompañante TEXT, observacion TEXT, Estado TEXT,  codEstado TEXT, HoraEstado TEXT,codMotivo1 TEXT, codMotivo2 TEXT, codMotivo3 TEXT,  OtroMotivo TEXT  , codTipo TEXT, codInstitucion TEXT, codDesenlace TEXT,  producto TEXT );"
+                    "CREATE TABLE [ServicioCab] (_id INTEGER PRIMARY KEY ASC, id_solicitud INTEGER, " + 
+                    " NumeroSolicitud INTEGER, fecha_Llamado TEXT ,  hora_Llamado TEXT, nombrePaciente TEXT, " +
+                    " Tel TEXT, edadPaciente NUMERIC, nombreSolicitante TEXT, direccionReferecia TEXT, " +
+                    " direccionReferecia2 TEXT, numeroCasa TEXT, referencia TEXT, Motivo TEXT,  nroSalida TEXT, " +
+                    " codMovil TEXT, codChofer TEXT, Acompañante TEXT, observacion TEXT, Estado TEXT,  codEstado TEXT, " +
+                    " HoraEstado TEXT,codMotivo1 TEXT, codMotivo2 TEXT, codMotivo3 TEXT,  OtroMotivo TEXT  , codTipo TEXT, " +
+                    " codInstitucion TEXT, codDesenlace TEXT,  producto TEXT );",
 
+                    "CREATE TABLE [ServiciosDet] (_id INTEGER PRIMARY KEY ASC, id_solicitud INTEGER, " +
+                    " NumeroSolicitud INTEGER, Nombre NTEXT, Fecha NTEXT, codMovil NTEXT, Estado NTEXT, " +
+                    " codEstado NTEXT, HoraEstado NTEXT, codInstitucion NTEXT, codDesenlace NTEXT, Enviado INTEGER, " +
+                    "AuditUsuario NTEXT, AuditId INTEGER,GeoData NTEXT);" ,
+
+                     "CREATE TABLE [sasDatos] (_id INTEGER PRIMARY KEY ASC, codigo TEXT, descripcion TEXT, idtabla TEXT);"
                 };
                     foreach (var command in commands)
                     {

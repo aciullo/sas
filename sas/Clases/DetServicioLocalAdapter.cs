@@ -13,11 +13,11 @@ using sas;
 using sas.Core;
 namespace sas.Clases
 {
-    class DetServicioLocalAdapter : BaseAdapter <ServicioLocal>
+    class DetServicioLocalAdapter : BaseAdapter <ServicioItem>
     {
-        IList<ServicioLocal> items;
+        IList<ServicioItem> items;
         Activity context;
-        public DetServicioLocalAdapter(Activity context, IList<ServicioLocal> items)
+        public DetServicioLocalAdapter(Activity context, IList<ServicioItem> items)
         : base()
          {
             this.context = context;
@@ -28,7 +28,7 @@ namespace sas.Clases
             return position;
         }
 
-        public override ServicioLocal this[int position]
+        public override ServicioItem this[int position]
         {
             get { return items[position]; }
         }
@@ -43,13 +43,17 @@ namespace sas.Clases
             View view = convertView;
             if (view == null) // no view to re-use, create new
                 view = context.LayoutInflater.Inflate(Resource.Layout.ServicioLocalView, null);
-            view.FindViewById<TextView>(Resource.Id.Text1).Text = item.ID.ToString();
-            view.FindViewById<TextView>(Resource.Id.Text2).Text = item.id_Solicitud.ToString();
-            view.FindViewById<TextView>(Resource.Id.Text3).Text = item.codMovil;
-            view.FindViewById<TextView>(Resource.Id.Text4).Text = item.HoraEstado;
-            view.FindViewById<TextView>(Resource.Id.Text5).Text = item.codEstado;
-            view.FindViewById<TextView>(Resource.Id.Text6).Text = item.codDesenlace;
-            view.FindViewById<TextView>(Resource.Id.Text7).Text = item.codInstitucion;
+            view.FindViewById<TextView>(Resource.Id.Text1).Text =  item.ID.ToString();
+            view.FindViewById<TextView>(Resource.Id.Text2).Text = "Id solicitud:  " + item.id_Solicitud.ToString();
+            view.FindViewById<TextView>(Resource.Id.Text3).Text = "Enviado: " + item.Enviado.ToString();
+            view.FindViewById<TextView>(Resource.Id.Text4).Text = "Hora Estado: " + item.HoraEstado;
+            view.FindViewById<TextView>(Resource.Id.Text5).Text = "Cod Estado: " + item.codEstado;
+            view.FindViewById<TextView>(Resource.Id.Text6).Text = "Desenlace:  " + item.codDesenlace;
+            view.FindViewById<TextView>(Resource.Id.Text7).Text = "Institucion: " + item.codInstitucion;
+            view.FindViewById<TextView>(Resource.Id.Text8).Text = "Estado:  " + item.Estado;
+            view.FindViewById<TextView>(Resource.Id.Text9).Text = "GeoData: " + item.GeoData;
+
+
 
             return view;
         }

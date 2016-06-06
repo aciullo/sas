@@ -9,15 +9,16 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-
+using sas.Core;
 namespace sas.Clases
 {
-    class BusquedaAdapter : BaseAdapter<SasDatosModel>
+    class BusquedaAdapter : BaseAdapter<SasDatosItem>
     {
-        List<SasDatosModel> items;
+      //  List<SasDatosModel> items;
+        IList <SasDatosItem> items;
         Activity context;
 
-        public BusquedaAdapter(Activity context, List<SasDatosModel> items)
+        public BusquedaAdapter(Activity context, IList<SasDatosItem> items)
             : base()
         {
             this.context = context;
@@ -28,7 +29,7 @@ namespace sas.Clases
             return position;
         }
 
-        public override SasDatosModel this[int position]
+        public override SasDatosItem this[int position]
         {
             get { return items[position]; }
         }

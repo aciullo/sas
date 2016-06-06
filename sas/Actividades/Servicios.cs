@@ -13,6 +13,7 @@ using System.Threading;
 using sas.Clases;
 using sas.Models;
 using sas.Core;
+using sas.Actividades;
 
 namespace sas
 {
@@ -142,14 +143,32 @@ namespace sas
         }
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            //Toast.MakeText(this, "Top ActionBar pressed: " + item.TitleFormatted, ToastLength.Short).Show();
+
+         
             
+            //Toast.MakeText(this, "Top ActionBar pressed: " + item.TitleFormatted, ToastLength.Short).Show();
 
-            session.logoutUser();
-            Finish();
+            if (item.TitleFormatted.ToString() == "Sincronizar Datos")
+            {
+                //sincrionizar datos sas_datos
+
+                 GetIndexDato("07");
+                 GetIndexDato("06");
+                //Toast.MakeText(this, "Sincronizacion completa", ToastLength.Long).Show();
+               
+            }
+
+            if (item.TitleFormatted.ToString() == "Cerrar Sesión")
+            {
+                session.logoutUser();
+                Finish();
+               
+            }
 
 
-            return base.OnOptionsItemSelected(item);
+             return  base.OnOptionsItemSelected(item);
+
+
 
 
 
@@ -204,12 +223,19 @@ namespace sas
 
             if (t.codEstado== "009")
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.SetTitle("Alerta");
-                builder.SetMessage("Aca mostrar el traking del servicio.");
-                builder.SetCancelable(false);
-                builder.SetPositiveButton("OK", delegate { return; });
-                builder.Show();
+                //AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                //builder.SetTitle("Alerta");
+                //builder.SetMessage("Aca mostrar el traking del servicio.");
+                //builder.SetCancelable(false);
+                //builder.SetPositiveButton("OK", delegate { return; });
+                //builder.Show();
+
+                var newActivity = new Intent(this, typeof(RegistrarServicioLocal));
+                Bundle valuesForActivity = new Bundle();
+                valuesForActivity.PutInt("ServiciosDet", t.ID);
+                newActivity.PutExtras(valuesForActivity);
+                StartActivity(newActivity);
+
                 return;
             }
 
@@ -223,7 +249,7 @@ namespace sas
 
                 //newActivity.PutExtra("ServiciosDet", t.ID);
                 StartActivity(newActivity);
-                Finish();
+               
             }
             else
             {
@@ -233,7 +259,7 @@ namespace sas
                 valuesForActivity.PutInt("ServiciosDet", t.ID);
                 newActivity.PutExtras(valuesForActivity);
                 StartActivity(newActivity);
-                Finish();
+               
             }
 
           
@@ -255,48 +281,51 @@ namespace sas
 
                 // client.BaseAddress = new Uri("http://181.120.121.221:88");
                 client.BaseAddress = new Uri(IPCONN);
-               
 
+                string movil = user.codMovil;
+                movil = movil.TrimEnd();
                 // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                string url = string.Format("/api/sas_ServiciosApi/00?idmovil={0}", user.codMovil.TrimEnd());
+                string url = string.Format("/api/sas_ServiciosApi/00?idmovil={0}", movil);
 
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
                 if (!(response.IsSuccessStatusCode))
                 {
-                   // return;
+                    // return;
                 }
 
             }
             catch (Exception ex)
             {
-              
+
                 Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
-               
+
                 return;
+            }
+            finally
+            {
+
+                servicios = ServicioManager.GetTasks();
+
+                lstServicios.ChoiceMode = ChoiceMode.Single;
+
+                lstServicios.Adapter = new ServicesAdapter(this, servicios);
             }
 
             try
             {
-               
-
                 if (string.IsNullOrEmpty(result) || result == "null")
                 {
                     // servicio = new List<ServiciosModel>();
                     //servicio = new List<ServiciosModel>();
-
-                   // servicio.Clear();
-                   // return;
-                  
+                    // servicio.Clear();
+                    // return;
                 }
                 else
                 {
                     servicio = JsonConvert.DeserializeObject<List<ServiciosModel>>(result);
-
-
                 }
-
 
                 //  var servlocal = new ServiciosLocalModel(t.id_Solicitud, t.NumeroSolicitud, t.fecha_Llamado, t.hora_Llamado,
                 //t.nombrePaciente, t.Tel, t.edadPaciente, t.nombrePaciente, t.direccionReferecia, t.direccionReferecia2, t.numeroCasa, t.referencia,
@@ -307,45 +336,40 @@ namespace sas
                 //var datos = new DAServicioCab();
 
                 ServicioLocal sl = new ServicioLocal();
-
-               
                 foreach (ServiciosModel t in servicio)
                 {
                     if (!ServicioManager.CheckIsDataAlreadyInDBorNot("[ServicioCab]", "[id_solicitud]", t.id_Solicitud.ToString()))
-                        { 
-
-
-                                sl.id_Solicitud = t.id_Solicitud;
-                                sl.NumeroSolicitud = t.NumeroSolicitud;
-                                sl.fecha_Llamado = t.fecha_Llamado;
-                                sl.hora_Llamado = t.hora_Llamado;
-                                sl.nombrePaciente = t.nombrePaciente;
-                                sl.Tel = t.Tel;
-                                sl.edadPaciente=t.edadPaciente;
-                                sl.nombreSolicitante = t.nombreSolicitante;
-                                sl.direccionReferecia = t.direccionReferecia;
-                                sl.direccionReferecia2 = t.direccionReferecia2;
-                                sl.numeroCasa = t.numeroCasa;
-                                sl.referencia = t.referencia;
-                                sl.Motivo = t.Motivo;
-                                sl.nroSalida = t.nroSalida;
-                                sl.codMovil = t.codMovil;
-                                sl.codChofer = t.codChofer;
-                                sl.Acompañante = t.Acompañante;
-                                sl.observacion = t.observacion;
-                                sl.Estado = t.Estado;
-                                sl.codEstado = t.codEstado;
-                                sl.HoraEstado = t.HoraEstado;
-                                sl.codMotivo1 = t.codMotivo1;
-                                sl.codMotivo2 = t.codMotivo2;
-                                sl.codMotivo3 = t.codMotivo3;
-                                sl.OtroMotivo = t.OtroMotivo;
-                                sl.codTipo = t.codTipo;
-                                sl.codInstitucion = t.codInstitucion;
-                                sl.codDesenlace = t.codDesenlace;
-                                sl.producto = t.producto;
-
-                                ServicioManager.SaveTask(sl);
+                    {
+                        sl.id_Solicitud = t.id_Solicitud;
+                        sl.NumeroSolicitud = t.NumeroSolicitud;
+                        sl.fecha_Llamado = t.fecha_Llamado;
+                        sl.hora_Llamado = t.hora_Llamado;
+                        sl.nombrePaciente = t.nombrePaciente;
+                        sl.Tel = t.Tel;
+                        sl.edadPaciente = t.edadPaciente;
+                        sl.nombreSolicitante = t.nombreSolicitante;
+                        sl.direccionReferecia = t.direccionReferecia;
+                        sl.direccionReferecia2 = t.direccionReferecia2;
+                        sl.numeroCasa = t.numeroCasa;
+                        sl.referencia = t.referencia;
+                        sl.Motivo = t.Motivo;
+                        sl.nroSalida = t.nroSalida;
+                        sl.codMovil = t.codMovil;
+                        sl.codChofer = t.codChofer;
+                        sl.Acompañante = t.Acompañante;
+                        sl.observacion = t.observacion;
+                        sl.Estado = t.Estado;
+                        sl.codEstado = t.codEstado;
+                        sl.HoraEstado = t.HoraEstado;
+                        sl.codMotivo1 = t.codMotivo1;
+                        sl.codMotivo2 = t.codMotivo2;
+                        sl.codMotivo3 = t.codMotivo3;
+                        sl.OtroMotivo = t.OtroMotivo;
+                        sl.codTipo = t.codTipo;
+                        sl.codInstitucion = t.codInstitucion;
+                        sl.codDesenlace = t.codDesenlace;
+                        sl.producto = t.producto;
+                        ServicioManager.SaveTask(sl);
                     }
                     //servlocal = new ServiciosLocalModel(t.id_Solicitud, t.NumeroSolicitud, t.fecha_Llamado, t.hora_Llamado,
                     //                                    t.nombrePaciente, t.Tel, t.edadPaciente, t.nombrePaciente,
@@ -359,38 +383,59 @@ namespace sas
                     //    datos.InsertServicio(servlocal);
                     //}
                 }
-
-              
-
                 servicios = ServicioManager.GetTasks();
-
                 //waitActivityIndicator.IsRunning = false;
-
-
                 //   lstServicios. = servicio;
-
-
-
                 //ListAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleExpandableListItem1, 0, items);
-
                 //lstServicios.Adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleExpandableListItem1,  items);
-
                 lstServicios.ChoiceMode = ChoiceMode.Single;
-
                 lstServicios.Adapter = new ServicesAdapter(this, servicios);
-              //  RunOnUiThread(() => lstServicios.Adapter = new ServicesAdapter(this, servicio));
-
+                //  RunOnUiThread(() => lstServicios.Adapter = new ServicesAdapter(this, servicio));
             }
             catch (Exception ex)
             {
-               
                 Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
-               
+                return;
+            }
+        }
+
+        async void GetIndexDato(string codtabla)
+        {
+            mProgress.Visibility = ViewStates.Visible;
+            mProgress.Indeterminate = true;
+            string result;
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.MaxResponseContentBufferSize = 256000;
+                client.BaseAddress = new Uri(IPCONN);
+                string url = string.Format("/api/SasDatosApi?idtabla={0}", codtabla);
+                var response = await client.GetAsync(url);
+                result = response.Content.ReadAsStringAsync().Result;
+            }
+            catch (Exception ex)
+            {
+                Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
                 return;
             }
 
-       
+
+            var din = JsonConvert.DeserializeObject<List<SasDatosItem>>(result);
+            SasDatosItem sl = new SasDatosItem();
+            foreach (SasDatosItem t in din)
+            {
+                if (!SasDatosManager.CheckIsDataAlreadyInDBorNot("[sasDatos]", "[codigo] ='" + t.codigo + "' and [idtabla] ='" + t.idtabla +  "'"))
+                {
+                    sl.codigo = t.codigo;
+                    sl.descripcion = t.descripcion;
+                    sl.idtabla = t.idtabla;
+                    SasDatosManager.SaveTask(sl);
+                }
+                mProgress.Visibility = ViewStates.Gone;
+            }
         }
+
+
 
         protected override void OnDestroy()
         {

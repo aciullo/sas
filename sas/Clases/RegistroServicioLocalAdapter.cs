@@ -44,12 +44,13 @@ namespace sas.Clases
             if (view == null) // no view to re-use, create new
                 view = context.LayoutInflater.Inflate(Resource.Layout.ServicioLocalView, null);
             view.FindViewById<TextView>(Resource.Id.Text1).Text = item.ID.ToString();
-            view.FindViewById<TextView>(Resource.Id.Text2).Text = item.id_Solicitud.ToString();
-            view.FindViewById<TextView>(Resource.Id.Text3).Text = item.codMovil;
-            view.FindViewById<TextView>(Resource.Id.Text4).Text = item.HoraEstado;
-            view.FindViewById<TextView>(Resource.Id.Text5).Text = item.codEstado;
-            view.FindViewById<TextView>(Resource.Id.Text6).Text = item.codDesenlace;
-            view.FindViewById<TextView>(Resource.Id.Text7).Text = item.codInstitucion;
+            view.FindViewById<TextView>(Resource.Id.Text2).Text = "Paciente  " + item.nombrePaciente;
+            view.FindViewById<TextView>(Resource.Id.Text3).Text = "Cod Estado  " + item.codEstado;
+            view.FindViewById<TextView>(Resource.Id.Text4).Text = "Hora Estado " + item.HoraEstado;
+            view.FindViewById<TextView>(Resource.Id.Text5).Text = "Estado "  + item.Estado;
+            view.FindViewById<TextView>(Resource.Id.Text6).Text = "Desenlace  " + item.codDesenlace;
+            view.FindViewById<TextView>(Resource.Id.Text7).Text = "Intitución " + item.codInstitucion;
+        
 
             return view;
         }

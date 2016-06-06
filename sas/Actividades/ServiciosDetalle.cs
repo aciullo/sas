@@ -80,8 +80,13 @@ namespace sas
             //{
             //    await LoadMotivo3();
             //}
+            string cadenamotivo = (!string.IsNullOrEmpty(servicio.codMotivo1)) ? servicio.codMotivo1 : string.Empty ;
+            cadenamotivo = cadenamotivo + " " + ((!string.IsNullOrEmpty(servicio.codMotivo2)) ? "," + servicio.codMotivo2 : string.Empty);
+            cadenamotivo = cadenamotivo + " " + ((!string.IsNullOrEmpty(servicio.codMotivo3)) ? "," + servicio.codMotivo3 : string.Empty);
+            cadenamotivo = cadenamotivo + " " + ((!string.IsNullOrEmpty(servicio.OtroMotivo)) ? "," + servicio.OtroMotivo : string.Empty);
 
-            txtMotivo1.Text = txtMotivo1.Text + ", " + servicio.OtroMotivo;
+
+            txtMotivo1.Text = cadenamotivo;
 
             btnIniciarServicio.Click += BtnIniciarServicio_Click;
 

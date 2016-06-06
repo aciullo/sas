@@ -16,8 +16,13 @@ namespace sas.Core
 		{
 			return ServicioRepositoryADO.GetServicio(id);
 		}
-		
-		public static IList<ServicioItem> GetTasks ()
+
+        public static IList<ServicioItem> GetItemByForeingID (int id)
+        {
+            return new List<ServicioItem> (ServicioRepositoryADO.GetItemByForeingID(id));
+        }
+
+        public static IList<ServicioItem> GetTasks ()
 		{
 			return new List<ServicioItem>(ServicioRepositoryADO.GetServicios());
 		}

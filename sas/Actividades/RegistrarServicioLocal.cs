@@ -10,7 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using sas.Clases;
-
+using sas.Core;
 namespace sas.Actividades
 {
     [Activity(Label = "Registrar Servicio Local", Theme = "@style/MyCustomTheme")]
@@ -18,7 +18,7 @@ namespace sas.Actividades
     {
 
         ListView listView;
-
+        ListView listView2;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -26,45 +26,19 @@ namespace sas.Actividades
             // Create your application here
             SetContentView(Resource.Layout.RegistroServiciosLocal); // loads the HomeScreen.axml as this activity's view
             listView = FindViewById<ListView>(Resource.Id.List); // get reference to the ListView in the layout
-                                                                 // populate the listview with data
+            listView2 = FindViewById<ListView>(Resource.Id.List2);                                                   // populate the listview with data
 
-            using (var datos = new DAServicioDet())
-            {
-                listView.Adapter = new RegistroServicioLocalAdapter(this, datos.GetServicios());
-            }
+            int ID = Intent.Extras.GetInt("ServiciosDet");
+
+           
+
+            //listView.Adapter = new RegistroServicioLocalAdapter(this, ServicioManager.GetTasks());
+            listView.Adapter = new DetServicioLocalAdapter (this, ServicioItemManager.GetItemByForeingID(ID));
 
 
-            listView.ItemClick += ListView_ItemClick;
+         
 
         }
-
-        private void ListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
-        {
-            try
-            {
-              var t = new List<RegistrarServicioModel>();
-                        using (var datos = new DAServicioDet())
-                        {
-                            t = datos.GetServicios();
-                        }
-          
-                       var itemEliminar= t[e.Position];
-
-                        using (var datos = new DAServicioDet())
-                        {
-                            datos.DeleteServicio(itemEliminar);
-                        }
-            }
-            catch (Exception ex) {
-                Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
-
-                return;
-            }
-            Toast.MakeText(this, "Servicio borrado correctamente", ToastLength.Long).Show();
-            using (var datos = new DAServicioDet())
-            {
-                listView.Adapter = new RegistroServicioLocalAdapter(this, datos.GetServicios());
-            }
-        }
+        
     }
 }
