@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tableLayout1">
             <Button
-                android:text="Iniciar Servicio"
+                android:text="Registrar Salida de Base"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnIniciarServicio"

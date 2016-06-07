@@ -1,24 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 using Android.App;
 using Android.Content;
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Android.Graphics;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
-using System.Threading;
-using sas.Clases;
-using sas.Models;
-using sas.Core;
 using sas.Actividades;
+using sas.Clases;
+using sas.Core;
+using Android.Locations;
+using Android.Util;
+
 
 namespace sas
 {
     [Activity(Label = "Servicios", Theme = "@style/MyCustomTheme", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class Servicios  : Activity
+    public class Servicios  : Activity, ILocationListener
     {
         private List<ServiciosModel> servicio;
         private DeviceUserModel user;
@@ -27,8 +32,9 @@ namespace sas
         ListView lstServicios;
         ProgressBar mProgress;
         Button btnCerrarSesion;
+        
         // private ArrayAdapter<ServiciosModel> ListAdapter;
-        private System.Timers.Timer timer = new System.Timers.Timer();
+        //private System.Timers.Timer timer = new System.Timers.Timer();
 
         // Session Manager Class
         UserSessionManager session;
@@ -37,6 +43,14 @@ namespace sas
         //bool isConfigurationChange = false;
         // DemoServiceBinder binder;
         // DemoServiceConnection demoServiceConnection;
+
+        //GPS
+        Location _currentLocation;
+        LocationManager _locationManager;
+        string _locationProvider;
+        string _locationText;
+        int verGPS;
+        static readonly string TAG = "X:" + typeof(Servicios).Name;
 
         protected override  void OnCreate(Bundle savedInstanceState)
         {
@@ -58,10 +72,6 @@ namespace sas
         * logged in
         * */
             session.checkLogin();
-
-
-
-
             // Create your application here
             //strUser = Intent.Extras.GetString("user");
             //var deviceUser = JsonConvert.DeserializeObject<List<DeviceUserModel>>(strUser);
@@ -82,7 +92,7 @@ namespace sas
             IPCONN = session.getAccessConn();
 
          
-            user = new DeviceUserModel("","",codmovil.ToString(),nombre.ToString(),"");
+            user = new DeviceUserModel("","",codmovil.ToString(),nombre.ToString(),"","");
                 
           
             
@@ -97,6 +107,7 @@ namespace sas
                 txtTitulo.Text = string.Format("Bienvenid@  {0}", user.nombres);
             }
 
+            verGPS = Intent.Extras.GetInt("GPS");
 
             //mProgress.Indeterminate = true;
             //mProgress.Visibility = ViewStates.Visible;
@@ -143,35 +154,22 @@ namespace sas
         }
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-
-         
-            
             //Toast.MakeText(this, "Top ActionBar pressed: " + item.TitleFormatted, ToastLength.Short).Show();
-
             if (item.TitleFormatted.ToString() == "Sincronizar Datos")
             {
+                mProgress.Visibility = ViewStates.Visible;
+                mProgress.Indeterminate = true;
                 //sincrionizar datos sas_datos
-
-                 GetIndexDato("07");
+                GetIndexDato("07");
                  GetIndexDato("06");
                 //Toast.MakeText(this, "Sincronizacion completa", ToastLength.Long).Show();
-               
             }
-
             if (item.TitleFormatted.ToString() == "Cerrar Sesión")
             {
                 session.logoutUser();
                 Finish();
-               
             }
-
-
-             return  base.OnOptionsItemSelected(item);
-
-
-
-
-
+            return base.OnOptionsItemSelected(item);
         }
 
         protected override async void OnStart()
@@ -184,6 +182,103 @@ namespace sas
             //demoServiceConnection = new DemoServiceConnection(this);
             //ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
             mProgress.Visibility = ViewStates.Gone;
+        }
+        void InitializeLocationManager()
+        {
+            _locationManager = (LocationManager)GetSystemService(LocationService);
+            Criteria criteriaForLocationService = new Criteria
+            {
+                Accuracy = Accuracy.Coarse,
+                PowerRequirement = Power.Medium
+
+
+            };
+            IList<string> acceptableLocationProviders = _locationManager.GetProviders(criteriaForLocationService, true);
+
+            if (acceptableLocationProviders.Any())
+            {
+                _locationProvider = acceptableLocationProviders.First();
+            }
+            else
+            {
+                _locationProvider = string.Empty;
+            }
+            Log.Debug(TAG, "Using " + _locationProvider + ".");
+        }
+
+        protected override void OnPause()
+        {
+            base.OnPause();
+            _locationManager.RemoveUpdates(this);
+            Log.Debug(TAG, "No longer listening for location updates.");
+        }
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            // _locationManager = GetSystemService(Context.LocationService) as LocationManager;
+            InitializeLocationManager();
+
+            //if (_locationManager.IsProviderEnabled(LocationManager.GpsProvider))
+            if ((!string.IsNullOrEmpty(_locationProvider)) )
+            {
+
+              
+            }
+            else
+            {
+                if (verGPS == 0)
+                { 
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.SetTitle("El servicio de localización no se encuentra activo");
+                    builder.SetMessage("Por favor habilite el Servicio de Localización y GPS");
+                    builder.SetPositiveButton("OK", delegate
+                    {
+                        // Show location settings when the user acknowledges the alert dialog
+                        Intent intent = new Intent(Android.Provider.Settings.ActionLocationSourceSettings);
+                        StartActivity(intent);
+
+                    });
+                    builder.SetCancelable(true);
+                    builder.SetNegativeButton("Cancelar", delegate { return; });
+
+                    Dialog alertDialog = builder.Create();
+                    alertDialog.SetCanceledOnTouchOutside(false);
+                    alertDialog.Show();
+                    verGPS = 1;
+
+                }
+            }
+        }
+        public void OnLocationChanged(Location location)
+        {
+            _currentLocation = location;
+            if (_currentLocation == null)
+            {
+                _locationText = "Unable to determine your location. Try again in a short while.";
+            }
+            else
+            {
+                _locationText = string.Format("{0:f6},{1:f6}", _currentLocation.Latitude, _currentLocation.Longitude);
+                // Address address = await ReverseGeocodeCurrentLocation();
+                // DisplayAddress(address);
+
+            }
+        }
+
+        public void OnProviderDisabled(string provider)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnProviderEnabled(string provider)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
+        {
+            Log.Debug(TAG, "{0}, {1}", provider, status);
         }
         protected override void OnUserLeaveHint()
         {
@@ -399,10 +494,10 @@ namespace sas
             }
         }
 
-        async void GetIndexDato(string codtabla)
+       
+        private async void GetIndexDato(string codtabla)
         {
-            mProgress.Visibility = ViewStates.Visible;
-            mProgress.Indeterminate = true;
+            
             string result;
             try
             {

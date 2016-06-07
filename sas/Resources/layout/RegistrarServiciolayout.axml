@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btnRegistroLocal"
                 android:layout_column="2"
-                android:visibility="visible" />
+                android:visibility="invisible" />
         </TableLayout>
     </TableLayout>
 </ScrollView>

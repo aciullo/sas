@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using sas.Clases;
 using Android.Util;
+using System.Text;
 
 namespace sas
 {
@@ -76,7 +77,9 @@ namespace sas
             if (session.isLoggedIn())
             { 
                     Intent newActivity = new Intent(this, typeof(Servicios));
-
+                    Bundle valuesForActivity = new Bundle();
+                    valuesForActivity.PutInt("GPS", 0);
+                    newActivity.PutExtras(valuesForActivity);
                     StartActivity(newActivity);
                     Finish();
             }
@@ -85,14 +88,18 @@ namespace sas
 
         private async void BtnIngresar_Click(object sender, EventArgs e)
         {
-           
+
 
             mProgress.Indeterminate = true;
             mProgress.Visibility = ViewStates.Visible;
             await myMethod();
-          
+
             mProgress.Visibility = ViewStates.Gone;
-         }
+
+      
+           
+
+        }
 
         private async Task myMethod()
         {
@@ -168,8 +175,10 @@ namespace sas
                 Intent newActivity = new Intent(this, typeof(Servicios));
 
                 //newActivity.PutExtras(valuesForActivity);
-
-               StartActivity(newActivity);
+                Bundle valuesForActivity = new Bundle();
+                valuesForActivity.PutInt("GPS", 0);
+                newActivity.PutExtras(valuesForActivity);
+                StartActivity(newActivity);
                // Toast.MakeText(this, "OK", ToastLength.Long).Show();
                 btnIngresar.Enabled = true;
                 
@@ -195,6 +204,47 @@ namespace sas
                 return;
             }
         }
+
+        #region "codigo comentado"
+        //actualizar idregistro
+        //string result;
+
+        //var person = new SimpledeviceUser();
+        //person.usuario = "01";
+        //person.pass = "1234";
+        //person.codMovil = "10";
+        //person.nombres = "Pepe";
+        //person.apellidos = "Gonzalez";
+        //person.idRegistro="prueba2";
+
+
+
+        //var jsonResquest = JsonConvert.SerializeObject(person);
+        //var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
+
+        //try
+        //{
+
+        //    HttpClient client = new HttpClient();
+        //    client.MaxResponseContentBufferSize = 256000;
+        //    client.BaseAddress = new Uri("http://192.168.0.102:88");
+
+        //    string url = string.Format("/api/DeviceUsersApi/{0}", person.usuario);
+        //    var response = await client.PutAsync(url, content);
+
+        //    result = response.Content.ReadAsStringAsync().Result;
+
+        //}
+        //catch (Exception ex)
+        //{
+
+        //    Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+        //    return;
+        //}
+
+
+        //Toast.MakeText(this, "Guardado Correctamente" , ToastLength.Long).Show();
+        #endregion
     }
 }
 

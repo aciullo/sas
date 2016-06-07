@@ -71,14 +71,11 @@ namespace sas
             //asignar el diseño
             SetContentView(Resource.Layout.RegistrarServiciolayout);
 
-            //recuperar IP con WEBAPI
+            //recuperar IP para WEBAPI
             session = new UserSessionManager(this);
             IPCONN = session.getAccessConn();
             usuario = session.getAccessKey();
             movil = session.getAccessIdmovil();
-
-            //referenciar al manager d e localizaciones
-          //  InitializeLocationManager();
 
             //asignar los controles del layout
             txtNroSolicitud = FindViewById<EditText>(Resource.Id.txtNroSolicitud);
@@ -97,30 +94,13 @@ namespace sas
             btnRegistroLocal = FindViewById<Button>(Resource.Id.btnRegistroLocal);
 
             //recibir datos de la actividad predecesora
-            // servicio = this.Intent.GetParcelableExtra("ServiciosDet") as ServiciosModel;
-            // ID = this.Intent.GetStringExtra("ServiciosDet");
-            // servicio = ServicioManager.GetTask(Convert.ToInt32(ID));
             ID = Intent.Extras.GetInt("ServiciosDet");
-
             servicio = ServicioManager.GetTask(ID);
-
-            // sasdatosBusqueda = this.Intent.GetParcelableExtra("sasDatos") as SasDatosModel;
-
-
 
             //mostrar los datos recibidos
             txtNroSolicitud.Text = servicio.NumeroSolicitud.ToString();
             txtNombrePaciente.Text = servicio.nombrePaciente;
             txtEdad.Text = servicio.edadPaciente.ToString();
-
-
-            //mostrar de la busqueda
-            //if (sasdatosBusqueda != null)
-            //{
-            //    txtDestinoDesenlace.Text = sasdatosBusqueda.codigo;
-            //    GetIndexDato(txtDestinoDesenlace.Text);
-
-            //}
 
             //variables
             codEstadoRecibido =  servicio.codEstado;
@@ -133,48 +113,14 @@ namespace sas
             //asignar los eventos a los controles
             btnRegistroInicial.Click += BtnRegistroInicial_Click;
             btnVolverBase.Click += BtnVolverBase_Click;
-           // btnRegistrarResultado.Click += BtnRegistrarResultado_Click;
+            btnRegistrarResultado.Click += BtnRegistrarResultado_Click;
             btnTranslado.Click += BtnTranslado_Click;
             btnRegistroLocal.Click += BtnRegistroLocal_Click;
-            //txtDestinoDesenlace.KeyPress += async (object sender, View.KeyEventArgs e) =>
-            //{
-            //    e.Handled = false;
-            //    if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
-            //    {
-            //        //Toast.MakeText(this, txtDestinoDesenlace.Text, ToastLength.Short).Show();
-            //        await GetIndexDato(txtDestinoDesenlace.Text);
-            //        e.Handled = true;
-            //    }
-            //};
-
             txtDestinoDesenlace.KeyPress += TxtDestinoDesenlace_KeyPress;
             txtDestinoDesenlace.FocusChange += TxtDestinoDesenlace_FocusChange;
             btnBuscar.Click += BtnBuscar_Click;
           //  GetAddress();
 
-        }
-
-        void InitializeLocationManager()
-        {
-            _locationManager = (LocationManager)GetSystemService(LocationService);
-            Criteria criteriaForLocationService = new Criteria
-            {
-                Accuracy = Accuracy.Coarse,
-                PowerRequirement= Power.Medium
-                
-
-            };
-            IList<string> acceptableLocationProviders = _locationManager.GetProviders(criteriaForLocationService, true);
-
-            if (acceptableLocationProviders.Any())
-            {
-                _locationProvider = acceptableLocationProviders.First();
-            }
-            else
-            {
-                _locationProvider = string.Empty;
-            }
-            Log.Debug(TAG, "Using " + _locationProvider + ".");
         }
 
 
@@ -188,28 +134,12 @@ namespace sas
             //if (_locationManager.IsProviderEnabled(LocationManager.GpsProvider))
             if ((!string.IsNullOrEmpty(_locationProvider)))
             {
-                
                 _locationManager.RequestLocationUpdates(_locationProvider, 2000, 1, this);
                 Log.Debug(TAG, "Listening for location updates using " + _locationProvider + ".");
             }
             else
             {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.SetTitle("Location Services Not Active");
-                builder.SetMessage("Please enable Location Services and GPS");
-                builder.SetPositiveButton("OK", delegate
-                {
-                    // Show location settings when the user acknowledges the alert dialog
-                    Intent intent = new Intent(Android.Provider.Settings.ActionLocationSourceSettings);
-                    StartActivity(intent);
-
-                });
-
-                Dialog alertDialog = builder.Create();
-                alertDialog.SetCanceledOnTouchOutside(false);
-                alertDialog.Show();
-
+                //do nothing
             }
         }
 
@@ -261,7 +191,28 @@ namespace sas
         //        _addressText = "Unable to determine the address. Try again in a few minutes.";
         //    }
         //}
+        void InitializeLocationManager()
+        {
+            _locationManager = (LocationManager)GetSystemService(LocationService);
+            Criteria criteriaForLocationService = new Criteria
+            {
+                Accuracy = Accuracy.Coarse,
+                PowerRequirement = Power.Medium
 
+
+            };
+            IList<string> acceptableLocationProviders = _locationManager.GetProviders(criteriaForLocationService, true);
+
+            if (acceptableLocationProviders.Any())
+            {
+                _locationProvider = acceptableLocationProviders.First();
+            }
+            else
+            {
+                _locationProvider = string.Empty;
+            }
+            Log.Debug(TAG, "Using " + _locationProvider + ".");
+        }
         public  void OnLocationChanged(Location location)
         {
             _currentLocation = location;
@@ -302,16 +253,15 @@ namespace sas
             StartActivity(newActivity);
         }
 
+        //resultado de la búsqueda
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
 
             if (resultCode == Result.Ok)
             {
-                int idresul = data.Extras.GetInt("sasDatos");
-
-                var  SasdatosItem  = SasDatosManager.GetTask(idresul);
-
+               int idresul = data.Extras.GetInt("sasDatos");
+               var  SasdatosItem  = SasDatosManager.GetTask(idresul);
                if (SasdatosItem != null)
                 {
                     txtDestinoDesenlace.Text = SasdatosItem.codigo;
@@ -322,22 +272,6 @@ namespace sas
 
         }
 
-        public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
-        {
-            base.OnConfigurationChanged(newConfig);
-
-            if (newConfig.Orientation == Android.Content.Res.Orientation.Portrait)
-            {
-                Toast.MakeText(this, "Changed to portrait", ToastLength.Long).Show();
-
-               
-            }
-            else if (newConfig.Orientation == Android.Content.Res.Orientation.Landscape)
-            {
-                Toast.MakeText(this, "Changed to landscape", ToastLength.Long).Show();
-              
-            }
-        }
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
             string codtabla="";
@@ -351,120 +285,222 @@ namespace sas
             {
                 codtabla = "06";
             }
-
             newActivity.PutExtra("codtabla", codtabla);
             StartActivityForResult(newActivity,0);
-
            // StartActivity(newActivity);
         }
 
-        private void LoadStateButtons(string codEstadoRecibido)
+        private async void LoadStateButtons(string codEstadoRecibido)
         {
             switch (codEstadoRecibido)
             {
                 case ("001"):
                     btnRegistroInicial.Text = "Registrar Salida de Base";
+                    btnVolverBase.Visibility = ViewStates.Invisible;
+                    btnTranslado.Visibility = ViewStates.Invisible;
                     break;
                 case ("002"):
                     btnRegistroInicial.Text = "Registrar Salida de Base";
+                    btnVolverBase.Visibility = ViewStates.Invisible;
+                    btnTranslado.Visibility = ViewStates.Invisible;
                     break;
                 case "003":
                     btnRegistroInicial.Text = "Registrar Llegada a Servicio";
+                    btnVolverBase.Visibility = ViewStates.Invisible;
+                    btnTranslado.Visibility = ViewStates.Invisible;
                     break;
                 case "004":
                     btnRegistroInicial.Enabled = false;
                     btnRegistroInicial.Visibility = ViewStates.Invisible;
+
+                    btnVolverBase.Visibility = ViewStates.Visible;
+                    btnTranslado.Visibility = ViewStates.Visible;
+
                     btnVolverBase.Enabled = true;
                     btnTranslado.Enabled = true;
 
+                    if (!string.IsNullOrEmpty(codDesenlace))
+                    {
+                        btnRegistroInicial.Text = "Registrar Salida a Base";
+                        btnRegistroInicial.Enabled = true;
+                        btnRegistroInicial.Visibility = ViewStates.Visible;
+                        btnRegistrarResultado.Visibility = ViewStates.Invisible;
+
+                        txtDestinoDesenlace.Visibility = ViewStates.Invisible;
+                        lblDestinoDesenlace.Visibility = ViewStates.Invisible;
+                        txtDestinoDesenlace.Visibility = ViewStates.Invisible;
+                        btnBuscar.Visibility = ViewStates.Invisible;
+                        btnVolverBase.Visibility = ViewStates.Invisible;
+                        btnTranslado.Visibility = ViewStates.Invisible;
+
+                    }
+                    //else
+                    //{
+                    //    btnRegistroInicial.Text = "Registrar Salida a Base";
+                    //    btnRegistroInicial.Enabled = true;
+                    //    btnRegistroInicial.Visibility = ViewStates.Visible;
+                    //    btnRegistrarResultado.Visibility = ViewStates.Invisible;
+
+                    //    txtDestinoDesenlace.Visibility = ViewStates.Invisible;
+                    //    lblDestinoDesenlace.Visibility = ViewStates.Invisible;
+                    //    txtDestinoDesenlace.Visibility = ViewStates.Invisible;
+                    //    btnBuscar.Visibility = ViewStates.Invisible;
+                    //    btnVolverBase.Visibility = ViewStates.Visible;
+                    //    btnTranslado.Visibility = ViewStates.Visible;
+
+                    //}
+
                     break;
                 case "005":
-                   // btnRegistroInicial.Enabled = false;
+                    // btnRegistroInicial.Enabled = false;
                     btnVolverBase.Enabled = false;
                     btnTranslado.Enabled = false;
-                    btnRegistroInicial.Visibility = ViewStates.Visible;
+                    btnRegistrarResultado.Visibility = ViewStates.Visible;
+                    btnRegistroInicial.Visibility = ViewStates.Invisible;
                     btnVolverBase.Visibility = ViewStates.Invisible;
                     btnTranslado.Visibility = ViewStates.Invisible;
 
                     btnRegistrarResultado.Visibility = ViewStates.Invisible;
-                    if (string.IsNullOrEmpty(codInstitucionRecibido) && (string.IsNullOrEmpty(codDesenlace)))
+                    if ( (string.IsNullOrEmpty(codInstitucionRecibido) || codInstitucionRecibido=="Null") &&  string.IsNullOrEmpty(codDesenlace) )
                     {
-                        txtDestinoDesenlace.Visibility = ViewStates.Invisible;
-                        lblDestinoDesenlace.Visibility = ViewStates.Invisible;
-                        txtDestinoDesenlace.Visibility = ViewStates.Invisible;
-                        btnBuscar.Visibility= ViewStates.Invisible;
-                        btnRegistroInicial.Text = "Registrar Llegada a Base";
-                    }
-                    else
-                    {
+                        btnRegistrarResultado.Text = "Registrar Desenlace";
                         txtDestinoDesenlace.Visibility = ViewStates.Visible;
                         lblDestinoDesenlace.Visibility = ViewStates.Visible;
                         txtDestinoDesenlace.Visibility = ViewStates.Visible;
                         btnBuscar.Visibility = ViewStates.Visible;
+                        txtDestinoDesenlace.Enabled = true;
+                        lblDestinoDesenlace.Text = "Desenlace";
+                        txtDestinoDesenlace.Text = string.Empty;
+                        lblDescrpcionDestinoDesenlace.Text = string.Empty;
+                        return;
+                    }
+                  
+
+                    
+                        if ((!string.IsNullOrEmpty(codInstitucionRecibido) && codInstitucionRecibido != "Null") )
+                    {
+                        txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                        lblDestinoDesenlace.Visibility = ViewStates.Visible;
+                        txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                        btnBuscar.Visibility = ViewStates.Invisible;
                         //mostrar institucion
                         txtDestinoDesenlace.Text = codInstitucionRecibido;
-                        GetIndexDato(txtDestinoDesenlace.Text);
-                        btnRegistroInicial.Text = "Registrar Llegada a Institución";
+                        await GetIndexDato(txtDestinoDesenlace.Text);
+                        btnRegistrarResultado.Text = "Registrar Llegada a Institución";
                         txtDestinoDesenlace.Enabled = false;
+                        btnRegistrarResultado.Visibility = ViewStates.Visible;
+                        btnRegistrarResultado.Enabled = true;
+                        return;
+                    }
+
+                    if (!string.IsNullOrEmpty(codDesenlace) && ( string.IsNullOrEmpty(codInstitucionRecibido) || codInstitucionRecibido == "Null"))
+                    {
+
+                        btnRegistroInicial.Enabled = true;
+                        btnVolverBase.Enabled = false;
+                        btnTranslado.Enabled = false;
+                        btnRegistrarResultado.Visibility = ViewStates.Invisible;
+                        btnVolverBase.Visibility = ViewStates.Invisible;
+                        btnTranslado.Visibility = ViewStates.Invisible;
+                        btnRegistroInicial.Visibility = ViewStates.Visible;
+                        btnRegistroInicial.Text = "Registrar Llegada a Base";
                     }
                     break;
                 case "006":
+
+                    btnRegistrarResultado.Text = "Registrar Salida de Institución";
+                    btnRegistrarResultado.Visibility = ViewStates.Visible;
+                    btnRegistrarResultado.Enabled = true;
+
                     btnRegistroInicial.Enabled = true;
                     btnVolverBase.Enabled = false;
                     btnTranslado.Enabled = false;
-                    btnRegistroInicial.Visibility = ViewStates.Visible;
+                    btnRegistroInicial.Visibility = ViewStates.Invisible;
                     btnVolverBase.Visibility = ViewStates.Invisible;
                     btnTranslado.Visibility = ViewStates.Invisible;
-
-                    btnRegistrarResultado.Visibility = ViewStates.Invisible;
-
+                   
                     txtDestinoDesenlace.Visibility = ViewStates.Visible;
                     lblDestinoDesenlace.Visibility = ViewStates.Visible;
                     txtDestinoDesenlace.Visibility = ViewStates.Visible;
                     btnBuscar.Visibility = ViewStates.Visible;
-
                     lblDestinoDesenlace.Text = "Institución";
                     txtDestinoDesenlace.Text = codInstitucionRecibido;
-                    GetIndexDato(txtDestinoDesenlace.Text);
+                    await GetIndexDato(txtDestinoDesenlace.Text);
                     txtDestinoDesenlace.Enabled = false;
-                    btnRegistroInicial.Text = "Registrar Salida de Institución";
+                    btnBuscar.Visibility = ViewStates.Invisible;
                     break;
                 case "007":
                     btnRegistroInicial.Enabled = true;
-                    btnVolverBase.Enabled = false;
-                    btnTranslado.Enabled = false;
-
                     btnRegistroInicial.Visibility = ViewStates.Visible;
-                    btnVolverBase.Visibility = ViewStates.Invisible;
-                    btnTranslado.Visibility = ViewStates.Invisible;
-
-                    btnRegistrarResultado.Visibility = ViewStates.Invisible;
-
                     btnRegistroInicial.Text = "Registrar Llegada a Base";
 
-                    break;
-                case "008":
-                    btnRegistroInicial.Enabled = true;
+                    txtDestinoDesenlace.Visibility = ViewStates.Invisible;
+                    lblDestinoDesenlace.Visibility = ViewStates.Invisible;
+                    txtDestinoDesenlace.Visibility = ViewStates.Invisible;
+                    btnBuscar.Visibility = ViewStates.Invisible;
+                    btnRegistrarResultado.Enabled = true;
                     btnVolverBase.Enabled = false;
                     btnTranslado.Enabled = false;
-
-                    btnRegistroInicial.Visibility = ViewStates.Visible;
-
+                    btnRegistrarResultado.Visibility = ViewStates.Invisible;
                     btnVolverBase.Visibility = ViewStates.Invisible;
                     btnTranslado.Visibility = ViewStates.Invisible;
-                    btnRegistrarResultado.Visibility = ViewStates.Invisible;
+                  
+                    break;
+                case "008":
+                  
+                  
+                  
+                    if (!(string.IsNullOrEmpty(codInstitucionRecibido))  && codInstitucionRecibido != "Null")
+                    {
+                        btnRegistrarResultado.Text = "Registrar Desenlace";
+                        btnRegistrarResultado.Visibility = ViewStates.Visible;
+                        btnRegistrarResultado.Enabled = true;
 
-                    btnRegistroInicial.Text = "Registrar Desenlace";
-                    txtDestinoDesenlace.Visibility = ViewStates.Visible;
-                    lblDestinoDesenlace.Visibility = ViewStates.Visible;
-                    txtDestinoDesenlace.Visibility = ViewStates.Visible;
-                    btnBuscar.Visibility = ViewStates.Visible;
-                    txtDestinoDesenlace.Enabled = true;
+                        btnRegistroInicial.Visibility = ViewStates.Invisible;
+                        btnVolverBase.Visibility = ViewStates.Invisible;
+                        btnTranslado.Visibility = ViewStates.Invisible;
+                     
 
-                    lblDestinoDesenlace.Text = "Desenlace";
+                        txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                        lblDestinoDesenlace.Visibility = ViewStates.Visible;
+                        txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                        btnBuscar.Visibility = ViewStates.Visible;
+                        txtDestinoDesenlace.Enabled = true;
+                        lblDestinoDesenlace.Text = "Desenlace";
+                        txtDestinoDesenlace.Text = string.Empty;
+                        lblDescrpcionDestinoDesenlace.Text = string.Empty;
+                    }
+                    else
+                    {
+                       Toast.MakeText(this, "Servicio Finalizado", ToastLength.Long).Show();
+                       
+                       var regservicio = new RegistrarServicioModel
+                        {
+                            id_Solicitud = servicio.id_Solicitud,
+                            NumeroSolicitud = servicio.NumeroSolicitud,
+                            HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now),
+                            codEstado = "009",
+                            Estado = "C"
+                        };
+                        //actualizar localmente
+                        servicio.ID = ID;
+                        servicio.codEstado = regservicio.codEstado;
+                        servicio.HoraEstado = regservicio.HoraEstado;
+                        ServicioManager.SaveTask(servicio);
+                        await GuardarDatos(regservicio);
 
-                    txtDestinoDesenlace.Text = string.Empty;
-                    lblDescrpcionDestinoDesenlace.Text = string.Empty;
+                        Intent intent = new Intent();
+                        intent.SetClass(BaseContext, typeof(Servicios));
+                        Bundle valuesForActivity = new Bundle();
+                        valuesForActivity.PutInt("GPS", 1);
+                        intent.PutExtras(valuesForActivity);
+
+                        intent.SetFlags(ActivityFlags.ClearTask);
+
+
+                        StartActivity(intent);
+                        Finish();
+                    }
                     break;
 
             }
@@ -476,7 +512,7 @@ namespace sas
             if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
             {
                 //Toast.MakeText(this, txtDestinoDesenlace.Text, ToastLength.Short).Show();
-                 GetIndexDato(txtDestinoDesenlace.Text);
+               await GetIndexDato(txtDestinoDesenlace.Text);
                 e.Handled = true;
             }
         }
@@ -486,7 +522,7 @@ namespace sas
             if (!e.HasFocus)
             {
                 //Toast.MakeText(this, txtDestinoDesenlace.Text, ToastLength.Short).Show();
-                 GetIndexDato(txtDestinoDesenlace.Text);
+                 await GetIndexDato(txtDestinoDesenlace.Text);
 
             }
         }
@@ -497,11 +533,12 @@ namespace sas
             //btnTranslado.Enabled = false;
             txtDestinoDesenlace.Enabled = true;
             btnRegistroInicial.Enabled = true;
-            btnRegistroInicial.Text = "Registrar Salida a Institución";
-            btnRegistroInicial.Visibility = ViewStates.Visible;
+            btnRegistrarResultado.Text = "Registrar Salida a Institución";
+            btnRegistrarResultado.Visibility = ViewStates.Visible;
+            btnRegistroInicial.Visibility = ViewStates.Invisible;
             btnVolverBase.Visibility = ViewStates.Invisible;
             btnTranslado.Visibility = ViewStates.Invisible;
-            btnRegistrarResultado.Visibility = ViewStates.Invisible;
+            
             btnBuscar.Visibility = ViewStates.Visible;
             txtDestinoDesenlace.Visibility = ViewStates.Visible;
             txtDestinoDesenlace.Visibility = ViewStates.Visible;
@@ -514,14 +551,23 @@ namespace sas
 
         private void BtnVolverBase_Click(object sender, EventArgs e)
         {
-            btnRegistroInicial.Enabled = true;
-            btnRegistroInicial.Text = "Registrar Salida a Base";
-            btnRegistrarResultado.Visibility= ViewStates.Invisible;
-            //btnVolverBase.Enabled = false;
-            //btnTranslado.Enabled = false;
-            btnRegistroInicial.Visibility = ViewStates.Visible;
+    
+    
+            btnRegistrarResultado.Visibility= ViewStates.Visible;
+            btnRegistroInicial.Visibility = ViewStates.Invisible;
             btnVolverBase.Visibility = ViewStates.Invisible;
             btnTranslado.Visibility = ViewStates.Invisible;
+
+
+            btnRegistrarResultado.Text = "Registrar Desenlace";
+            txtDestinoDesenlace.Visibility = ViewStates.Visible;
+            lblDestinoDesenlace.Visibility = ViewStates.Visible;
+            txtDestinoDesenlace.Visibility = ViewStates.Visible;
+            btnBuscar.Visibility = ViewStates.Visible;
+            txtDestinoDesenlace.Enabled = true;
+            lblDestinoDesenlace.Text = "Desenlace";
+            txtDestinoDesenlace.Text = string.Empty;
+            lblDescrpcionDestinoDesenlace.Text = string.Empty;
         }
 
         private void BtnRegistroInicial_Click(object sender, EventArgs e)
@@ -541,10 +587,9 @@ namespace sas
          
         }
 
-        private void GuardarEstadoInicial()
+        private async void GuardarEstadoInicial()
         {
             string idestado = "";
-
             switch (btnRegistroInicial.Text)
             {
                 case "Registrar Salida de Base":
@@ -567,6 +612,95 @@ namespace sas
                     // btnRegistrarResultado.Text = "Servicio Finalizado";
                     btnRegistroInicial.Text = "Registrar Llegada a Base";
                     break;
+                case "Registrar Llegada a Base":
+                    idestado = "008";
+
+                    break;
+                default:
+                    idestado = "";
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(idestado))
+            {
+                var regservicio = new RegistrarServicioModel
+                {
+                    id_Solicitud = servicio.id_Solicitud,
+                    NumeroSolicitud = servicio.NumeroSolicitud,
+                    HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now),
+                    codEstado = idestado,
+                    Estado = servicio.Estado
+                };
+                //actualizar localmente
+                servicio.ID = ID;
+                servicio.codEstado = regservicio.codEstado;
+                servicio.HoraEstado = regservicio.HoraEstado;
+                ServicioManager.SaveTask(servicio);
+                await GuardarDatos(regservicio);
+
+
+
+                //if (idestado == "008")
+                //{
+                //    regservicio = new RegistrarServicioModel
+                //    {
+                //        id_Solicitud = servicio.id_Solicitud,
+                //        NumeroSolicitud = servicio.NumeroSolicitud,
+                //        HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now),
+                //        codEstado = "009",
+                //        Estado = "C"
+                //    };
+                //    //actualizar localmente
+                //    servicio.ID = ID;
+                //    servicio.codEstado = regservicio.codEstado;
+                //    servicio.HoraEstado = regservicio.HoraEstado;
+                //    ServicioManager.SaveTask(servicio);
+                //    await GuardarDatos(regservicio);
+
+                //}
+                mProgress.Visibility = ViewStates.Gone;
+                Intent intent = new Intent();
+                intent.SetClass(BaseContext, typeof(Servicios));
+                intent.SetFlags(ActivityFlags.ReorderToFront);
+                StartActivity(intent);
+                Finish();
+
+            }
+        }
+
+
+        private void BtnRegistrarResultado_Click(object sender, EventArgs e)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.SetTitle("Confirmación");
+            builder.SetMessage("Se encuetra a punto de actualizar el servicio. ¿Continuar?.");
+            builder.SetCancelable(true);
+            builder.SetPositiveButton("Si", delegate
+            {
+
+                mProgress.Indeterminate = true;
+                mProgress.Visibility = ViewStates.Visible;
+                GuardarResultados();
+
+            });
+            builder.SetNegativeButton("No", delegate { return; });
+            builder.Show();
+        }
+
+
+        private async void GuardarResultados()
+        {
+            string idestado = "";
+
+            switch (btnRegistrarResultado.Text)
+            {
+                case "Registrar Salida a Base":
+                    idestado = "005";
+                    //volverBaseButton.BackgroundColor = Color.Green;
+                    // btnRegistrarResultado.Text = "Servicio Finalizado";
+                    btnRegistrarResultado.Text = "Registrar Llegada a Base";
+                    break;
+
                 //case "Servicio Finalizado":
                 //    idestado = "009";
                 //    //volverBaseButton.BackgroundColor = Color.Purple;
@@ -576,25 +710,24 @@ namespace sas
                 case "Registrar Llegada a Base":
                     idestado = "008";
                     // volverBaseButton.BackgroundColor = Color.Maroon;
-                    btnRegistroInicial.Text = "Registrar Desenlace";
-                    btnRegistroInicial.Visibility = ViewStates.Visible;
-                    btnRegistroInicial.Enabled = true;
-                    txtDestinoDesenlace.Visibility = ViewStates.Visible;
-                    lblDestinoDesenlace.Visibility = ViewStates.Visible;
-                    txtDestinoDesenlace.Visibility = ViewStates.Visible;
-                    btnBuscar.Visibility = ViewStates.Visible;
-                    txtDestinoDesenlace.Enabled = true;
-                    lblDestinoDesenlace.Text = "Desenlace";
-                    txtDestinoDesenlace.Text = string.Empty;
-                    lblDescrpcionDestinoDesenlace.Text = string.Empty;
+                    //btnRegistrarResultado.Text = "Registrar Desenlace";
+                    //txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                    //lblDestinoDesenlace.Visibility = ViewStates.Visible;
+                    //txtDestinoDesenlace.Visibility = ViewStates.Visible;
+                    //btnBuscar.Visibility = ViewStates.Visible;
+                    //txtDestinoDesenlace.Enabled = true;
+                    //lblDestinoDesenlace.Text = "Desenlace";
+                    //txtDestinoDesenlace.Text = string.Empty;
+                    //lblDescrpcionDestinoDesenlace.Text = string.Empty;
                     //volverBaseButton.IsEnabled = false;
                     break;
                 case "Registrar Desenlace":
-                     GetIndexDato(txtDestinoDesenlace.Text);
-                    idestado = "009";
+                    await GetIndexDato(txtDestinoDesenlace.Text);
+                    //idestado = "009";
                     if (string.IsNullOrEmpty(txtDestinoDesenlace.Text))
                     {
                         Toast.MakeText(this, "Debe ingresar un desenlace", ToastLength.Long).Show();
+                        mProgress.Visibility = ViewStates.Gone;
                         return;
                     }
                     else
@@ -605,16 +738,16 @@ namespace sas
                             NumeroSolicitud = servicio.NumeroSolicitud,
                             codInstitucion = "Null",
                             codDesenlace = txtDestinoDesenlace.Text,
-                            codEstado= idestado,
-                            Estado="C"
+                           // codEstado = idestado,
+                           // Estado = "C"
                         };
+
                         //var regservicio2 = servicio;
+
                         //regservicio2.HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now);
                         //regservicio2.codEstado = idestado;
                         //regservicio2.codInstitucion = "Null";
                         //regservicio2.codDesenlace = txtDestinoDesenlace.Text;
-
-                        //actualizar localmente
                         servicio.ID = ID;
                         servicio.Estado = servicio.Estado;
                         servicio.HoraEstado = servicio.HoraEstado;
@@ -622,10 +755,12 @@ namespace sas
                         servicio.codInstitucion = regservicio2.codInstitucion;
                         servicio.codDesenlace = regservicio2.codDesenlace;
                         ServicioManager.SaveTask(servicio);
-
-
                         actualizarInstitucionDesenlace(regservicio2);
                     }
+
+
+
+
                     Intent intent = new Intent();
                     intent.SetClass(BaseContext, typeof(Servicios));
                     intent.SetFlags(ActivityFlags.ReorderToFront);
@@ -637,10 +772,11 @@ namespace sas
                     break;
                 case "Registrar Salida a Institución":
                     idestado = "005";
-                     GetIndexDato(txtDestinoDesenlace.Text);
+                    await GetIndexDato(txtDestinoDesenlace.Text);
                     if (string.IsNullOrEmpty(txtDestinoDesenlace.Text))
                     {
                         Toast.MakeText(this, "Debe ingresar una institución", ToastLength.Long).Show();
+                        mProgress.Visibility = ViewStates.Gone;
                         return;
                     }
                     else
@@ -651,9 +787,11 @@ namespace sas
                             NumeroSolicitud = servicio.NumeroSolicitud,
                             codInstitucion = txtDestinoDesenlace.Text,
                             codDesenlace = "Null",
-                            codEstado= idestado
+                            codEstado = idestado
+
                         };
                         //var regservicio = servicio;
+
                         //regservicio.HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now);
                         //regservicio.codEstado = idestado;
                         //regservicio.codInstitucion = txtDestinoDesenlace.Text ;
@@ -665,23 +803,22 @@ namespace sas
                         servicio.codInstitucion = regservicio.codInstitucion;
                         servicio.codDesenlace = regservicio.codDesenlace;
                         ServicioManager.SaveTask(servicio);
-
                         actualizarInstitucionDesenlace(regservicio);
                     }
 
                     //regTransladoButton.BackgroundColor = Color.Purple;
-                    btnRegistroInicial.Text = "Registrar Llegada a Institución";
+                    btnRegistrarResultado.Text = "Registrar Llegada a Institución";
                     txtDestinoDesenlace.Enabled = false;
                     break;
                 case "Registrar Llegada a Institución":
                     idestado = "006";
                     // regTransladoButton.BackgroundColor = Color.Teal;
-                    btnRegistroInicial.Text = "Registrar Salida de Institución";
+                    btnRegistrarResultado.Text = "Registrar Salida de Institución";
                     break;
                 case "Registrar Salida de Institución":
                     idestado = "007";
                     //regTransladoButton.BackgroundColor = Color.Green;
-                    btnRegistroInicial.Text = "Registrar Llegada a Base";
+                    btnRegistrarResultado.Text = "Registrar Llegada a Base";
                     break;
 
                 default:
@@ -697,34 +834,31 @@ namespace sas
                     NumeroSolicitud = servicio.NumeroSolicitud,
                     HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now),
                     codEstado = idestado,
-                    Estado= servicio.Estado
-                    
-                    
+                    Estado = servicio.Estado
+
                 };
-                //var regservicio = servicio;
-                //regservicio.HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now);
-                //regservicio.codEstado = idestado;
-                //regservicio.HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now);
 
                 //actualizar localmente
                 servicio.ID = ID;
-                //servicio.Estado = regservicio.Estado;
                 servicio.codEstado = regservicio.codEstado;
                 servicio.HoraEstado = regservicio.HoraEstado;
-                //servicio.codInstitucion = regservicio.codInstitucion;
-                //servicio.codDesenlace = regservicio.codDesenlace;
                 ServicioManager.SaveTask(servicio);
 
-                GuardarDatos(regservicio);
-                
-              
+                await GuardarDatos(regservicio);
 
                 mProgress.Visibility = ViewStates.Gone;
 
+                Intent intent = new Intent();
+                intent.SetClass(BaseContext, typeof(Servicios));
+                intent.SetFlags(ActivityFlags.ReorderToFront);
+                StartActivity(intent);
+                Finish();
             }
         }
+
+
         #region "Metodos actualizacion BD"
-        private void GuardarDatos(RegistrarServicioModel regservicio)
+        async Task GuardarDatos(RegistrarServicioModel regservicio)
         {
 
             //GetAddress();
@@ -962,7 +1096,7 @@ namespace sas
         }
         #endregion
 
-      private void GetIndexDato(string Id)
+      async Task GetIndexDato(string Id)
         {
             //string result;
             var busqueda = new SasDatosItem();
@@ -994,11 +1128,11 @@ namespace sas
             catch (Exception ex)
             {
                 Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
-                return;
+                //return;
             }
             //sasdatos = JsonConvert.DeserializeObject<List<SasDatosModel>>(result);
 
-            if (busqueda != null)
+            if (busqueda.codigo != null)
             {
                 lblDescrpcionDestinoDesenlace.Text = string.Format("{0}", busqueda.descripcion);
             }
@@ -1017,6 +1151,7 @@ namespace sas
 
                // Toast.MakeText(this, "Código no existe", ToastLength.Long).Show();
             }
+         
                        
         }
 

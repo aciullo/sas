@@ -86,6 +86,7 @@
     <Compile Include="Clases\RegistroServicioLocalAdapter.cs" />
     <Compile Include="Clases\UserSessionManager.cs" />
     <Compile Include="Models\ABMServicioModel.cs" />
+    <Compile Include="Models\SimpledeviceUser.cs" />
     <Compile Include="Models\DeviceUserModel.cs" />
     <Compile Include="Models\MotivosModel.cs" />
     <Compile Include="Models\RegistrarServicioModel.cs" />

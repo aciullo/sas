@@ -125,7 +125,7 @@ namespace sas.Core
                 connection.Open();
                 using (var contents = connection.CreateCommand())
                 { try { 
-                    contents.CommandText = "SELECT [_id], [id_solicitud], [NumeroSolicitud], [Fecha_Llamado], [hora_Llamado],[nombrePaciente], [Tel], [edadPaciente], [nombreSolicitante], [direccionReferecia], [direccionReferecia2], [numeroCasa], [referencia], [Motivo], [nroSalida], [codMovil],[codChofer], [Acompañante],[observacion], [Estado], [codEstado], [HoraEstado], [codMotivo1], [codMotivo2], [codMotivo3], [OtroMotivo], [codTipo], [codInstitucion], [codDesenlace], [producto]  from [ServicioCab]";
+                    contents.CommandText = "SELECT [_id], [id_solicitud], [NumeroSolicitud], [Fecha_Llamado], [hora_Llamado],[nombrePaciente], [Tel], [edadPaciente], [nombreSolicitante], [direccionReferecia], [direccionReferecia2], [numeroCasa], [referencia], [Motivo], [nroSalida], [codMovil],[codChofer], [Acompañante],[observacion], [Estado], [codEstado], [HoraEstado], [codMotivo1], [codMotivo2], [codMotivo3], [OtroMotivo], [codTipo], [codInstitucion], [codDesenlace], [producto]  from [ServicioCab] WHERE [codEstado] <> '009' ";
                     var r = contents.ExecuteReader();
                     while (r.Read())
                     {

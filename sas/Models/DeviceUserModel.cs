@@ -12,6 +12,7 @@ namespace sas
 		public string codMovil { get; set; }
 		public string nombres { get; set; }
 		public string apellidos { get; set; }
+        public string idRegistro { get; set; }
 
         public int DescribeContents()
         {
@@ -25,6 +26,7 @@ namespace sas
             dest.WriteString(this.codMovil);
             dest.WriteString(this.nombres);
             dest.WriteString(this.apellidos);
+            dest.WriteString(this.idRegistro);
         }
 
         [ExportField("CREATOR")]
@@ -44,7 +46,8 @@ namespace sas
                 string codMovil = source.ReadString();
                 string nombres = source.ReadString();
                 string apellidos = source.ReadString();
-                return new DeviceUserModel(usuario, pass, codMovil, nombres, apellidos);
+                string idRegistro = source.ReadString();
+                return new DeviceUserModel(usuario, pass, codMovil, nombres, apellidos, idRegistro);
             }
 
             Java.Lang.Object[] IParcelableCreator.NewArray(int size)
@@ -59,13 +62,14 @@ namespace sas
                         string pass,
                          string codMovil,
                          string nombres,
-                         string apellidos) : base()
+                         string apellidos, string idRegistro) : base()
         {
             this.usuario = usuario;
             this.pass = pass;
             this.codMovil = codMovil;
             this.nombres = nombres;
             this.apellidos = apellidos;
+            this.idRegistro = idRegistro;
 
         }
 

@@ -22,9 +22,9 @@ namespace sas.Clases
         
         
 
-        public static String PREFERENCE_USER = "PREFERENCE_USER";
-        public static String PREFERENCE_IDMOVIL = "PREFERENCE_IDMOVIL";
-        public static String PREFERENCE_CONEXION = "PREFERENCE_CONEXION";
+        public static string PREFERENCE_USER = "PREFERENCE_USER";
+        public static string PREFERENCE_IDMOVIL = "PREFERENCE_IDMOVIL";
+        public static string PREFERENCE_CONEXION = "PREFERENCE_CONEXION";
         // All Shared Preferences Keys
         private static String IS_LOGIN = "IsLoggedIn";
 
@@ -73,7 +73,7 @@ namespace sas.Clases
         /**
      * Create login session
      * */
-        public void createLoginSession(String user, String idmovil)
+        public void createLoginSession(string user, string idmovil)
         {
             // Storing login value as TRUE
             mPrefsEditor.PutBoolean(IS_LOGIN, true);
@@ -110,7 +110,7 @@ namespace sas.Clases
                 // user is not logged in redirect him to Login Activity
                 Intent i = new Intent(mContext, typeof(MainActivity));
                 // Closing all the Activities
-                i.SetFlags(ActivityFlags.ClearTop);
+                i.SetFlags(ActivityFlags.ClearTask);
 
                 // Add new Flag to start new Activity
                 i.SetFlags(ActivityFlags.NewTask);
