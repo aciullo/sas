@@ -63,6 +63,13 @@ namespace sas
         private string codEstadoRecibido = "";
         private string codInstitucionRecibido = "";
         private string codDesenlace = "";
+
+        //bind service
+        bool isBound = false;
+        bool isConfigurationChange = false;
+        DemoServiceBinder binder;
+        DemoServiceConnection demoServiceConnection;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -119,10 +126,24 @@ namespace sas
             txtDestinoDesenlace.KeyPress += TxtDestinoDesenlace_KeyPress;
             txtDestinoDesenlace.FocusChange += TxtDestinoDesenlace_FocusChange;
             btnBuscar.Click += BtnBuscar_Click;
-          //  GetAddress();
+            //  GetAddress();
+
+            // restore from connection there was a configuration change, such as a device rotation
+            demoServiceConnection = LastNonConfigurationInstance as DemoServiceConnection;
+
+            if (demoServiceConnection != null)
+                binder = demoServiceConnection.Binder;
 
         }
 
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            var demoServiceIntent = new Intent("com.xamarin.sas");
+            demoServiceConnection = new DemoServiceConnection(this);
+            ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
+        }
 
         protected override void OnResume()
         {
@@ -141,6 +162,29 @@ namespace sas
             {
                 //do nothing
             }
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (!isConfigurationChange)
+            {
+                if (isBound)
+                {
+                    ApplicationContext.UnbindService(demoServiceConnection);
+                   // UnbindService(demoServiceConnection);
+                    isBound = false;
+                }
+            }
+        }
+        // return the service connection if there is a configuration change
+        public override Java.Lang.Object OnRetainNonConfigurationInstance()
+        {
+            base.OnRetainNonConfigurationInstance();
+
+            isConfigurationChange = true;
+
+            return demoServiceConnection;
         }
 
         protected override void OnPause()
@@ -886,81 +930,94 @@ namespace sas
             servicioDetalle.Address = _addressText;
             ServicioItemManager.SaveTask(servicioDetalle);
             Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
-            StartService(new Intent("com.xamarin.sas"));
-            //string result;
-            //try
-            //{
-            //    HttpClient client = new HttpClient();
-            //    client.MaxResponseContentBufferSize = 256000;
-            //    client.BaseAddress = new Uri(IPCONN);
-            //    //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
-            //    string url = string.Format("/api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", regservicio.id_Solicitud, regservicio.codEstado, regservicio.HoraEstado);
-            //    var response = await client.GetAsync(url);
-            //    result = response.Content.ReadAsStringAsync().Result;
-            //    //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
-            //    if (result.Contains("Error"))
-            //    {
-            //        Toast.MakeText(this, "Error", ToastLength.Long).Show();
-            //        //using (var datos = new DAServicioDet())
-            //        //{
-            //        //    datos.InsertServicio(regservicio);
-            //        //}
-            //    }
 
-            //    GetAddress();
+            if (isBound)
+            {
+                RunOnUiThread(() =>
+                {
+                    binder.GetDemoService().SincronizarEstados();
+                    //string text = binder.GetDemoService().GetText();
+                    //Console.WriteLine("{0} returned from DemoService", text);
+                    //Toast.MakeText(this, string.Format( "{0} returned from DemoService", text), ToastLength.Long).Show();
+                }
 
-            //    servicioDetalle = new ServicioItem();
-            //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
-            //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
-            //    servicioDetalle.Nombre = servicio.nombrePaciente;
-            //    servicioDetalle.Fecha = DateTime.Now;
-            //    servicioDetalle.codMovil = movil;
-            //    servicioDetalle.Estado = servicio.Estado;
-            //    servicioDetalle.codEstado = servicio.codEstado;
-            //    servicioDetalle.HoraEstado = servicio.HoraEstado;
-            //    servicioDetalle.codInstitucion = regservicio.codInstitucion;
-            //    servicioDetalle.codDesenlace = regservicio.codDesenlace;
-            //    servicioDetalle.Enviado = true;
-            //    servicioDetalle.AuditUsuario = usuario;
-            //    servicioDetalle.AuditId = servicio.ID;
-            //    servicioDetalle.GeoData = _locationText;
-            //    ServicioItemManager.SaveTask(servicioDetalle);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+            );
+            }
 
-            //    //using (var datos = new DAServicioDet())
-            //    //{
-            //    //    datos.InsertServicio(regservicio);
-            //    //}
+                //string result;
+                //try
+                //{
+                //    HttpClient client = new HttpClient();
+                //    client.MaxResponseContentBufferSize = 256000;
+                //    client.BaseAddress = new Uri(IPCONN);
+                //    //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
+                //    string url = string.Format("/api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", regservicio.id_Solicitud, regservicio.codEstado, regservicio.HoraEstado);
+                //    var response = await client.GetAsync(url);
+                //    result = response.Content.ReadAsStringAsync().Result;
+                //    //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
+                //    if (result.Contains("Error"))
+                //    {
+                //        Toast.MakeText(this, "Error", ToastLength.Long).Show();
+                //        //using (var datos = new DAServicioDet())
+                //        //{
+                //        //    datos.InsertServicio(regservicio);
+                //        //}
+                //    }
 
-            //    GetAddress();
+                //    GetAddress();
 
-            //    servicioDetalle = new ServicioItem();
-            //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
-            //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
-            //    servicioDetalle.Nombre = servicio.nombrePaciente;
-            //    servicioDetalle.Fecha = DateTime.Now;
-            //    servicioDetalle.codMovil = movil;
-            //    servicioDetalle.Estado= servicio.Estado;
-            //    servicioDetalle.codEstado = servicio.codEstado;
-            //    servicioDetalle.HoraEstado = servicio.HoraEstado;
-            //    servicioDetalle.codInstitucion = regservicio.codInstitucion;
-            //    servicioDetalle.codDesenlace = regservicio.codDesenlace;
-            //    servicioDetalle.Enviado = false;
-            //    servicioDetalle.AuditUsuario = usuario;
-            //    servicioDetalle.AuditId = servicio.ID;
-            //    servicioDetalle.GeoData = _locationText;
-            //    ServicioItemManager.SaveTask (servicioDetalle);
+                //    servicioDetalle = new ServicioItem();
+                //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
+                //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
+                //    servicioDetalle.Nombre = servicio.nombrePaciente;
+                //    servicioDetalle.Fecha = DateTime.Now;
+                //    servicioDetalle.codMovil = movil;
+                //    servicioDetalle.Estado = servicio.Estado;
+                //    servicioDetalle.codEstado = servicio.codEstado;
+                //    servicioDetalle.HoraEstado = servicio.HoraEstado;
+                //    servicioDetalle.codInstitucion = regservicio.codInstitucion;
+                //    servicioDetalle.codDesenlace = regservicio.codDesenlace;
+                //    servicioDetalle.Enviado = true;
+                //    servicioDetalle.AuditUsuario = usuario;
+                //    servicioDetalle.AuditId = servicio.ID;
+                //    servicioDetalle.GeoData = _locationText;
+                //    ServicioItemManager.SaveTask(servicioDetalle);
+                //}
+                //catch (Exception ex)
+                //{
+                //    Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+
+                //    //using (var datos = new DAServicioDet())
+                //    //{
+                //    //    datos.InsertServicio(regservicio);
+                //    //}
+
+                //    GetAddress();
+
+                //    servicioDetalle = new ServicioItem();
+                //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
+                //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
+                //    servicioDetalle.Nombre = servicio.nombrePaciente;
+                //    servicioDetalle.Fecha = DateTime.Now;
+                //    servicioDetalle.codMovil = movil;
+                //    servicioDetalle.Estado= servicio.Estado;
+                //    servicioDetalle.codEstado = servicio.codEstado;
+                //    servicioDetalle.HoraEstado = servicio.HoraEstado;
+                //    servicioDetalle.codInstitucion = regservicio.codInstitucion;
+                //    servicioDetalle.codDesenlace = regservicio.codDesenlace;
+                //    servicioDetalle.Enviado = false;
+                //    servicioDetalle.AuditUsuario = usuario;
+                //    servicioDetalle.AuditId = servicio.ID;
+                //    servicioDetalle.GeoData = _locationText;
+                //    ServicioItemManager.SaveTask (servicioDetalle);
 
 
 
-            //    return;
-            //}
-            ////waitActivityIndicator.IsRunning = false;
-            //Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
-        }
+                //    return;
+                //}
+                ////waitActivityIndicator.IsRunning = false;
+                //Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
+            }
 
 
         private void actualizarInstitucionDesenlace(RegistrarServicioModel servTranslado)
@@ -984,8 +1041,7 @@ namespace sas
             servicioDetalle.GeoData = _locationText;
             ServicioItemManager.SaveTask(servicioDetalle);
             Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
-            StartService(new Intent("com.xamarin.sas"));
-
+   
             //string result;
             //var jsonResquest = JsonConvert.SerializeObject(servTranslado);
             //var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
@@ -1163,8 +1219,44 @@ namespace sas
                        
         }
 
-   
 
+        class DemoServiceConnection : Java.Lang.Object, IServiceConnection
+        {
+            RegistrarServicio activity;
+            DemoServiceBinder binder;
+
+            public DemoServiceBinder Binder
+            {
+                get
+                {
+                    return binder;
+                }
+            }
+
+            public DemoServiceConnection(RegistrarServicio activity)
+            {
+                this.activity = activity;
+            }
+
+            public void OnServiceConnected(ComponentName name, IBinder service)
+            {
+                var demoServiceBinder = service as DemoServiceBinder;
+                if (demoServiceBinder != null)
+                {
+                    var binder = (DemoServiceBinder)service;
+                    activity.binder = binder;
+                    activity.isBound = true;
+
+                    // keep instance for preservation across configuration changes
+                    this.binder = (DemoServiceBinder)service;
+                }
+            }
+
+            public void OnServiceDisconnected(ComponentName name)
+            {
+                activity.isBound = false;
+            }
+        }
 
 
         #region"codigo comentado"

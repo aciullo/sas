@@ -36,19 +36,19 @@ namespace sas
         {
             Log.Debug("sas", "DemoService started");
 
-            StartServiceInForeground();
+           // StartServiceInForeground();
 
             //DoWork ();
-            if (timerSinc == null)
-            {
-                timerSinc = new System.Timers.Timer();
-                timerSinc.Interval = 185000;
-                timerSinc.Elapsed += TimerSinc_Elapsed;
-            }
+            //if (timerSinc == null)
+            //{
+            //    timerSinc = new System.Timers.Timer();
+            //    timerSinc.Interval = 185000;
+            //    timerSinc.Elapsed += TimerSinc_Elapsed;
+            //}
 
-            timerSinc.Start();
+            //timerSinc.Start();
 
-            TimerSinc_Elapsed(null, null);
+            //TimerSinc_Elapsed(null, null);
 
             return StartCommandResult.Sticky;
         }
@@ -77,16 +77,16 @@ namespace sas
 
             IPCONN = session.getAccessConn();
 
-            if (timer == null)
+            if (timerSinc == null)
             {
-
-                timer = new System.Timers.Timer();
-                timer.Interval = 180000;
-                timer.Elapsed += Timer_Elapsed;
+                timerSinc = new System.Timers.Timer();
+                timerSinc.Interval = 185000;
+                timerSinc.Elapsed += TimerSinc_Elapsed;
             }
-            timer.Start();
 
-          
+            timerSinc.Start();
+
+
 
         }
 
@@ -97,42 +97,12 @@ namespace sas
                 var t = new Thread(() => { SincronizarEstados(); });
                 t.Start();
             }
-            timerSinc.Stop();
-        }
-
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {//DoWork();
-           var t = new Thread(()  =>{ BuscarServicios(); });
-           t.Start();
           
         }
 
-        private async void BuscarServicios()
-        {
-            string result;
-            try
-            {
-                HttpClient client = new HttpClient();
-                client.MaxResponseContentBufferSize = 256000;
-                client.BaseAddress = new System.Uri(IPCONN);
-                // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", "10", "001", "P");
-                var response = await client.GetAsync(url);
-                result = response.Content.ReadAsStringAsync().Result;
-                //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
-            }
-            catch (Exception ex)
-            {
-              //  Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
-              return;
-            }
-            if (!(string.IsNullOrEmpty(result) || result == "null"))
-            {
-                SendNotification();
-            }
-        }
+        
 
-        private async void SincronizarEstados()
+        public async void SincronizarEstados()
         {
             servicios = ServicioItemManager.GetServiciosToSend();
             foreach (var item in servicios)
@@ -254,9 +224,9 @@ namespace sas
                 {
                     //Thread.Sleep(5000);
                    
-                    Log.Debug("SasService", "Stopping foreground");
-                    StopForeground(true);
-                    StopSelf();
+                    //Log.Debug("SasService", "Stopping foreground");
+                    //StopForeground(true);
+                    //StopSelf();
 
                 }
 
@@ -284,17 +254,16 @@ namespace sas
         public override void OnDestroy ()
 		{
 			base.OnDestroy ();
-          
             if (!session.isLoggedIn())
             {
-                timer.Stop();
                 timerSinc.Stop();
-               
-                Log.Debug("sas", "DemoService stopped");
+                Log.Debug("SearchService", "SearchService stopped");
                 StopForeground(true);
                 StopSelf();
             }
-              
+           
+                            
+                        
 		}
 
         public static bool NetworkConnected(Context context)
@@ -367,64 +336,7 @@ namespace sas
             return;
 
         }
-
-		//public void DoWork ()
-		//{
-		//	//Toast.MakeText (this, "The demo service has started", ToastLength.Long).Show ();
-
-		//	var t = new Thread (async () =>
-  //          {
-
-  //              string result;
-
-
-  //              try
-  //              {
-
-  //                  HttpClient client = new HttpClient();
-  //                  client.MaxResponseContentBufferSize = 256000;
-
-  //                  client.BaseAddress = new System.Uri("http://181.120.121.221:88");
-
-
-  //                  // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-  //                  string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", "10", "001", "P");
-
-  //                  var response = await client.GetAsync(url);
-  //                  result = response.Content.ReadAsStringAsync().Result;
-  //                  //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
-
-  //              }
-  //              catch (Exception ex)
-  //              {
-
-  //                  Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
-
-  //                  return;
-  //              }
-
-  //              if (!(string.IsNullOrEmpty(result) || result == "null"))
-  //              {
-
-  //                  SendNotification();
-
-                   
-  //              }
-
-               
-
-  //              Thread.Sleep(500);
-
-  //             //Log.Debug("sas", "Stopping foreground");
-  //            // StopForeground(true);
-
-  //            // StopSelf();
-  //          }
-  //          );
-
-		//	t.Start ();
-		//}
-      
+              
 
 
         public override Android.OS.IBinder OnBind (Android.Content.Intent intent)

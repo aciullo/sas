@@ -75,8 +75,10 @@ namespace sas
 
 
             if (session.isLoggedIn())
-            { 
-                    Intent newActivity = new Intent(this, typeof(Servicios));
+            {
+                StartService(new Intent("com.sas.searchpending"));
+                StartService(new Intent("com.xamarin.sas"));
+                Intent newActivity = new Intent(this, typeof(Servicios));
                     Bundle valuesForActivity = new Bundle();
                     valuesForActivity.PutInt("GPS", 0);
                     newActivity.PutExtras(valuesForActivity);
@@ -169,6 +171,7 @@ namespace sas
                 session.createLoginSession((deviceUser[0].nombres + " " + deviceUser[0].apellidos), deviceUser[0].codMovil);
 
                 StartService(new Intent("com.sas.searchpending"));
+                StartService(new Intent("com.xamarin.sas"));
                 //Bundle valuesForActivity = new Bundle();
                 //valuesForActivity.PutString("user", result.Result);
                 // valuesForActivity.PutStringArrayList("user", deviceUser);

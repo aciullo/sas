@@ -117,44 +117,12 @@ namespace sas
                 verGPS = Intent.Extras.GetInt("GPS");
             }
             
-            //mProgress.Indeterminate = true;
-            //mProgress.Visibility = ViewStates.Visible;
-            //// await LoadServicios();
-            // ThreadPool.QueueUserWorkItem(async o => await LoadServicios());
-            //mProgress.Visibility = ViewStates.Gone;
-
+     
             lstServicios.ItemClick += LstServicios_ItemClick; ;
 
-            
-
-            //btnCerrarSesion.Click += BtnCerrarSesion_Click;
+          
 
 
-            // StartService(new Intent(this, typeof(DemoService)));
-
-            // StartService(new Intent("com.xamarin.sas"));
-            // restore from connection there was a configuration change, such as a device rotation
-
-
-
-            //demoServiceConnection = LastNonConfigurationInstance as DemoServiceConnection;
-
-            //if (demoServiceConnection != null)
-            //    binder = demoServiceConnection.Binder;
-
-            //  if (timer == null)
-            //  {
-            //     timer = new System.Timers.Timer();
-            //     timer.Interval = 15000;
-            //     timer.Elapsed += Timer_Elapsed;
-            //// }
-            //timer.Stop();
-            // timer.Dispose();
-            // Timer_Elapsed(null, null);
-            //timer = new System.Timers.Timer();
-            //timer.Interval = 150000;
-            //timer.Elapsed += Timer_Elapsed;
-            //timer.Start();
 
         }
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -178,6 +146,7 @@ namespace sas
             {
                 session.logoutUser();
                 StopService(new Intent("com.sas.searchpending"));
+                StopService(new Intent("com.xamarin.sas"));
                 Finish();
             }
             return base.OnOptionsItemSelected(item);

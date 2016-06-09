@@ -39,13 +39,13 @@ namespace sas
             StartServiceInForeground();
 
 
-            if (timer == null)
-            {
-                timer = new System.Timers.Timer();
-                timer.Interval = 180000;
-                timer.Elapsed += Timer_Elapsed;
-            }
-            timer.Start();
+            //if (timer == null)
+            //{
+            //    timer = new System.Timers.Timer();
+            //    timer.Interval = 180000;
+            //    timer.Elapsed += Timer_Elapsed;
+            //}
+            //timer.Start();
             //DoWork ();
 
             return StartCommandResult.Sticky;
@@ -73,7 +73,15 @@ namespace sas
             session = new UserSessionManager(this);
             IPCONN = session.getAccessConn();
             movil = session.getAccessIdmovil();
-           
+
+            if (timer == null)
+            {
+                timer = new System.Timers.Timer();
+                timer.Interval = 180000;
+                timer.Elapsed += Timer_Elapsed;
+            }
+            timer.Start();
+
         }
 
       private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -94,7 +102,7 @@ namespace sas
                 client.MaxResponseContentBufferSize = 256000;
                 client.BaseAddress = new System.Uri(IPCONN);
                 // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", movil, "001", "P");
+                string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", movil.TrimEnd(), "001", "P");
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
@@ -118,7 +126,7 @@ namespace sas
             if (!session.isLoggedIn())
             {
                 timer.Stop();
-                Log.Debug("sas", "DemoService stopped");
+                Log.Debug("SearchService", "SearchService stopped");
                 StopForeground(true);
                 StopSelf();
             }
