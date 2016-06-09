@@ -48,10 +48,7 @@ namespace sas.Core
                     " HoraEstado TEXT,codMotivo1 TEXT, codMotivo2 TEXT, codMotivo3 TEXT,  OtroMotivo TEXT  , codTipo TEXT, " +
                     " codInstitucion TEXT, codDesenlace TEXT,  producto TEXT );",
 
-                    "CREATE TABLE [ServiciosDet] (_id INTEGER PRIMARY KEY ASC, id_solicitud INTEGER, " +
-                    " NumeroSolicitud INTEGER, Nombre NTEXT, Fecha NTEXT, codMovil NTEXT, Estado NTEXT, " +
-                    " codEstado NTEXT, HoraEstado NTEXT, codInstitucion NTEXT, codDesenlace NTEXT, Enviado INTEGER, " +
-                    "AuditUsuario NTEXT, AuditId INTEGER,GeoData NTEXT, Address NTEXT );" ,
+                
 
                      "CREATE TABLE [sasDatos] (_id INTEGER PRIMARY KEY ASC, codigo TEXT, descripcion TEXT, idtabla TEXT);"
                 };

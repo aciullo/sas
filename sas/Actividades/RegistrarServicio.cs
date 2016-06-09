@@ -210,11 +210,20 @@ namespace sas
 
         async Task<Address> ReverseGeocodeCurrentLocation()
         {
-            Geocoder geocoder = new Geocoder(this);
-            IList<Address> addressList =
-                await geocoder.GetFromLocationAsync(_currentLocation.Latitude, _currentLocation.Longitude, 10);
+            Address address;
+            try
+            {
+                Geocoder geocoder = new Geocoder(this);
+                IList<Address> addressList =
+                    await geocoder.GetFromLocationAsync(_currentLocation.Latitude, _currentLocation.Longitude, 10);
 
-            Address address = addressList.FirstOrDefault();
+                address = addressList.FirstOrDefault();
+               
+            }catch
+            {
+                address = null;
+
+            }
             return address;
         }
 

@@ -36,9 +36,10 @@ namespace sas.Core
 
 				connection.Open ();
 				var commands = new[] {
-                    "CREATE TABLE [ServiciosDet] (_id INTEGER PRIMARY KEY ASC, id_solicitud INTEGER, " + 
+                       "CREATE TABLE [ServiciosDet] (_id INTEGER PRIMARY KEY ASC, id_solicitud INTEGER, " +
                     " NumeroSolicitud INTEGER, Nombre NTEXT, Fecha NTEXT, codMovil NTEXT, Estado NTEXT, " +
-                    " codEstado NTEXT, HoraEstado NTEXT, codInstitucion NTEXT, codDesenlace NTEXT, Enviado INTEGER, AuditUsuario NTEXT, AuditId INTEGER,GeoData NTEXT);"
+                    " codEstado NTEXT, HoraEstado NTEXT, codInstitucion NTEXT, codDesenlace NTEXT, Enviado INTEGER, " +
+                    "AuditUsuario NTEXT, AuditId INTEGER,GeoData NTEXT, Address NTEXT );" ,
                 };
 				foreach (var command in commands) {
 					using (var c = connection.CreateCommand ()) {

@@ -14,33 +14,33 @@ namespace sas.Core
 		
 		public static ServicioItem GetTask(int id)
 		{
-			return ServicioRepositoryADO.GetServicio(id);
+			return ServicioItemRepositoryADO.GetServicio(id);
 		}
 
         public static IList<ServicioItem> GetItemByForeingID (int id)
         {
-            return new List<ServicioItem> (ServicioRepositoryADO.GetItemByForeingID(id));
+            return new List<ServicioItem> (ServicioItemRepositoryADO.GetItemByForeingID(id));
         }
 
         public static IList<ServicioItem> GetTasks ()
 		{
-			return new List<ServicioItem>(ServicioRepositoryADO.GetServicios());
+			return new List<ServicioItem>(ServicioItemRepositoryADO.GetServicios());
 		}
 
 
         public static IList<ServicioItem> GetServiciosToSend()
         {
-            return new List<ServicioItem>(ServicioRepositoryADO.GetServiciosToSend());
+            return new List<ServicioItem>(ServicioItemRepositoryADO.GetServiciosToSend());
         }
 
         public static int SaveTask (ServicioItem item)
 		{
-			return ServicioRepositoryADO.SaveTaskDet(item);
+			return ServicioItemRepositoryADO.SaveTaskDet(item);
 		}
 		
 		public static int DeleteTask(int id)
 		{
-			return ServicioRepositoryADO.DeleteTaskDet(id);
+			return ServicioItemRepositoryADO.DeleteTaskDet(id);
 		}
 	}
 }

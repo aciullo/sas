@@ -129,12 +129,12 @@ namespace sas
 
 
 
-            var newActivity = new Intent(this, typeof(RegistrarServicio));
-            // newActivity.PutExtra("ServiciosDet", servicio.ID);
-            Bundle valuesForActivity = new Bundle();
-            valuesForActivity.PutInt("ServiciosDet", ID);
-            newActivity.PutExtras(valuesForActivity);
-            StartActivity(newActivity);
+            //var newActivity = new Intent(this, typeof(RegistrarServicio));
+            //// newActivity.PutExtra("ServiciosDet", servicio.ID);
+            //Bundle valuesForActivity = new Bundle();
+            //valuesForActivity.PutInt("ServiciosDet", ID);
+            //newActivity.PutExtras(valuesForActivity);
+            //StartActivity(newActivity);
             Finish();
         }
 
