@@ -143,6 +143,9 @@ namespace sas.Clases
             mPrefsEditor.Clear();
             mPrefsEditor.Commit();
 
+            
+            
+            
             // After logout redirect user to Loing Activity
             Intent i = new Intent(mContext, typeof(MainActivity));
 

@@ -76,6 +76,7 @@
     <Compile Include="Actividades\Login.cs" />
     <Compile Include="Actividades\RegistrarServicio.cs" />
     <Compile Include="Actividades\RegistrarServicioLocal.cs" />
+    <Compile Include="Clases\BuscarServiciosService.cs" />
     <Compile Include="Clases\BusquedaAdapter.cs" />
     <Compile Include="Clases\DAServicioCab.cs" />
     <Compile Include="Clases\DAServicioDet.cs" />

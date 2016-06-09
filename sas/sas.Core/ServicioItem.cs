@@ -25,6 +25,7 @@ namespace sas.Core
         public string AuditUsuario { get; set; }
         public int AuditId { get; set; }
         public string GeoData { get; set; }
+        public string Address { get; set; }
 
         public string Detalle
         {

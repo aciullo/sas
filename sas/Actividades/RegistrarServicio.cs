@@ -164,33 +164,33 @@ namespace sas
         //    DisplayAddress(address);
         //}
 
-        //async Task<Address> ReverseGeocodeCurrentLocation()
-        //{
-        //    Geocoder geocoder = new Geocoder(this);
-        //    IList<Address> addressList =
-        //        await geocoder.GetFromLocationAsync(_currentLocation.Latitude, _currentLocation.Longitude, 10);
+        async Task<Address> ReverseGeocodeCurrentLocation()
+        {
+            Geocoder geocoder = new Geocoder(this);
+            IList<Address> addressList =
+                await geocoder.GetFromLocationAsync(_currentLocation.Latitude, _currentLocation.Longitude, 10);
 
-        //    Address address = addressList.FirstOrDefault();
-        //    return address;
-        //}
+            Address address = addressList.FirstOrDefault();
+            return address;
+        }
 
-        //void DisplayAddress(Address address)
-        //{
-        //    if (address != null)
-        //    {
-        //        StringBuilder deviceAddress = new StringBuilder();
-        //        for (int i = 0; i < address.MaxAddressLineIndex; i++)
-        //        {
-        //            deviceAddress.AppendLine(address.GetAddressLine(i));
-        //        }
-        //        // Remove the last comma from the end of the address.
-        //        _addressText = deviceAddress.ToString();
-        //    }
-        //    else
-        //    {
-        //        _addressText = "Unable to determine the address. Try again in a few minutes.";
-        //    }
-        //}
+        void DisplayAddress(Address address)
+        {
+            if (address != null)
+            {
+                StringBuilder deviceAddress = new StringBuilder();
+                for (int i = 0; i < address.MaxAddressLineIndex; i++)
+                {
+                    deviceAddress.AppendLine(address.GetAddressLine(i));
+                }
+                // Remove the last comma from the end of the address.
+                _addressText = deviceAddress.ToString();
+            }
+            else
+            {
+                _addressText = "Unable to determine the address. Try again in a few minutes.";
+            }
+        }
         void InitializeLocationManager()
         {
             _locationManager = (LocationManager)GetSystemService(LocationService);
@@ -213,7 +213,7 @@ namespace sas
             }
             Log.Debug(TAG, "Using " + _locationProvider + ".");
         }
-        public  void OnLocationChanged(Location location)
+        public async void OnLocationChanged(Location location)
         {
             _currentLocation = location;
             if (_currentLocation == null)
@@ -223,8 +223,8 @@ namespace sas
             else
             {
                 _locationText = string.Format("{0:f6},{1:f6}", _currentLocation.Latitude, _currentLocation.Longitude);
-               // Address address = await ReverseGeocodeCurrentLocation();
-               // DisplayAddress(address);
+                Address address = await ReverseGeocodeCurrentLocation();
+                DisplayAddress(address);
 
             }
         }
@@ -489,16 +489,21 @@ namespace sas
                         ServicioManager.SaveTask(servicio);
                         await GuardarDatos(regservicio);
 
-                        Intent intent = new Intent();
-                        intent.SetClass(BaseContext, typeof(Servicios));
+
+                        Intent i = new Intent(BaseContext, typeof(Servicios));
                         Bundle valuesForActivity = new Bundle();
                         valuesForActivity.PutInt("GPS", 1);
-                        intent.PutExtras(valuesForActivity);
+                        i.PutExtras(valuesForActivity);
+                        // Closing all the Activities
+                        i.SetFlags(ActivityFlags.ClearTask);
 
-                        intent.SetFlags(ActivityFlags.ClearTask);
+                        // Add new Flag to start new Activity
+                        i.SetFlags(ActivityFlags.NewTask);
 
+                        // Staring service Activity
+                        BaseContext.StartActivity(i);
 
-                        StartActivity(intent);
+                
                         Finish();
                     }
                     break;
@@ -878,9 +883,10 @@ namespace sas
             servicioDetalle.AuditUsuario = usuario;
             servicioDetalle.AuditId = servicio.ID;
             servicioDetalle.GeoData = _locationText;
+            servicioDetalle.Address = _addressText;
             ServicioItemManager.SaveTask(servicioDetalle);
             Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
-
+            StartService(new Intent("com.xamarin.sas"));
             //string result;
             //try
             //{
@@ -978,6 +984,8 @@ namespace sas
             servicioDetalle.GeoData = _locationText;
             ServicioItemManager.SaveTask(servicioDetalle);
             Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
+            StartService(new Intent("com.xamarin.sas"));
+
             //string result;
             //var jsonResquest = JsonConvert.SerializeObject(servTranslado);
             //var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");

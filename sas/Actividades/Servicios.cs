@@ -107,8 +107,16 @@ namespace sas
                 txtTitulo.Text = string.Format("Bienvenid@  {0}", user.nombres);
             }
 
-            verGPS = Intent.Extras.GetInt("GPS");
+            if (Intent.Extras == null)
+            {
+                verGPS = 1;
+            }
+           else
+            {
 
+                verGPS = Intent.Extras.GetInt("GPS");
+            }
+            
             //mProgress.Indeterminate = true;
             //mProgress.Visibility = ViewStates.Visible;
             //// await LoadServicios();
@@ -116,9 +124,11 @@ namespace sas
             //mProgress.Visibility = ViewStates.Gone;
 
             lstServicios.ItemClick += LstServicios_ItemClick; ;
+
             
+
             //btnCerrarSesion.Click += BtnCerrarSesion_Click;
-            
+
 
             // StartService(new Intent(this, typeof(DemoService)));
 
@@ -141,11 +151,11 @@ namespace sas
             //timer.Stop();
             // timer.Dispose();
             // Timer_Elapsed(null, null);
-                //timer = new System.Timers.Timer();
-                //timer.Interval = 150000;
-                //timer.Elapsed += Timer_Elapsed;
-                //timer.Start();
-          
+            //timer = new System.Timers.Timer();
+            //timer.Interval = 150000;
+            //timer.Elapsed += Timer_Elapsed;
+            //timer.Start();
+
         }
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
@@ -167,6 +177,7 @@ namespace sas
             if (item.TitleFormatted.ToString() == "Cerrar Sesión")
             {
                 session.logoutUser();
+                StopService(new Intent("com.sas.searchpending"));
                 Finish();
             }
             return base.OnOptionsItemSelected(item);
@@ -178,6 +189,7 @@ namespace sas
             mProgress.Indeterminate = true;
             mProgress.Visibility = ViewStates.Visible;
              await LoadServicios();
+          
             //var demoServiceIntent = new Intent("com.xamarin.sas");
             //demoServiceConnection = new DemoServiceConnection(this);
             //ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
@@ -293,18 +305,19 @@ namespace sas
 
             //Timer_Elapsed(null, null);
 
-            StartService(new Intent("com.xamarin.sas"));
+            
+
         }
-   
-        private void LstServicios_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+
+        private  void LstServicios_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
             var t = servicios[e.Position];
             //Android.Widget.Toast.MakeText(this, t.nombrePaciente, Android.Widget.ToastLength.Short).Show();
             //Console.WriteLine("Clicked on " + t.nombrePaciente);
             var cantidad = ServicioManager.CantidadPendiente();
-            
-          
-            if (cantidad >= 1 && t.codEstado=="001")
+
+
+            if (cantidad >= 1 && t.codEstado == "001")
             {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -316,7 +329,7 @@ namespace sas
                 return;
             }
 
-            if (t.codEstado== "009")
+            if (t.codEstado == "009")
             {
                 //AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 //builder.SetTitle("Alerta");
@@ -334,7 +347,77 @@ namespace sas
                 return;
             }
 
-            if (t.codEstado != "001" )
+            if (t.codEstado == "008")
+            {
+                //
+                if (! (!(string.IsNullOrEmpty(t.codInstitucion)) && t.codInstitucion != "Null"))
+                {
+
+                    Finish();
+
+                     
+                    //        var newActivity = new Intent(this, typeof(RegistrarServicio));
+
+                    //        Bundle valuesForActivity = new Bundle();
+                    //        valuesForActivity.PutInt("ServiciosDet", t.ID);
+                    //        newActivity.PutExtras(valuesForActivity);
+
+                    //        //newActivity.PutExtra("ServiciosDet", t.ID);
+                    //        StartActivity(newActivity);
+                    //        return;
+                }
+            }
+            //    else
+            //    {
+            //        Toast.MakeText(this, "Servicio Finalizado", ToastLength.Long).Show();
+
+            //        var regservicio = new RegistrarServicioModel
+            //        {
+            //            id_Solicitud = t.id_Solicitud,
+            //            NumeroSolicitud = t.NumeroSolicitud,
+            //            HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now),
+            //            codEstado = "009",
+            //            Estado = "C"
+            //        };
+            //        //actualizar localmente
+
+
+
+            //        var servicio = new ServicioLocal();
+            //        servicio.ID = t.ID;
+            //        servicio.codEstado = regservicio.codEstado;
+            //        servicio.HoraEstado = regservicio.HoraEstado;
+            //        ServicioManager.SaveTask(servicio);
+
+
+
+            //        var servicioDetalle = new ServicioItem();
+            //        servicioDetalle.id_Solicitud = servicio.id_Solicitud;
+            //        servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
+            //        servicioDetalle.Nombre = servicio.nombrePaciente;
+            //        servicioDetalle.Fecha = DateTime.Now;
+            //        servicioDetalle.codMovil = t.codMovil;
+            //        servicioDetalle.Estado = servicio.Estado;
+            //        servicioDetalle.codEstado = servicio.codEstado;
+            //        servicioDetalle.HoraEstado = servicio.HoraEstado;
+            //        servicioDetalle.codInstitucion = regservicio.codInstitucion;
+            //        servicioDetalle.codDesenlace = regservicio.codDesenlace;
+            //        servicioDetalle.Enviado = false;
+            //        servicioDetalle.AuditUsuario = user.nombres;
+            //        servicioDetalle.AuditId = servicio.ID;
+            //        servicioDetalle.GeoData = _locationText;
+            //        servicioDetalle.Address = "";
+            //        ServicioItemManager.SaveTask(servicioDetalle);
+
+            //        await LoadServicios();
+            //        return;
+            //    }
+
+            //}
+
+
+
+            if (t.codEstado != "001")
             {
                 var newActivity = new Intent(this, typeof(RegistrarServicio));
 
@@ -344,20 +427,20 @@ namespace sas
 
                 //newActivity.PutExtra("ServiciosDet", t.ID);
                 StartActivity(newActivity);
-               
+
             }
             else
             {
-             var newActivity = new Intent(this, typeof(ServiciosDetalle));
+                var newActivity = new Intent(this, typeof(ServiciosDetalle));
                 // newActivity.PutExtra("ServiciosDet", t.ID);
                 Bundle valuesForActivity = new Bundle();
                 valuesForActivity.PutInt("ServiciosDet", t.ID);
                 newActivity.PutExtras(valuesForActivity);
                 StartActivity(newActivity);
-               
+
             }
 
-          
+
 
         }
 

@@ -13,6 +13,8 @@ using sas.Clases;
 using sas.Core;
 using Android.Net;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace sas
 {
@@ -23,8 +25,8 @@ namespace sas
         DemoServiceBinder binder;
         IList<ServicioItem> servicios;
         ServicioItem servicioDetalle;
-        private System.Timers.Timer timer= new System.Timers.Timer();
-        private System.Timers.Timer timerSinc = new System.Timers.Timer();
+        private System.Timers.Timer timer;
+        private System.Timers.Timer timerSinc;
         private int counter = 0, incrementby = 1;
         UserSessionManager session;
         string IPCONN = "";
@@ -34,9 +36,19 @@ namespace sas
         {
             Log.Debug("sas", "DemoService started");
 
-            StartServiceInForeground ();
+            StartServiceInForeground();
 
             //DoWork ();
+            if (timerSinc == null)
+            {
+                timerSinc = new System.Timers.Timer();
+                timerSinc.Interval = 185000;
+                timerSinc.Elapsed += TimerSinc_Elapsed;
+            }
+
+            timerSinc.Start();
+
+            TimerSinc_Elapsed(null, null);
 
             return StartCommandResult.Sticky;
         }
@@ -44,10 +56,16 @@ namespace sas
         void StartServiceInForeground()
         {
             var ongoing = new Notification(Resource.Drawable.Icon, "Sas en Segundo Plano");
-            var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(Servicios)), 0);
-            ongoing.SetLatestEventInfo(this, "sas", "Sas se está ejecutando en segundo plano", pendingIntent);
+            // newActivity.PutExtra("ServiciosDet", servicio.ID);
+            var newActivity = new Intent(this, typeof(Servicios));
+            Bundle valuesForActivity = new Bundle();
+            valuesForActivity.PutInt("GPS", 1);
+            newActivity.PutExtras(valuesForActivity);
+            var pendingIntent = PendingIntent.GetActivity(this, 0, newActivity, 0, valuesForActivity);
+           ongoing.SetLatestEventInfo(this, "sas", "Sas se está ejecutando en segundo plano", pendingIntent);
 
             StartForeground((int)NotificationFlags.AutoCancel, ongoing);
+            
         }
 
         public override void OnCreate()
@@ -59,17 +77,16 @@ namespace sas
 
             IPCONN = session.getAccessConn();
 
+            if (timer == null)
+            {
 
-            timer = new System.Timers.Timer();
-            timer.Interval = 180000;
-            timer.Elapsed += Timer_Elapsed;
+                timer = new System.Timers.Timer();
+                timer.Interval = 180000;
+                timer.Elapsed += Timer_Elapsed;
+            }
             timer.Start();
 
-            timerSinc = new System.Timers.Timer();
-            timerSinc.Interval = 185000;
-            timerSinc.Elapsed += TimerSinc_Elapsed;
-            timerSinc.Start();
-
+          
 
         }
 
@@ -138,15 +155,10 @@ namespace sas
                     if (result.Contains("Error"))
                     {
                       //  Toast.MakeText(this, "Error", ToastLength.Long).Show();
-
-
-
                         servicioDetalle = new ServicioItem();
                         servicioDetalle.ID = item.ID;
                         servicioDetalle.Enviado = false;
                         ServicioItemManager.SaveTask(servicioDetalle);
-                      
-
                     }
                     else
                     {
@@ -156,9 +168,16 @@ namespace sas
                         ServicioItemManager.SaveTask(servicioDetalle);
                         Log.Debug("SasService", String.Format("Enviando {0}", item.NumeroSolicitud));
                         SendNotification(String.Format("Enviando {0}", item.NumeroSolicitud));
+
+                        
+                        var jsonResquest = JsonConvert.SerializeObject(item);
+                        var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
+                        url = string.Format("/api/ProcesoEstadoServiciosApi");
+                        response = await client.PostAsync(url, content);
+                        result = response.Content.ReadAsStringAsync().Result;
+
+
                     }
-
-
                     if ((!string.IsNullOrEmpty(item.codDesenlace ) ) && (string.IsNullOrEmpty(item.codInstitucion) || item.codInstitucion=="Null"))
                     {
                         item.codInstitucion = "Null";
@@ -170,18 +189,23 @@ namespace sas
                         if (result.Contains("Error"))
                         {
                             // Toast.MakeText(this, "Error", ToastLength.Long).Show();
-
-
-
                             servicioDetalle = new ServicioItem();
                             servicioDetalle.ID = item.ID;
                             servicioDetalle.Enviado = false;
                             ServicioItemManager.SaveTask(servicioDetalle);
                             return;
-
                         }
+                        else
+                        {
+                            servicioDetalle = new ServicioItem();
+                            servicioDetalle.ID = item.ID;
+                            servicioDetalle.Enviado = true;
+                            ServicioItemManager.SaveTask(servicioDetalle);
+                            Log.Debug("SasService", String.Format("Enviando {0}", item.NumeroSolicitud));
+                            SendNotification(String.Format("Enviando {0}", item.NumeroSolicitud));
 
-
+                           
+                        }
                     }
                     else
                     {
@@ -194,9 +218,6 @@ namespace sas
                             if (result.Contains("Error"))
                             {
                                 // Toast.MakeText(this, "Error", ToastLength.Long).Show();
-
-
-
                                 servicioDetalle = new ServicioItem();
                                 servicioDetalle.ID = item.ID;
                                 servicioDetalle.Enviado = false;
@@ -204,13 +225,19 @@ namespace sas
                                 return;
 
                             }
+                            else
+                            {
+                                servicioDetalle = new ServicioItem();
+                                servicioDetalle.ID = item.ID;
+                                servicioDetalle.Enviado = true;
+                                ServicioItemManager.SaveTask(servicioDetalle);
+                                Log.Debug("SasService", String.Format("Enviando {0}", item.NumeroSolicitud));
+                                SendNotification(String.Format("Enviando {0}", item.NumeroSolicitud));
+
+                               
+                            }
                         }
                     }
-
-                 
-                       
-
-                   
                 }
                 catch (Exception ex)
                 {
@@ -219,18 +246,25 @@ namespace sas
                     servicioDetalle.ID = item.ID;
                     servicioDetalle.Enviado = false;
                     ServicioItemManager.SaveTask(servicioDetalle);
+
+                  
                     return;
+                }
+                finally
+                {
+                    //Thread.Sleep(5000);
+                   
+                    Log.Debug("SasService", "Stopping foreground");
+                    StopForeground(true);
+                    StopSelf();
+
                 }
 
 
                
             }
 
-            //Thread.Sleep(5000);
-            timerSinc.Start();
-            Log.Debug("SasService", "Stopping foreground");
-            StopForeground(true);
-            StopSelf();
+          
         }
 
         void SendNotification(string mensaje)
@@ -255,6 +289,7 @@ namespace sas
             {
                 timer.Stop();
                 timerSinc.Stop();
+               
                 Log.Debug("sas", "DemoService stopped");
                 StopForeground(true);
                 StopSelf();

@@ -71,7 +71,7 @@ namespace sas.Core
             t.AuditUsuario = r["AuditUsuario"].ToString();
             t.AuditId = Convert.ToInt32(r["AuditId"]);
             t.GeoData = r["GeoData"].ToString();
-
+            t.Address= r["Address"].ToString();
 
             return t;
 		}
@@ -85,8 +85,8 @@ namespace sas.Core
 				connection.Open ();
 				using (var contents = connection.CreateCommand ()) {
 					contents.CommandText = "SELECT [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " + 
-                                           " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], AuditUsuario , " + 
-                                           " AuditId ,GeoData from [ServiciosDet]";
+                                           " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], AuditUsuario , " +
+                                           " AuditId ,GeoData,Address from [ServiciosDet]";
 					var r = contents.ExecuteReader ();
 					while (r.Read ()) {
 						tl.Add (FromReader(r));
@@ -109,8 +109,8 @@ namespace sas.Core
                 using (var contents = connection.CreateCommand())
                 {
                     contents.CommandText = "SELECT [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
-                                           " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado] , AuditUsuario , " + 
-                                           " AuditId ,GeoData " +
+                                           " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado] , AuditUsuario , " +
+                                           " AuditId ,GeoData,Address " +
                                            " from [ServiciosDet] WHERE [Enviado] = 0  ";
                     var r = contents.ExecuteReader();
                     while (r.Read())
@@ -133,7 +133,7 @@ namespace sas.Core
 				using (var command = connection.CreateCommand ()) {
 					command.CommandText = "SELECT  [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
                                           " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], AuditUsuario , " +
-                                          " AuditId ,GeoData  from [ServiciosDet] WHERE [_id] = ?";
+                                          " AuditId ,GeoData,Address  from [ServiciosDet] WHERE [_id] = ?";
 					command.Parameters.Add (new SqliteParameter (DbType.Int32) { Value = id });
 					var r = command.ExecuteReader ();
 					while (r.Read ()) {
@@ -161,7 +161,7 @@ namespace sas.Core
                 {
                     contents.CommandText = "SELECT  [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
                                            " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], AuditUsuario , " +
-                                           " AuditId ,GeoData  from [ServiciosDet] WHERE [AuditId] = ?";
+                                           " AuditId ,GeoData,Address  from [ServiciosDet] WHERE [AuditId] = ?";
                     contents.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = id });
                     var r = contents.ExecuteReader();
                     while (r.Read())
@@ -199,8 +199,8 @@ namespace sas.Core
 					connection.Open ();
 					using (var command = connection.CreateCommand ()) {
 						command.CommandText = "INSERT INTO [ServiciosDet] (id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, " + 
-                                              " Estado, codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], " + 
-                                              " AuditUsuario , AuditId ,GeoData) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                              " Estado, codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], " +
+                                              " AuditUsuario , AuditId ,GeoData,Address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
                         //command.CommandText = "INSERT INTO [Servicios] (_id], [Nombre], [NroServicio], [Enviado]) VALUES (? ,?, ?, ?)";
                         command.Parameters.Add (new SqliteParameter (DbType.Int32) { Value = item.id_Solicitud });
                         command.Parameters.Add (new SqliteParameter (DbType.Int32) { Value = item.NumeroSolicitud });
@@ -216,6 +216,7 @@ namespace sas.Core
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.AuditUsuario });
                         command.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = item.AuditId });
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.GeoData });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.Address });
 
                         r = command.ExecuteNonQuery ();
 					}

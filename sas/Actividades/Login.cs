@@ -159,7 +159,7 @@ namespace sas
                     return;
                 }
 
-                Toast.MakeText(this, "Ingresando...", ToastLength.Short).Show();
+              //  Toast.MakeText(this, "Ingresando...", ToastLength.Short).Show();
 
               
 
@@ -168,10 +168,10 @@ namespace sas
 
                 session.createLoginSession((deviceUser[0].nombres + " " + deviceUser[0].apellidos), deviceUser[0].codMovil);
 
-            
+                StartService(new Intent("com.sas.searchpending"));
                 //Bundle valuesForActivity = new Bundle();
                 //valuesForActivity.PutString("user", result.Result);
-               // valuesForActivity.PutStringArrayList("user", deviceUser);
+                // valuesForActivity.PutStringArrayList("user", deviceUser);
                 Intent newActivity = new Intent(this, typeof(Servicios));
 
                 //newActivity.PutExtras(valuesForActivity);
