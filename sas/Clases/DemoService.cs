@@ -113,6 +113,8 @@ namespace sas
                 client.MaxResponseContentBufferSize = 256000;
                 System.Net.Http.HttpResponseMessage response;
                 client.BaseAddress = new System.Uri(IPCONN);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + session.getAccessToken());
                 string url;
 
                 try

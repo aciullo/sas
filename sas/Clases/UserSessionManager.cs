@@ -24,6 +24,8 @@ namespace sas.Clases
 
         public static string PREFERENCE_USER = "PREFERENCE_USER";
         public static string PREFERENCE_IDMOVIL = "PREFERENCE_IDMOVIL";
+        public static string PREFERENCE_TOKEN = "TOKEN";
+
         public static string PREFERENCE_CONEXION = "PREFERENCE_CONEXION";
         // All Shared Preferences Keys
         private static String IS_LOGIN = "IsLoggedIn";
@@ -64,7 +66,10 @@ namespace sas.Clases
         {
             return mSharedPrefs.GetString(PREFERENCE_IDMOVIL, "");
         }
-
+        public string getAccessToken()
+        {
+            return mSharedPrefs.GetString(PREFERENCE_TOKEN, "");
+        }
         public string getAccessConn()
         {
             return mSharedPrefs.GetString(PREFERENCE_CONEXION, "");
@@ -73,7 +78,7 @@ namespace sas.Clases
         /**
      * Create login session
      * */
-        public void createLoginSession(string user, string idmovil)
+        public void createLoginSession(string user, string idmovil, string token)
         {
             // Storing login value as TRUE
             mPrefsEditor.PutBoolean(IS_LOGIN, true);
@@ -83,6 +88,9 @@ namespace sas.Clases
 
             // Storing email in pref
             mPrefsEditor.PutString(PREFERENCE_IDMOVIL, idmovil);
+
+            mPrefsEditor.PutString(PREFERENCE_TOKEN, token);
+
 
             // commit changes
             mPrefsEditor.Commit();

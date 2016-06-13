@@ -101,6 +101,8 @@ namespace sas
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
                 client.BaseAddress = new System.Uri(IPCONN);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + session.getAccessToken());
                 // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
                 string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", movil.TrimEnd(), "001", "P");
                 var response = await client.GetAsync(url);

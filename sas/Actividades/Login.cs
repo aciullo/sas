@@ -12,6 +12,7 @@ using sas.Clases;
 using Android.Util;
 using System.Text;
 
+using System.Net.Http.Headers;
 namespace sas
 {
     [Activity(Label = "sas", MainLauncher = true, Icon = "@drawable/icon", Theme = "@style/MyCustomTheme")]
@@ -124,7 +125,7 @@ namespace sas
 
             //var result;
 
-
+          
             try
             {
                 btnIngresar.Enabled = false;
@@ -136,17 +137,37 @@ namespace sas
                 //client.BaseAddress = new Uri ("http://181.120.121.221:88");
                 client.BaseAddress = new Uri(IPCONN);
 
+                var form = new Dictionary<string, string>
+               {
+                   {"grant_type", "password"},
+                   {"username", txtUsuario.Text},
+                   {"password", txtClave.Text},
+               };
 
-               // var uri = new Uri(string.Format("http://181.120.121.221:88/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text));
+               
 
-                string url = string.Format ("/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text);
 
-                var response = await client.GetAsync(url);
+                // var uri = new Uri(string.Format("http://181.120.121.221:88/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text));
 
-                var result = response.Content.ReadAsStringAsync();
+                // string url = string.Format ("/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text);
+
+                string url = string.Format("/token");
+
+
+               // var response = await client.PostAsync(url, new FormUrlEncodedContent(form)).Result);
+
+                var tokenResponse = client.PostAsync(client.BaseAddress + "/token", new FormUrlEncodedContent(form)).Result;
+                var result = tokenResponse.Content.ReadAsStringAsync();
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
 
 
+                var token = new Dictionary<string, string>
+                  {
+                   {"access_token", ""},
+                   {"token_type", ""},
+                   {"expires_in", ""},
+                  }; 
+                 token=   JsonConvert.DeserializeObject<Dictionary<string, string>>(result.Result);
 
                 if (string.IsNullOrEmpty(result.Result) || result.Result == "null")
                 {
@@ -160,15 +181,24 @@ namespace sas
                     btnIngresar.Enabled = true;
                     return;
                 }
+                string access_token="";
+                token.TryGetValue("access_token", out access_token);
+                //  Toast.MakeText(this, "Ingresando...", ToastLength.Short).Show();
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
 
-              //  Toast.MakeText(this, "Ingresando...", ToastLength.Short).Show();
+                url = string.Format("/api/UsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text); ;
 
-              
+
+                var response = await client.GetAsync(url);
+
+                result = response.Content.ReadAsStringAsync();
 
                 var deviceUser = JsonConvert.DeserializeObject<List<DeviceUserModel>>(result.Result);
 
+             
 
-                session.createLoginSession((deviceUser[0].nombres + " " + deviceUser[0].apellidos), deviceUser[0].codMovil);
+                session.createLoginSession((deviceUser[0].nombres + " " + deviceUser[0].apellidos), deviceUser[0].codMovil, access_token);
 
                 StartService(new Intent("com.sas.searchpending"));
                 StartService(new Intent("com.xamarin.sas"));
