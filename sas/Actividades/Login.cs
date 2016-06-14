@@ -30,6 +30,7 @@ namespace sas
         UserSessionManager session;
         string IPCONN = "";
 
+        private clsAutenticacion auth;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -44,6 +45,8 @@ namespace sas
             // Get our button from the layout resource,
             // and attach an event to it
             //
+
+            auth = new clsAutenticacion();
 
             // Session Manager
             session = new UserSessionManager(this);
@@ -141,7 +144,7 @@ namespace sas
                {
                    {"grant_type", "password"},
                    {"username", txtUsuario.Text},
-                   {"password", txtClave.Text},
+                   {"password", auth.Encripta(txtClave.Text)},
                };
 
                
@@ -169,7 +172,7 @@ namespace sas
                   }; 
                  token=   JsonConvert.DeserializeObject<Dictionary<string, string>>(result.Result);
 
-                if (string.IsNullOrEmpty(result.Result) || result.Result == "null")
+                if (string.IsNullOrEmpty(result.Result) || result.Result == "null" || result.Result.Contains("error"))
                 {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.SetTitle("Aviso");
@@ -187,7 +190,7 @@ namespace sas
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
 
-                url = string.Format("/api/UsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text); ;
+                url = string.Format("/api/UsersApi/{0}/{1}", txtUsuario.Text, auth.Encripta(txtClave.Text)); ;
 
 
                 var response = await client.GetAsync(url);
