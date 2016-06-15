@@ -46,6 +46,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Constantes.cs" />
     <Compile Include="DetServicioDatabaseADO.cs" />
     <Compile Include="SasDatosDatabaseADO.cs" />
     <Compile Include="SasDatosItem.cs" />

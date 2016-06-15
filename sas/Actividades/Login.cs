@@ -13,6 +13,8 @@ using Android.Util;
 using System.Text;
 
 using System.Net.Http.Headers;
+using Android.Gms.Common;
+
 namespace sas
 {
     [Activity(Label = "sas", MainLauncher = true, Icon = "@drawable/icon", Theme = "@style/MyCustomTheme")]
@@ -63,7 +65,7 @@ namespace sas
             mProgress.Visibility = ViewStates.Invisible;
 
           //recuperar la base para la coneccion
-                IPCONN = session.getAccessConn();
+            IPCONN = session.getAccessConn();
 
 
             // Start lengthy operation in a background thread
@@ -80,18 +82,61 @@ namespace sas
 
             if (session.isLoggedIn())
             {
-                StartService(new Intent("com.sas.searchpending"));
+                //StartService(new Intent("com.sas.searchpending"));
                 StartService(new Intent("com.xamarin.sas"));
                 Intent newActivity = new Intent(this, typeof(Servicios));
                     Bundle valuesForActivity = new Bundle();
                     valuesForActivity.PutInt("GPS", 0);
                     newActivity.PutExtras(valuesForActivity);
                     StartActivity(newActivity);
-                    Finish();
+                   
+
+                if (IsPlayServicesAvailable())
+                {
+                    var intent = new Intent(this, typeof(RegistrationIntentService));
+                    StartService(intent);
+                }
+
+                Finish();
             }
           
         }
 
+        public bool IsPlayServicesAvailable()
+        {
+            string msgText = "";
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.SetTitle("Aviso");
+           
+            builder.SetCancelable(true);
+            builder.SetPositiveButton("OK", delegate { return; });
+           
+            int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
+            if (resultCode != ConnectionResult.Success)
+            {
+                if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
+                { 
+                    msgText = GoogleApiAvailability.Instance.GetErrorString(resultCode);
+                    builder.SetMessage(msgText);
+                    builder.Show();
+                }
+                else
+                {
+                    msgText = "Sorry, this device is not supported";
+                    builder.SetMessage(msgText);
+                    builder.Show();
+                    Finish();
+                }
+                return false;
+            }
+            else
+            {
+                msgText = "Google Play Services is available.";
+                builder.SetMessage(msgText);
+                builder.Show();
+                return true;
+            }
+        }
         private async void BtnIngresar_Click(object sender, EventArgs e)
         {
 
@@ -201,9 +246,9 @@ namespace sas
 
              
 
-                session.createLoginSession((deviceUser[0].nombres + " " + deviceUser[0].apellidos), deviceUser[0].codMovil, access_token);
+                session.createLoginSession((deviceUser[0].nombres + " " + deviceUser[0].apellidos), deviceUser[0].codMovil, access_token, deviceUser[0].usuario);
 
-                StartService(new Intent("com.sas.searchpending"));
+               // StartService(new Intent("com.sas.searchpending"));
                 StartService(new Intent("com.xamarin.sas"));
                 //Bundle valuesForActivity = new Bundle();
                 //valuesForActivity.PutString("user", result.Result);
@@ -217,7 +262,11 @@ namespace sas
                 StartActivity(newActivity);
                // Toast.MakeText(this, "OK", ToastLength.Long).Show();
                 btnIngresar.Enabled = true;
-                
+                if (IsPlayServicesAvailable())
+                {
+                    var intent = new Intent(this, typeof(RegistrationIntentService));
+                    StartService(intent);
+                }
                 Finish();
 
             }

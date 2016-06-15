@@ -19,8 +19,9 @@ namespace sas.Clases
         private ISharedPreferences mSharedPrefs;
         private ISharedPreferencesEditor mPrefsEditor;
         private Context mContext;
-        
-        
+
+
+        public static string PREFERENCE_USERID = "PREFERENCE_USERID";
 
         public static string PREFERENCE_USER = "PREFERENCE_USER";
         public static string PREFERENCE_IDMOVIL = "PREFERENCE_IDMOVIL";
@@ -74,11 +75,14 @@ namespace sas.Clases
         {
             return mSharedPrefs.GetString(PREFERENCE_CONEXION, "");
         }
-
+        public string getAccessUserId()
+        {
+            return mSharedPrefs.GetString(PREFERENCE_USERID, "");
+        }
         /**
      * Create login session
      * */
-        public void createLoginSession(string user, string idmovil, string token)
+        public void createLoginSession(string user, string idmovil, string token, string userid)
         {
             // Storing login value as TRUE
             mPrefsEditor.PutBoolean(IS_LOGIN, true);
@@ -90,6 +94,8 @@ namespace sas.Clases
             mPrefsEditor.PutString(PREFERENCE_IDMOVIL, idmovil);
 
             mPrefsEditor.PutString(PREFERENCE_TOKEN, token);
+
+            mPrefsEditor.PutString(PREFERENCE_USERID, userid);
 
 
             // commit changes
