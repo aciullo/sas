@@ -26,7 +26,7 @@ namespace sas
 
             var notificationBuilder = new Notification.Builder(this)
                 .SetSmallIcon(Resource.Drawable.ic_stat_ic_notification)
-                .SetContentTitle("GCM Message")
+                .SetContentTitle("SAS Futura")
                 .SetContentText(message)
                 .SetAutoCancel(true)
                 .SetContentIntent(pendingIntent);

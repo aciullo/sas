@@ -46,11 +46,11 @@ namespace sas
             }
         }
 
-        async void SendRegistrationToAppServer(string token)
+        void SendRegistrationToAppServer(string token)
         {
 
             session = new UserSessionManager(this);
-                     
+
             //recuperar la base para la coneccion
             IPCONN = session.getAccessConn();
             access_token = session.getAccessToken();
@@ -82,9 +82,9 @@ namespace sas
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
 
-               string url = string.Format("/api/UsersApi/{0}", session.getAccessUserId());
-               //var response = await client.PutAsync(url, content);
-                var response =  client.PutAsync(client.BaseAddress + url , new FormUrlEncodedContent(person)).Result;
+                string url = string.Format("/api/UsersApi/{0}", session.getAccessUserId());
+                //var response = await client.PutAsync(url, content);
+                var response = client.PutAsync(client.BaseAddress + url, new FormUrlEncodedContent(person)).Result;
 
                 result = response.Content.ReadAsStringAsync().Result;
 
@@ -92,7 +92,7 @@ namespace sas
             catch (Exception ex)
             {
                 Log.Debug("RegistrationIntentService", "Failed to put a registration token");
-               
+
                 return;
             }
 
@@ -105,7 +105,7 @@ namespace sas
         void Subscribe(string token)
         {
             var pubSub = GcmPubSub.GetInstance(this);
-            pubSub.Subscribe(token, "/topics/global", null);
+            pubSub.Subscribe(token, "/topics/global",null);
         }
     }
 }

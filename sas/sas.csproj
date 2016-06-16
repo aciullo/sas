@@ -153,6 +153,7 @@
     <Compile Include="Servicios\GcmListenerService.cs" />
     <Compile Include="Servicios\InstanceIdListenerService.cs" />
     <Compile Include="Servicios\RegistrationIntentService.cs" />
+    <Compile Include="Servicios\SasService.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\styles.xml">

@@ -89,7 +89,7 @@ namespace sas
                     valuesForActivity.PutInt("GPS", 0);
                     newActivity.PutExtras(valuesForActivity);
                     StartActivity(newActivity);
-                   
+
 
                 if (IsPlayServicesAvailable())
                 {
@@ -105,42 +105,45 @@ namespace sas
         public bool IsPlayServicesAvailable()
         {
             string msgText = "";
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.SetTitle("Aviso");
-           
-            builder.SetCancelable(true);
-            builder.SetPositiveButton("OK", delegate { return; });
-           
+            //AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            //builder.SetTitle("Aviso");
+
+            //builder.SetCancelable(true);
+            //builder.SetPositiveButton("OK", delegate { return; });
+
             int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
             if (resultCode != ConnectionResult.Success)
             {
                 if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
-                { 
+                {
                     msgText = GoogleApiAvailability.Instance.GetErrorString(resultCode);
-                    builder.SetMessage(msgText);
-                    builder.Show();
+                    //builder.SetMessage(msgText);
+                    //builder.Show();
                 }
                 else
                 {
                     msgText = "Sorry, this device is not supported";
-                    builder.SetMessage(msgText);
-                    builder.Show();
-                    Finish();
+                    //builder.SetMessage(msgText);
+                    //builder.Show();
+                    //Finish();
                 }
+                Log.Debug("gcm", msgText);
                 return false;
             }
             else
             {
                 msgText = "Google Play Services is available.";
-                builder.SetMessage(msgText);
-                builder.Show();
+                //builder.SetMessage(msgText);
+                //builder.Show();
+                Log.Debug("gcm", msgText);
+
                 return true;
             }
         }
         private async void BtnIngresar_Click(object sender, EventArgs e)
         {
 
-
+            btnIngresar.Enabled = false;
             mProgress.Indeterminate = true;
             mProgress.Visibility = ViewStates.Visible;
             await myMethod();
@@ -176,7 +179,7 @@ namespace sas
           
             try
             {
-                btnIngresar.Enabled = false;
+                
                 Toast.MakeText(this, "Procesando petición de ingreso", ToastLength.Long).Show();
 
                 HttpClient client = new HttpClient();

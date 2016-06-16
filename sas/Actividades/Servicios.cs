@@ -18,7 +18,7 @@ using sas.Clases;
 using sas.Core;
 using Android.Locations;
 using Android.Util;
-
+using Android.Gms.Common;
 
 namespace sas
 {
@@ -120,10 +120,50 @@ namespace sas
      
             lstServicios.ItemClick += LstServicios_ItemClick; ;
 
-          
+            if (IsPlayServicesAvailable())
+            {
+                var intent = new Intent(this, typeof(RegistrationIntentService));
+                StartService(intent);
+            }
 
 
 
+        }
+
+        public bool IsPlayServicesAvailable()
+        {
+            string msgText = "";
+            //AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            //builder.SetTitle("Aviso");
+
+            //builder.SetCancelable(true);
+            //builder.SetPositiveButton("OK", delegate { return; });
+
+            int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
+            if (resultCode != ConnectionResult.Success)
+            {
+                if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
+                {
+                    msgText = GoogleApiAvailability.Instance.GetErrorString(resultCode);
+                    //builder.SetMessage(msgText);
+                    //builder.Show();
+                }
+                else
+                {
+                    msgText = "Sorry, this device is not supported";
+                    //builder.SetMessage(msgText);
+                    //builder.Show();
+                   
+                }
+                return false;
+            }
+            else
+            {
+                msgText = "Google Play Services is available.";
+                //builder.SetMessage(msgText);
+                //builder.Show();
+                return true;
+            }
         }
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
