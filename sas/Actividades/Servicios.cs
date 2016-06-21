@@ -19,6 +19,8 @@ using sas.Core;
 using Android.Locations;
 using Android.Util;
 using Android.Gms.Common;
+using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 
 namespace sas
 {
@@ -185,11 +187,59 @@ namespace sas
             if (item.TitleFormatted.ToString() == "Cerrar Sesión")
             {
                 session.logoutUser();
-                StopService(new Intent("com.sas.searchpending"));
+               // StopService(new Intent("com.sas.searchpending"));
                 StopService(new Intent("com.xamarin.sas"));
                 Finish();
             }
+
+            if (item.TitleFormatted.ToString() == "Enviar notificación")
+            {
+                MandarNotificacion();
+            }
             return base.OnOptionsItemSelected(item);
+        }
+        private void MandarNotificacion()
+        {
+             const string API_KEY = "AIzaSyAquOzHLBlZUdC5lae-GoOi6Psbqdzfwh8";
+             string MESSAGE = "Nuevo Servicio ";
+             string resultado = "";
+             var jGcmData = new JObject();
+             var jData = new JObject();
+
+                jData.Add("message", MESSAGE);
+                // jGcmData.Add("to", "/topics/global");
+                jGcmData.Add("to", user.idRegistro);
+                //jGcmData.Add("to", user.idRegistro + "/topics/global");
+
+                jGcmData.Add("data", jData);
+
+                var url = new Uri("https://gcm-http.googleapis.com/gcm/send");
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.DefaultRequestHeaders.Accept.Add(
+                            new MediaTypeWithQualityHeaderValue("application/json"));
+
+                        client.DefaultRequestHeaders.TryAddWithoutValidation(
+                            "Authorization", "key=" + API_KEY);
+
+                        Task.WaitAll(client.PostAsync(url,
+                            new StringContent(jGcmData.ToString(), Encoding.Default, "application/json"))
+                                .ContinueWith(response =>
+                                {
+                                    resultado = response.Status.ToString();
+                                    resultado = resultado + " " + response.Result.ToString();
+                                    resultado = resultado + " " + "Message sent: check the client device notification tray.";
+                                }));
+                    }
+                }
+                catch (Exception e)
+                {
+                    resultado = ("Unable to send GCM message:");
+                    resultado = resultado + " STRACKTRACE:  " + (e.StackTrace);
+                }
+            Log.Debug(TAG, "resultado " + resultado + ".");
         }
 
         protected override async void OnStart()

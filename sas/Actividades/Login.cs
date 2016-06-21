@@ -91,11 +91,11 @@ namespace sas
                     StartActivity(newActivity);
 
 
-                if (IsPlayServicesAvailable())
-                {
-                    var intent = new Intent(this, typeof(RegistrationIntentService));
-                    StartService(intent);
-                }
+                //if (IsPlayServicesAvailable())
+                //{
+                //    var intent = new Intent(this, typeof(RegistrationIntentService));
+                //    StartService(intent);
+                //}
 
                 Finish();
             }
@@ -264,12 +264,12 @@ namespace sas
                 newActivity.PutExtras(valuesForActivity);
                 StartActivity(newActivity);
                // Toast.MakeText(this, "OK", ToastLength.Long).Show();
-                btnIngresar.Enabled = true;
-                if (IsPlayServicesAvailable())
-                {
-                    var intent = new Intent(this, typeof(RegistrationIntentService));
-                    StartService(intent);
-                }
+                //btnIngresar.Enabled = true;
+                //if (IsPlayServicesAvailable())
+                //{
+                //    var intent = new Intent(this, typeof(RegistrationIntentService));
+                //    StartService(intent);
+                //}
                 Finish();
 
             }

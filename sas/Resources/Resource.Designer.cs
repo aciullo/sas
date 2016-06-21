@@ -393,11 +393,17 @@ namespace sas
 			// aapt resource value: 0x7f09000c
 			public const int mProgress = 2131296268;
 			
+			// aapt resource value: 0x7f090040
+			public const int menu_acercad = 2131296320;
+			
 			// aapt resource value: 0x7f09003e
 			public const int menu_cerrarsesion = 2131296318;
 			
 			// aapt resource value: 0x7f09003f
-			public const int menu_share = 2131296319;
+			public const int menu_enviar = 2131296319;
+			
+			// aapt resource value: 0x7f090041
+			public const int menu_share = 2131296321;
 			
 			// aapt resource value: 0x7f09003d
 			public const int menu_sincdatos = 2131296317;

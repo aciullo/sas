@@ -13,6 +13,16 @@
        android:title="Cerrar Sesión"
        />
   
+  <item
+       android:id="@+id/menu_enviar"
+      
+       android:title="Enviar notificación"
+       />
+  <item
+     android:id="@+id/menu_acercad"
+      
+     android:title="Acerca De"
+       />
   <!--Meter esta linea en item para asignarle un icono android:showAsAction="ifRoom"-->
   <!--android:icon="@drawable/ic_action_social_share"-->
 </menu>
