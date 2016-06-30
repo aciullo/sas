@@ -13,11 +13,11 @@
        android:title="Cerrar Sesión"
        />
   
-  <item
+  <!--<item
        android:id="@+id/menu_enviar"
       
        android:title="Enviar notificación"
-       />
+       />-->
   <item
      android:id="@+id/menu_acercad"
       

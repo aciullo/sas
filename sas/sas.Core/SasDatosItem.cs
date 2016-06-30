@@ -12,6 +12,7 @@ namespace sas.Core
         public string codigo { get; set; }
         public string descripcion { get; set; }
         public string idtabla { get; set; }
+        public bool Activo { get; set; }
 
         public static implicit operator List<object>(SasDatosItem v)
         {

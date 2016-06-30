@@ -37,7 +37,7 @@ namespace sas.Core
 
                 connection.Open();
                 var commands = new[] {
-                     "CREATE TABLE [sasDatos] (_id INTEGER PRIMARY KEY ASC, codigo TEXT, descripcion TEXT, idtabla TEXT);"
+                     "CREATE TABLE [sasDatos] (_id INTEGER PRIMARY KEY ASC, codigo TEXT, descripcion TEXT, idtabla TEXT, activo INTEGER);"
                 };
                 foreach (var command in commands)
                 {
@@ -65,6 +65,9 @@ namespace sas.Core
             t.codigo= (r["codigo"]).ToString();
             t.descripcion = (r["descripcion"]).ToString();
             t.idtabla = r ["idtabla"].ToString ();
+            t.idtabla = r["idtabla"].ToString();
+            t.idtabla = r["idtabla"].ToString();
+            t.Activo = Convert.ToInt32(r["Activo"]) == 1 ? true : false;
             return t;
 		}
 
@@ -76,7 +79,7 @@ namespace sas.Core
 				connection = new SqliteConnection ("Data Source=" + path);
 				connection.Open ();
 				using (var contents = connection.CreateCommand ()) {
-					contents.CommandText = "SELECT [_id], codigo, descripcion, idtabla from [sasDatos] where [idtabla] like '" +idtabla + "%'" ;
+					contents.CommandText = "SELECT [_id], codigo, descripcion, idtabla,Activo from [sasDatos] where [idtabla] like '" + idtabla + "%'" ;
                     contents.Parameters.Add(new SqliteParameter(DbType.String) { Value = idtabla });
                     var r = contents.ExecuteReader ();
 					while (r.Read ()) {
@@ -98,7 +101,7 @@ namespace sas.Core
 				connection = new SqliteConnection ("Data Source=" + path);
 				connection.Open ();
 				using (var command = connection.CreateCommand ()) {
-					command.CommandText = "SELECT  [_id], codigo, descripcion, idtabla from [sasDatos] WHERE _id = ?";
+					command.CommandText = "SELECT  [_id], codigo, descripcion, idtabla, Activo from [sasDatos] WHERE _id = ?";
 					command.Parameters.Add (new SqliteParameter (DbType.Int32) { Value = id });
              
 
@@ -123,7 +126,7 @@ namespace sas.Core
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "SELECT  [_id], codigo, descripcion, idtabla from [sasDatos] WHERE idtabla like '"+ idtbla + "%' and codigo like '"+ codigo +"%'";
+                    command.CommandText = "SELECT  [_id], codigo, descripcion, idtabla, Activo from [sasDatos] WHERE idtabla like '" + idtbla + "%' and codigo like '"+ codigo +"%'";
                    // command.Parameters.Add(new SqliteParameter(DbType.String) { Value = idtbla });
                    // command.Parameters.Add(new SqliteParameter(DbType.String) { Value = codigo });
 
@@ -161,10 +164,12 @@ namespace sas.Core
 					connection = new SqliteConnection ("Data Source=" + path);
 					connection.Open ();
 					using (var command = connection.CreateCommand ()) {
-						command.CommandText = "INSERT INTO [sasDatos] (codigo, descripcion , idtabla) VALUES (?, ?, ? )";
+						command.CommandText = "INSERT INTO [sasDatos] (codigo, descripcion , idtabla, Activo) VALUES (?, ?, ? , ? )";
                         command.Parameters.Add (new SqliteParameter (DbType.String) { Value = item.codigo });
                         command.Parameters.Add (new SqliteParameter (DbType.String) { Value = item.descripcion });
 						command.Parameters.Add (new SqliteParameter (DbType.String) { Value = item.idtabla });
+                        command.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = item.Activo });
+
                         r = command.ExecuteNonQuery ();
 					}
 					connection.Close ();

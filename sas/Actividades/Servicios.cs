@@ -25,7 +25,7 @@ using Newtonsoft.Json.Linq;
 namespace sas
 {
     [Activity(Label = "Servicios", Theme = "@style/MyCustomTheme", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class Servicios  : Activity, ILocationListener
+    public class Servicios  : Activity//, ILocationListener
     {
         private List<ServiciosModel> servicio;
         private DeviceUserModel user;
@@ -196,11 +196,26 @@ namespace sas
             {
                 MandarNotificacion();
             }
+
+            if (item.TitleFormatted.ToString() == "Acerca De")
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.SetTitle("Información");
+                builder.SetMessage("Futura Software Versión 1.0 Copyright © 2016 - Virginio González");
+                builder.SetPositiveButton("OK", delegate
+                { return; });
+                builder.SetCancelable(false);
+              
+
+                Dialog alertDialog = builder.Create();
+                alertDialog.SetCanceledOnTouchOutside(false);
+                alertDialog.Show();
+            }
             return base.OnOptionsItemSelected(item);
         }
         private void MandarNotificacion()
         {
-             const string API_KEY = "AIzaSyAquOzHLBlZUdC5lae-GoOi6Psbqdzfwh8";
+          
              string MESSAGE = "Nuevo Servicio ";
              string resultado = "";
              var jGcmData = new JObject();
@@ -222,7 +237,7 @@ namespace sas
                             new MediaTypeWithQualityHeaderValue("application/json"));
 
                         client.DefaultRequestHeaders.TryAddWithoutValidation(
-                            "Authorization", "key=" + API_KEY);
+                            "Authorization", "key=" + Constantes.API_KEY);
 
                         Task.WaitAll(client.PostAsync(url,
                             new StringContent(jGcmData.ToString(), Encoding.Default, "application/json"))
@@ -280,7 +295,7 @@ namespace sas
         protected override void OnPause()
         {
             base.OnPause();
-            _locationManager.RemoveUpdates(this);
+            //_locationManager.RemoveUpdates(this);
             Log.Debug(TAG, "No longer listening for location updates.");
         }
         protected override void OnResume()
@@ -321,36 +336,36 @@ namespace sas
                 }
             }
         }
-        public void OnLocationChanged(Location location)
-        {
-            _currentLocation = location;
-            if (_currentLocation == null)
-            {
-                _locationText = "Unable to determine your location. Try again in a short while.";
-            }
-            else
-            {
-                _locationText = string.Format("{0:f6},{1:f6}", _currentLocation.Latitude, _currentLocation.Longitude);
-                // Address address = await ReverseGeocodeCurrentLocation();
-                // DisplayAddress(address);
+        //public void OnLocationChanged(Location location)
+        //{
+        //    _currentLocation = location;
+        //    if (_currentLocation == null)
+        //    {
+        //        _locationText = "Unable to determine your location. Try again in a short while.";
+        //    }
+        //    else
+        //    {
+        //        _locationText = string.Format("{0:f6},{1:f6}", _currentLocation.Latitude, _currentLocation.Longitude);
+        //        // Address address = await ReverseGeocodeCurrentLocation();
+        //        // DisplayAddress(address);
 
-            }
-        }
+        //    }
+        //}
 
-        public void OnProviderDisabled(string provider)
-        {
-            throw new NotImplementedException();
-        }
+        //public void OnProviderDisabled(string provider)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public void OnProviderEnabled(string provider)
-        {
-            throw new NotImplementedException();
-        }
+        //public void OnProviderEnabled(string provider)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
-        {
-            Log.Debug(TAG, "{0}, {1}", provider, status);
-        }
+        //public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
+        //{
+        //    Log.Debug(TAG, "{0}, {1}", provider, status);
+        //}
         protected override void OnUserLeaveHint()
         {
             base.OnUserLeaveHint();
@@ -376,7 +391,7 @@ namespace sas
             var cantidad = ServicioManager.CantidadPendiente();
 
 
-            if (cantidad >= 1 && t.codEstado == "001")
+            if (cantidad > 1 && t.codEstado == "001")
             {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);

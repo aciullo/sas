@@ -126,6 +126,7 @@
     <Compile Include="Actividades\Login.cs" />
     <Compile Include="Actividades\RegistrarServicio.cs" />
     <Compile Include="Actividades\RegistrarServicioLocal.cs" />
+    <Compile Include="Actividades\Translado.cs" />
     <Compile Include="Servicios\BuscarServiciosService.cs" />
     <Compile Include="Clases\BusquedaAdapter.cs" />
     <Compile Include="Clases\clsAutenticacion.cs" />
@@ -184,6 +185,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\RegistroServiciosLocal.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\TransladoLayout.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

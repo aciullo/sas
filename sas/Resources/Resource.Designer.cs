@@ -393,20 +393,17 @@ namespace sas
 			// aapt resource value: 0x7f09000c
 			public const int mProgress = 2131296268;
 			
-			// aapt resource value: 0x7f090040
-			public const int menu_acercad = 2131296320;
+			// aapt resource value: 0x7f090047
+			public const int menu_acercad = 2131296327;
 			
-			// aapt resource value: 0x7f09003e
-			public const int menu_cerrarsesion = 2131296318;
+			// aapt resource value: 0x7f090046
+			public const int menu_cerrarsesion = 2131296326;
 			
-			// aapt resource value: 0x7f09003f
-			public const int menu_enviar = 2131296319;
+			// aapt resource value: 0x7f090048
+			public const int menu_share = 2131296328;
 			
-			// aapt resource value: 0x7f090041
-			public const int menu_share = 2131296321;
-			
-			// aapt resource value: 0x7f09003d
-			public const int menu_sincdatos = 2131296317;
+			// aapt resource value: 0x7f090045
+			public const int menu_sincdatos = 2131296325;
 			
 			// aapt resource value: 0x7f090002
 			public const int none = 2131296258;
@@ -419,6 +416,9 @@ namespace sas
 			
 			// aapt resource value: 0x7f09001a
 			public const int tableLayout2 = 2131296282;
+			
+			// aapt resource value: 0x7f09003d
+			public const int tableRow1 = 2131296317;
 			
 			// aapt resource value: 0x7f09000d
 			public const int textView3 = 2131296269;
@@ -462,8 +462,17 @@ namespace sas
 			// aapt resource value: 0x7f090017
 			public const int txtEdad = 2131296279;
 			
+			// aapt resource value: 0x7f09003f
+			public const int txtFC = 2131296319;
+			
+			// aapt resource value: 0x7f090043
+			public const int txtGlicemia = 2131296323;
+			
 			// aapt resource value: 0x7f090026
 			public const int txtHoraLlamada = 2131296294;
+			
+			// aapt resource value: 0x7f090044
+			public const int txtMedico = 2131296324;
 			
 			// aapt resource value: 0x7f09002c
 			public const int txtMotivo1 = 2131296300;
@@ -474,8 +483,17 @@ namespace sas
 			// aapt resource value: 0x7f090014
 			public const int txtNroSolicitud = 2131296276;
 			
+			// aapt resource value: 0x7f090040
+			public const int txtSAT = 2131296320;
+			
 			// aapt resource value: 0x7f090029
 			public const int txtSolicitante = 2131296297;
+			
+			// aapt resource value: 0x7f09003e
+			public const int txtTA = 2131296318;
+			
+			// aapt resource value: 0x7f090041
+			public const int txtTemperatura = 2131296321;
 			
 			// aapt resource value: 0x7f090027
 			public const int txtTipo = 2131296295;
@@ -485,6 +503,9 @@ namespace sas
 			
 			// aapt resource value: 0x7f09000e
 			public const int txtUsuario = 2131296270;
+			
+			// aapt resource value: 0x7f090042
+			public const int txtglasgow = 2131296322;
 			
 			// aapt resource value: 0x7f090005
 			public const int wide = 2131296261;
@@ -544,6 +565,9 @@ namespace sas
 			
 			// aapt resource value: 0x7f030008
 			public const int toolBarLayout = 2130903048;
+			
+			// aapt resource value: 0x7f030009
+			public const int TransladoLayout = 2130903049;
 			
 			static Layout()
 			{

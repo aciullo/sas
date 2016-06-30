@@ -41,13 +41,23 @@ namespace sas
         public string codDesenlace { get; set; }
         public string producto { get; set; }
 
+        //public string sv_ta { get; set; }
+        //public string sv_fc { get; set; }
+        //public string sv_tempe { get; set; }
+        //public string sv_fresp { get; set; }
+        //public string SAT { get; set; }
+        //public string Glasgow { get; set; }
+        //public string Glicemia { get; set; }
+
         /*CONSTRUCTOR*/
         public ServiciosModel(int id_solicitud, int NumeroSolicitud, DateTime  fecha_Llamado, string hora_Llamado
             , string nombrePaciente, string Tel, decimal edadPaciente, string nombreSolicitante,
             string direccionReferecia, string direccionReferecia2, string numeroCasa, string referencia, string Motivo, 
             string nroSalida, string codMovil, string codChofer, string Acompañante, string observacion, string Estado, 
             string codEstado, string HoraEstado, string codMotivo1, string codMotivo2, string codMotivo3, string OtroMotivo
-           , string codTipo, string codInstitucion, string codDesenlace, string producto)
+           , string codTipo, string codInstitucion, string codDesenlace, string producto
+            //, string sv_ta,string sv_fc, string sv_tempe, string sv_fresp, string SAT
+            )
         {
             this.id_Solicitud = id_solicitud;
             this.NumeroSolicitud = NumeroSolicitud;
