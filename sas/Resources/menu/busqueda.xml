@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:local="http://schemas.android.com/apk/res-auto">
+  <item
+       android:id="@+id/menu_busInstitucion"
+      
+       android:title="Buscar Institución"
+       />
+  
+  <item
+       android:id="@+id/menu_busMedico"
+      
+       android:title="Buscar Médico"
+       />
+  
+  <!--<item
+       android:id="@+id/menu_enviar"
+      
+       android:title="Enviar notificación"
+       />-->
+ 
+  <!--Meter esta linea en item para asignarle un icono android:showAsAction="ifRoom"-->
+  <!--android:icon="@drawable/ic_action_social_share"-->
+</menu>
