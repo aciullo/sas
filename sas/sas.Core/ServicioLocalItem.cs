@@ -4,9 +4,9 @@ namespace sas.Core {
 	/// <summary>
 	/// Task business object
 	/// </summary>
-	public class ServicioLocal
+	public class ServicioLocalItem
     {
-		public ServicioLocal ()
+		public ServicioLocalItem()
 		{
 		}
 

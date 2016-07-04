@@ -39,7 +39,7 @@ namespace sas.Core
                        "CREATE TABLE [ServiciosDet] (_id INTEGER PRIMARY KEY ASC, id_solicitud INTEGER, " +
                     " NumeroSolicitud INTEGER, Nombre NTEXT, Fecha NTEXT, codMovil NTEXT, Estado NTEXT, " +
                     " codEstado NTEXT, HoraEstado NTEXT, codInstitucion NTEXT, codDesenlace NTEXT, Enviado INTEGER, " +
-                    "AuditUsuario NTEXT, AuditId INTEGER,GeoData NTEXT, Address NTEXT );" ,
+                    "AuditUsuario NTEXT, AuditId INTEGER,GeoData NTEXT, Address NTEXT, sv_ta NTEXT, sv_fc NTEXT, sv_tempe NTEXT, sv_fresp NTEXT, SAT NTEXT, Glasgow NTEXT, Glicemia NTEXT );" ,
                 };
 				foreach (var command in commands) {
 					using (var c = connection.CreateCommand ()) {
@@ -73,6 +73,13 @@ namespace sas.Core
             t.AuditId = Convert.ToInt32(r["AuditId"]);
             t.GeoData = r["GeoData"].ToString();
             t.Address= r["Address"].ToString();
+            t.sv_ta = r["sv_ta"].ToString();
+            t.sv_fc = r["sv_fc"].ToString();
+            t.sv_tempe= r["sv_tempe"].ToString();
+            t.sv_fresp = r["sv_fresp"].ToString();
+            t.SAT = r["SAT"].ToString();
+            t.Glasgow = r["Glasgow"].ToString();
+            t.Glicemia = r["Glicemia"].ToString();
 
             return t;
 		}
@@ -87,7 +94,7 @@ namespace sas.Core
 				using (var contents = connection.CreateCommand ()) {
 					contents.CommandText = "SELECT [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " + 
                                            " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], AuditUsuario , " +
-                                           " AuditId ,GeoData,Address from [ServiciosDet]";
+                                           " AuditId ,GeoData,Address, sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia   from [ServiciosDet]";
 					var r = contents.ExecuteReader ();
 					while (r.Read ()) {
 						tl.Add (FromReader(r));
@@ -111,7 +118,7 @@ namespace sas.Core
                 {
                     contents.CommandText = "SELECT [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
                                            " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado] , AuditUsuario , " +
-                                           " AuditId ,GeoData,Address " +
+                                           " AuditId ,GeoData,Address, sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia " +
                                            " from [ServiciosDet] WHERE [Enviado] = 0  ";
                     var r = contents.ExecuteReader();
                     while (r.Read())
@@ -134,7 +141,7 @@ namespace sas.Core
 				using (var command = connection.CreateCommand ()) {
 					command.CommandText = "SELECT  [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
                                           " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], AuditUsuario , " +
-                                          " AuditId ,GeoData,Address  from [ServiciosDet] WHERE [_id] = ?";
+                                          " AuditId ,GeoData,Address, sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia  from [ServiciosDet] WHERE [_id] = ?";
 					command.Parameters.Add (new SqliteParameter (DbType.Int32) { Value = id });
 					var r = command.ExecuteReader ();
 					while (r.Read ()) {
@@ -162,7 +169,7 @@ namespace sas.Core
                 {
                     contents.CommandText = "SELECT  [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
                                            " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], AuditUsuario , " +
-                                           " AuditId ,GeoData,Address  from [ServiciosDet] WHERE [AuditId] = ?";
+                                           " AuditId ,GeoData,Address , sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia from [ServiciosDet] WHERE [AuditId] = ?";
                     contents.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = id });
                     var r = contents.ExecuteReader();
                     while (r.Read())

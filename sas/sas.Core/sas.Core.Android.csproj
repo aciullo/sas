@@ -54,7 +54,7 @@
     <Compile Include="ServicioItem.cs" />
     <Compile Include="ServicioItemManager.cs" />
     <Compile Include="ServicioItemRepositoryADO.cs" />
-    <Compile Include="ServicioLocal.cs" />
+    <Compile Include="ServicioLocalItem.cs" />
     <Compile Include="ServicioManager.cs" />
     <Compile Include="ServicioDatabaseADO.cs" />
     <Compile Include="ServicioRepositoryADO.cs" />

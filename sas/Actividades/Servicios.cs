@@ -181,7 +181,7 @@ namespace sas
                 mProgress.Indeterminate = true;
                 //sincrionizar datos sas_datos
                 GetIndexDato("07");
-                 GetIndexDato("06");
+                GetIndexDato("06");
                 //Toast.MakeText(this, "Sincronizacion completa", ToastLength.Long).Show();
             }
             if (item.TitleFormatted.ToString() == "Cerrar Sesión")

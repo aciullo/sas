@@ -73,9 +73,9 @@ namespace sas.Core
         }
 
         /// <summary>Convert from DataReader to Task object</summary>
-        ServicioLocal FromReader(SqliteDataReader r)
+        ServicioLocalItem FromReader(SqliteDataReader r)
         {
-            var t = new ServicioLocal();
+            var t = new ServicioLocalItem();
             t.ID = Convert.ToInt32(r["_id"]);
             t.id_Solicitud = Convert.ToInt32(r["id_solicitud"]);
             t.NumeroSolicitud = Convert.ToInt32(r["NumeroSolicitud"]);
@@ -112,9 +112,9 @@ namespace sas.Core
 
         }
 
-        public IEnumerable<ServicioLocal> GetItems()
+        public IEnumerable<ServicioLocalItem> GetItems()
         {
-            var tl = new List<ServicioLocal>();
+            var tl = new List<ServicioLocalItem>();
 
             lock (locker)
             {
@@ -141,9 +141,9 @@ namespace sas.Core
             return tl;
         }
 
-        public ServicioLocal GetItem(int id)
+        public ServicioLocalItem GetItem(int id)
         {
-            var t = new ServicioLocal();
+            var t = new ServicioLocalItem();
             lock (locker)
             {
                 connection = new SqliteConnection("Data Source=" + path);
@@ -165,7 +165,7 @@ namespace sas.Core
             return t;
         }
 
-        public int SaveItem(ServicioLocal item)
+        public int SaveItem(ServicioLocalItem item)
         {
             int r;
             lock (locker)
@@ -266,7 +266,7 @@ namespace sas.Core
         public bool CheckIsDataAlreadyInDBorNot(string TableName,
         string dbfield, string fieldValue)
         {
-            var t = new ServicioLocal();
+            var t = new ServicioLocalItem();
 
             lock (locker)
             {
@@ -291,7 +291,7 @@ namespace sas.Core
 
         public int CantidadPendiente()
         {
-            var t = new ServicioLocal();
+            var t = new ServicioLocalItem();
 
             lock (locker)
             {

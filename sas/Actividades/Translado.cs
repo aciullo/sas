@@ -87,6 +87,9 @@ namespace sas.Actividades
             btnBuscar = FindViewById<Button>(Resource.Id.btnBuscar);
             mProgress = FindViewById<ProgressBar>(Resource.Id.mProgress);
             mProgress.Visibility = ViewStates.Invisible;
+
+            //asignar eventos
+            
         }
 
         #region"GPS"
