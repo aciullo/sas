@@ -60,17 +60,20 @@ namespace sas.Core {
 			}
 		}
 
-		public static ServicioLocal GetTask(int id)
+		public static ServicioLocalItem GetTask(int id)
 		{
 			return me.db.GetItem(id);
 		}
-
-		public static IEnumerable<ServicioLocal> GetTasks ()
+        public static ServicioLocalItem GetTaskIdSol(int id)
+        {
+            return me.db.GetTaskIdSol(id);
+        }
+        public static IEnumerable<ServicioLocalItem> GetTasks ()
 		{
 			return me.db.GetItems();
 		}
 
-		public static int SaveTask (ServicioLocal item)
+		public static int SaveTask (ServicioLocalItem item)
 		{
 			return me.db.SaveItem(item);
 		}

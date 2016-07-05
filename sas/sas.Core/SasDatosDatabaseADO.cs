@@ -37,7 +37,7 @@ namespace sas.Core
 
                 connection.Open();
                 var commands = new[] {
-                     "CREATE TABLE [sasDatos] (_id INTEGER PRIMARY KEY ASC, codigo TEXT, descripcion TEXT, idtabla TEXT, activo INTEGER);"
+                     "CREATE TABLE [sasDatos] (_id INTEGER PRIMARY KEY ASC, codigo TEXT, descripcion TEXT, idtabla TEXT, Activo INTEGER);"
                 };
                 foreach (var command in commands)
                 {
@@ -79,7 +79,7 @@ namespace sas.Core
 				connection = new SqliteConnection ("Data Source=" + path);
 				connection.Open ();
 				using (var contents = connection.CreateCommand ()) {
-					contents.CommandText = "SELECT [_id], codigo, descripcion, idtabla,Activo from [sasDatos] where [idtabla] like '" + idtabla + "%'" ;
+					contents.CommandText = "SELECT [_id], codigo, descripcion, idtabla, Activo from [sasDatos] where [idtabla] like '" + idtabla + "%'" ;
                     contents.Parameters.Add(new SqliteParameter(DbType.String) { Value = idtabla });
                     var r = contents.ExecuteReader ();
 					while (r.Read ()) {

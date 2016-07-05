@@ -34,6 +34,13 @@ namespace sas
 
         private clsAutenticacion auth;
 
+        private Dictionary<string, string> token = new Dictionary<string, string>
+                  {
+                   {"access_token", ""},
+                   {"token_type", ""},
+                   {"expires_in", ""},
+                  };
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -78,7 +85,7 @@ namespace sas
             //    mProgress.IncrementProgressBy(mProgressStatus);
             //};
 
-
+ 
 
             if (session.isLoggedIn())
             {
@@ -101,6 +108,8 @@ namespace sas
             }
           
         }
+        
+        
 
         public bool IsPlayServicesAvailable()
         {
@@ -182,68 +191,34 @@ namespace sas
                 
                 Toast.MakeText(this, "Procesando petición de ingreso", ToastLength.Long).Show();
 
+                await getToken();
+
+                string access_token = "";
+                token.TryGetValue("access_token", out access_token);
+
+
+                if (string.IsNullOrEmpty(access_token))
+                {
+                    return;
+                }
+
                 HttpClient client = new HttpClient();
                 client.MaxResponseContentBufferSize = 256000;
 
                 //client.BaseAddress = new Uri ("http://181.120.121.221:88");
                 client.BaseAddress = new Uri(IPCONN);
 
-                var form = new Dictionary<string, string>
-               {
-                   {"grant_type", "password"},
-                   {"username", txtUsuario.Text},
-                   {"password", auth.Encripta(txtClave.Text)},
-               };
-
                
-
-
-                // var uri = new Uri(string.Format("http://181.120.121.221:88/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text));
-
-                // string url = string.Format ("/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text);
-
-                string url = string.Format("/token");
-
-
-               // var response = await client.PostAsync(url, new FormUrlEncodedContent(form)).Result);
-
-                var tokenResponse = client.PostAsync(client.BaseAddress + "/token", new FormUrlEncodedContent(form)).Result;
-                var result = tokenResponse.Content.ReadAsStringAsync();
-                //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
-
-
-                var token = new Dictionary<string, string>
-                  {
-                   {"access_token", ""},
-                   {"token_type", ""},
-                   {"expires_in", ""},
-                  }; 
-                 token=   JsonConvert.DeserializeObject<Dictionary<string, string>>(result.Result);
-
-                if (string.IsNullOrEmpty(result.Result) || result.Result == "null" || result.Result.Contains("error"))
-                {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.SetTitle("Aviso");
-                    builder.SetMessage("Usuario o clave no válidos.");
-                    builder.SetCancelable(false);
-                    builder.SetPositiveButton("OK", delegate { return; });
-                    builder.Show();
-                    //Toast.MakeText(this, "Usuario o clave no validos", ToastLength.Long).Show();
-                    btnIngresar.Enabled = true;
-                    return;
-                }
-                string access_token="";
-                token.TryGetValue("access_token", out access_token);
                 //  Toast.MakeText(this, "Ingresando...", ToastLength.Short).Show();
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
 
-                url = string.Format("/api/UsersApi/{0}/{1}", txtUsuario.Text, auth.Encripta(txtClave.Text)); ;
+                var url = string.Format("/api/UsersApi/{0}/{1}", txtUsuario.Text, auth.Encripta(txtClave.Text)); ;
 
 
                 var response = await client.GetAsync(url);
 
-                result = response.Content.ReadAsStringAsync();
+                var result = response.Content.ReadAsStringAsync();
 
                 var deviceUser = JsonConvert.DeserializeObject<List<DeviceUserModel>>(result.Result);
 
@@ -292,7 +267,89 @@ namespace sas
                 return;
             }
         }
+        private async Task getToken()
+        {
 
+          
+
+
+            //var result;
+
+
+            try
+            {
+
+                //Toast.MakeText(this, "Procesando petición de ingreso", ToastLength.Long).Show();
+
+                HttpClient client = new HttpClient();
+                client.MaxResponseContentBufferSize = 256000;
+
+                //client.BaseAddress = new Uri ("http://181.120.121.221:88");
+                client.BaseAddress = new Uri(IPCONN);
+
+                var form = new Dictionary<string, string>
+               {
+                   {"grant_type", "password"},
+                   {"username", txtUsuario.Text},
+                   {"password", auth.Encripta(txtClave.Text)},
+               };
+
+
+
+
+                // var uri = new Uri(string.Format("http://181.120.121.221:88/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text));
+
+                // string url = string.Format ("/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text);
+
+                string url = string.Format("/token");
+
+
+                // var response = await client.PostAsync(url, new FormUrlEncodedContent(form)).Result);
+
+                var tokenResponse =  client.PostAsync(client.BaseAddress + "/token", new FormUrlEncodedContent(form)).Result;
+                var result = tokenResponse.Content.ReadAsStringAsync();
+                //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
+
+
+                token = JsonConvert.DeserializeObject<Dictionary<string, string>>(result.Result);
+                string access_token = "";
+                token.TryGetValue("access_token", out access_token);
+                session.saveToken(access_token);
+
+                if (string.IsNullOrEmpty(result.Result) || result.Result == "null" || result.Result.Contains("error"))
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.SetTitle("Aviso");
+                    builder.SetMessage("Usuario o clave no válidos.");
+                    builder.SetCancelable(false);
+                    builder.SetPositiveButton("OK", delegate { return; });
+                    builder.Show();
+                    //Toast.MakeText(this, "Usuario o clave no validos", ToastLength.Long).Show();
+                    btnIngresar.Enabled = true;
+                    return;
+                }
+              
+
+            }
+            catch (Exception ex)
+            {
+
+                //Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.SetTitle("Aviso");
+                builder.SetMessage("No hay conexión intente más tarde");
+                builder.SetCancelable(true);
+                builder.SetPositiveButton("OK", delegate { return; });
+                builder.Show();
+
+                btnIngresar.Enabled = true;
+
+                Log.Debug("Error en login", ex.Message);
+
+                return;
+            }
+        }
         #region "codigo comentado"
         //actualizar idregistro
         //string result;

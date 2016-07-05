@@ -42,5 +42,13 @@ namespace sas.Core {
         public string codInstitucion { get; set; }
         public string codDesenlace { get; set; }
         public string producto { get; set; }
+        public string sv_ta { get; set; }
+        public string sv_fc { get; set; }
+        public string sv_tempe { get; set; }
+        public string sv_fresp { get; set; }
+        public string SAT { get; set; }
+        public string Glasgow { get; set; }
+        public string Glicemia { get; set; }
+        public string IndicacionArribo { get; set; }
     }
 }

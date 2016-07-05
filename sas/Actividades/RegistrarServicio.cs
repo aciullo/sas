@@ -28,7 +28,7 @@ namespace sas
         // private ServiciosModel servicio;
         static readonly string TAG = "X:" + typeof(RegistrarServicio).Name;
         //base de datos local
-        private ServicioLocal servicio;
+        private ServicioLocalItem servicio;
         private ServicioItem servicioDetalle;
         private int ID = 0;
         //private List<SasDatosModel> sasdatos;
@@ -589,22 +589,31 @@ namespace sas
         {
             //btnVolverBase.Enabled = false;
             //btnTranslado.Enabled = false;
-            txtDestinoDesenlace.Enabled = true;
-            btnRegistroInicial.Enabled = true;
-            btnRegistrarResultado.Text = "Registrar Salida a Institución";
-            btnRegistrarResultado.Visibility = ViewStates.Visible;
-            btnRegistroInicial.Visibility = ViewStates.Invisible;
-            btnVolverBase.Visibility = ViewStates.Invisible;
-            btnTranslado.Visibility = ViewStates.Invisible;
-            
-            btnBuscar.Visibility = ViewStates.Visible;
-            txtDestinoDesenlace.Visibility = ViewStates.Visible;
-            txtDestinoDesenlace.Visibility = ViewStates.Visible;
-            lblDestinoDesenlace.Visibility = ViewStates.Visible;
+            //txtDestinoDesenlace.Enabled = true;
+            //btnRegistroInicial.Enabled = true;
+            //btnRegistrarResultado.Text = "Registrar Salida a Institución";
+            //btnRegistrarResultado.Visibility = ViewStates.Visible;
+            //btnRegistroInicial.Visibility = ViewStates.Invisible;
+            //btnVolverBase.Visibility = ViewStates.Invisible;
+            //btnTranslado.Visibility = ViewStates.Invisible;
 
-            lblDestinoDesenlace.Text = "Institución";
-            txtDestinoDesenlace.Text = string.Empty;
-            lblDescrpcionDestinoDesenlace.Text = string.Empty;
+            //btnBuscar.Visibility = ViewStates.Visible;
+            //txtDestinoDesenlace.Visibility = ViewStates.Visible;
+            //txtDestinoDesenlace.Visibility = ViewStates.Visible;
+            //lblDestinoDesenlace.Visibility = ViewStates.Visible;
+
+            //lblDestinoDesenlace.Text = "Institución";
+            //txtDestinoDesenlace.Text = string.Empty;
+            //lblDescrpcionDestinoDesenlace.Text = string.Empty;
+
+            var newActivity = new Intent(this, typeof(Translado));
+
+            Bundle valuesForActivity = new Bundle();
+            valuesForActivity.PutInt("ServiciosDet", ID);
+            newActivity.PutExtras(valuesForActivity);
+
+            StartActivity(newActivity);
+            Finish();
         }
 
         private void BtnVolverBase_Click(object sender, EventArgs e)

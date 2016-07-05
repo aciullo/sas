@@ -29,7 +29,7 @@ namespace sas
     {
         private List<ServiciosModel> servicio;
         private DeviceUserModel user;
-        IList<ServicioLocal> servicios = new List<ServicioLocal>();
+        IList<ServicioLocalItem> servicios = new List<ServicioLocalItem>();
         TextView txtTitulo;
         ListView lstServicios;
         ProgressBar mProgress;
@@ -391,7 +391,7 @@ namespace sas
             var cantidad = ServicioManager.CantidadPendiente();
 
 
-            if (cantidad > 1 && t.codEstado == "001")
+            if (cantidad >= 1 && t.codEstado == "001")
             {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -589,7 +589,7 @@ namespace sas
                 //servlocal = servicio[0].Class ;
                 //var datos = new DAServicioCab();
 
-                ServicioLocal sl = new ServicioLocal();
+                ServicioLocalItem sl = new ServicioLocalItem();
                 foreach (ServiciosModel t in servicio)
                 {
                     if (!ServicioManager.CheckIsDataAlreadyInDBorNot("[ServicioCab]", "[id_solicitud]", t.id_Solicitud.ToString()))

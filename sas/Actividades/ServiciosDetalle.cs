@@ -23,7 +23,7 @@ namespace sas
     public class ServiciosDetalle : Activity, ILocationListener
     {
         // private ServiciosModel servicio;
-        private ServicioLocal servicio;
+        private ServicioLocalItem servicio;
         private MotivosModel motivo;
         private int ID=0;
         EditText txtNroSolicitud;

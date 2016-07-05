@@ -11,17 +11,23 @@ namespace sas.Core {
 		{
 		}
 		
-		public static ServicioLocal GetTask(int id)
+		public static ServicioLocalItem GetTask(int id)
 		{
 			return ServicioRepositoryADO.GetTask(id);
 		}
-		
-		public static IList<ServicioLocal> GetTasks ()
+
+        public static ServicioLocalItem GetTaskIdSol(int id)
+        {
+            return ServicioRepositoryADO.GetTaskIdSol(id);
+        }
+
+
+        public static IList<ServicioLocalItem> GetTasks ()
 		{
-			return new List<ServicioLocal>(ServicioRepositoryADO.GetTasks());
+			return new List<ServicioLocalItem>(ServicioRepositoryADO.GetTasks());
 		}
 		
-		public static int SaveTask (ServicioLocal item)
+		public static int SaveTask (ServicioLocalItem item)
 		{
 			return ServicioRepositoryADO.SaveTask(item);
 		}

@@ -119,11 +119,17 @@ namespace sas
 
                 try
                 {
+                    var servicio = ServicioManager.GetTaskIdSol(item.id_Solicitud);
+                    var jsonResquest = JsonConvert.SerializeObject(servicio);
+                    var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
 
                     url = string.Format("/api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", item.id_Solicitud, item.codEstado, item.HoraEstado);
                     response = await client.GetAsync(url);
                     result = response.Content.ReadAsStringAsync().Result;
 
+                    url = string.Format("/api/sas_ServiciosApi/{0}", item.id_Solicitud);
+                    response = await client.PutAsync(url, content);
+                    result = response.Content.ReadAsStringAsync().Result;
                     if (result.Contains("Error"))
                     {
                       //  Toast.MakeText(this, "Error", ToastLength.Long).Show();
@@ -142,8 +148,8 @@ namespace sas
                         SendNotification(String.Format("Enviando {0}", item.NumeroSolicitud));
 
                         
-                        var jsonResquest = JsonConvert.SerializeObject(item);
-                        var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
+                        jsonResquest = JsonConvert.SerializeObject(item);
+                        content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
                         url = string.Format("/api/ProcesoEstadoServiciosApi");
                         response = await client.PostAsync(url, content);
                         result = response.Content.ReadAsStringAsync().Result;

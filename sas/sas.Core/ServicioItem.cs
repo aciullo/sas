@@ -33,7 +33,7 @@ namespace sas.Core
         public string SAT { get; set; }
         public string Glasgow { get; set; }
         public string Glicemia { get; set; }
-
+        public string IndicacionArribo { get; set; }
         public string Detalle
         {
             get

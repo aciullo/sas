@@ -46,11 +46,12 @@ namespace sas.Core
                     " direccionReferecia2 TEXT, numeroCasa TEXT, referencia TEXT, Motivo TEXT,  nroSalida TEXT, " +
                     " codMovil TEXT, codChofer TEXT, Acompañante TEXT, observacion TEXT, Estado TEXT,  codEstado TEXT, " +
                     " HoraEstado TEXT,codMotivo1 TEXT, codMotivo2 TEXT, codMotivo3 TEXT,  OtroMotivo TEXT  , codTipo TEXT, " +
-                    " codInstitucion TEXT, codDesenlace TEXT,  producto TEXT );",
+                    " codInstitucion TEXT, codDesenlace TEXT,  producto TEXT , sv_ta NTEXT, sv_fc NTEXT, sv_tempe NTEXT, "+
+                    "sv_fresp NTEXT, SAT NTEXT, Glasgow NTEXT, Glicemia NTEXT, IndicacionArribo NTEXT );",
 
-                
 
-                     "CREATE TABLE [sasDatos] (_id INTEGER PRIMARY KEY ASC, codigo TEXT, descripcion TEXT, idtabla TEXT);"
+
+                     "CREATE TABLE [sasDatos] (_id INTEGER PRIMARY KEY ASC, codigo TEXT, descripcion TEXT, idtabla TEXT, Activo INTEGER);"
                 };
                     foreach (var command in commands)
                     {
@@ -106,7 +107,14 @@ namespace sas.Core
             t.codInstitucion = r["codInstitucion"].ToString();
             t.codDesenlace = r["codDesenlace"].ToString();
             t.producto = r["producto"].ToString();
-
+            t.sv_ta = r["sv_ta"].ToString();
+            t.sv_fc = r["sv_fc"].ToString();
+            t.sv_tempe = r["sv_tempe"].ToString();
+            t.sv_fresp = r["sv_fresp"].ToString();
+            t.SAT = r["SAT"].ToString();
+            t.Glasgow = r["Glasgow"].ToString();
+            t.Glicemia = r["Glicemia"].ToString();
+            t.IndicacionArribo = r["IndicacionArribo"].ToString();
             //Convert.ToInt32 (r ["Done"]) == 1 ? true : false;
             return t;
 
@@ -122,7 +130,14 @@ namespace sas.Core
                 connection.Open();
                 using (var contents = connection.CreateCommand())
                 { try { 
-                    contents.CommandText = "SELECT [_id], [id_solicitud], [NumeroSolicitud], [Fecha_Llamado], [hora_Llamado],[nombrePaciente], [Tel], [edadPaciente], [nombreSolicitante], [direccionReferecia], [direccionReferecia2], [numeroCasa], [referencia], [Motivo], [nroSalida], [codMovil],[codChofer], [Acompañante],[observacion], [Estado], [codEstado], [HoraEstado], [codMotivo1], [codMotivo2], [codMotivo3], [OtroMotivo], [codTipo], [codInstitucion], [codDesenlace], [producto]  from [ServicioCab] WHERE [codEstado] <> '009' ";
+                    contents.CommandText = "SELECT [_id], [id_solicitud], [NumeroSolicitud], [Fecha_Llamado], [hora_Llamado]," +
+                                            "[nombrePaciente], [Tel], [edadPaciente], [nombreSolicitante], [direccionReferecia], " +
+                                            "[direccionReferecia2], [numeroCasa], [referencia], [Motivo], [nroSalida], [codMovil]," +
+                                            "[codChofer], [Acompañante],[observacion], [Estado], [codEstado], [HoraEstado], "+
+                                            "[codMotivo1], [codMotivo2], [codMotivo3], [OtroMotivo], [codTipo], [codInstitucion],"+
+                                            " [codDesenlace], [producto], sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , "+
+                                            "Glicemia ,IndicacionArribo  " +
+                                            "from [ServicioCab] WHERE [codEstado] <> '009' ";
                     var r = contents.ExecuteReader();
                     while (r.Read())
                     {
@@ -150,7 +165,14 @@ namespace sas.Core
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "SELECT [_id], [id_solicitud], [NumeroSolicitud], [Fecha_Llamado], [hora_Llamado],[nombrePaciente], [Tel], [edadPaciente], [nombreSolicitante], [direccionReferecia], [direccionReferecia2], [numeroCasa], [referencia], [Motivo], [nroSalida], [codMovil],[codChofer], [Acompañante],[observacion], [Estado], [codEstado], [HoraEstado], [codMotivo1], [codMotivo2], [codMotivo3], [OtroMotivo], [codTipo], [codInstitucion], [codDesenlace], [producto]  from [ServicioCab] WHERE [_id] = ?";
+                    command.CommandText = "SELECT [_id], [id_solicitud], [NumeroSolicitud], [Fecha_Llamado], "+
+                                          "[hora_Llamado],[nombrePaciente], [Tel], [edadPaciente], [nombreSolicitante], "+
+                                          "[direccionReferecia], [direccionReferecia2], [numeroCasa], [referencia], "+
+                                          "[Motivo], [nroSalida], [codMovil],[codChofer], [Acompañante],[observacion], "+
+                                          "[Estado], [codEstado], [HoraEstado], [codMotivo1], [codMotivo2], [codMotivo3], "+
+                                          "[OtroMotivo], [codTipo], [codInstitucion], [codDesenlace], [producto] "+
+                                          ",sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia, IndicacionArribo " +
+                                          " from [ServicioCab] WHERE [_id] = ?";
                     command.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = id });
                     var r = command.ExecuteReader();
                     while (r.Read())
@@ -164,7 +186,36 @@ namespace sas.Core
             }
             return t;
         }
-
+        public ServicioLocalItem GetTaskIdSol(int id)
+        {
+            var t = new ServicioLocalItem();
+            lock (locker)
+            {
+                connection = new SqliteConnection("Data Source=" + path);
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "SELECT [_id], [id_solicitud], [NumeroSolicitud], [Fecha_Llamado], " +
+                                          "[hora_Llamado],[nombrePaciente], [Tel], [edadPaciente], [nombreSolicitante], " +
+                                          "[direccionReferecia], [direccionReferecia2], [numeroCasa], [referencia], " +
+                                          "[Motivo], [nroSalida], [codMovil],[codChofer], [Acompañante],[observacion], " +
+                                          "[Estado], [codEstado], [HoraEstado], [codMotivo1], [codMotivo2], [codMotivo3], " +
+                                          "[OtroMotivo], [codTipo], [codInstitucion], [codDesenlace], [producto] " +
+                                          ",sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia, IndicacionArribo " +
+                                          " from [ServicioCab] WHERE [id_solicitud] = ?";
+                    command.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = id });
+                    var r = command.ExecuteReader();
+                    while (r.Read())
+                    {
+                        t = FromReader(r);
+                        break;
+                    }
+                }
+                connection.Close();
+                GC.Collect();
+            }
+            return t;
+        }
         public int SaveItem(ServicioLocalItem item)
         {
             int r;
@@ -176,14 +227,24 @@ namespace sas.Core
                     connection.Open();
                     using (var command = connection.CreateCommand())
                     {
-                        command.CommandText = "UPDATE [ServicioCab] SET [Estado] = ?, [codEstado] = ?, [HoraEstado]= ? , [codInstitucion] = ? , [codDesenlace] = ? WHERE [_id] = ?;";
+                        command.CommandText = "UPDATE [ServicioCab] SET [Estado] = ?, [codEstado] = ?, [HoraEstado]= ? , "+
+                                                "[codInstitucion] = ? , [codDesenlace] = ?, [sv_ta]= ? , [sv_fc] = ?, [sv_tempe]= ? , "+
+                                                " [sv_fresp]= ?  , [SAT]= ? , [Glasgow]= ? , [Glicemia]= ?, [IndicacionArribo] = ? "+
+                                                " WHERE [_id] = ?;";
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.Estado });
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.codEstado });
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.HoraEstado });
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.codInstitucion });
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.codDesenlace });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.sv_ta });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.sv_fc });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.sv_tempe });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.sv_fresp });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.SAT });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.Glasgow });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.Glicemia });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.IndicacionArribo });
                         command.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = item.ID });
-
                         r = command.ExecuteNonQuery();
                     }
                     connection.Close();

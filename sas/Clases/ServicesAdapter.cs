@@ -14,12 +14,12 @@ using sas.Core;
 namespace sas
 {
 
-    public class ServicesAdapter : BaseAdapter<ServicioLocal>
+    public class ServicesAdapter : BaseAdapter<ServicioLocalItem>
     {
-        IList<ServicioLocal> items;
+        IList<ServicioLocalItem> items;
         Activity context;
 
-        public ServicesAdapter(Activity context, IList<ServicioLocal> items)
+        public ServicesAdapter(Activity context, IList<ServicioLocalItem> items)
             : base()
         {
             this.context = context;
@@ -29,7 +29,7 @@ namespace sas
         {
             return position;
         }
-        public override ServicioLocal this[int position]
+        public override ServicioLocalItem this[int position]
         {
             get { return items[position]; }
         }

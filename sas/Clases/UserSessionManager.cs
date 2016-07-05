@@ -54,6 +54,11 @@ namespace sas.Clases
             mPrefsEditor.Commit();
         }
 
+        public void saveToken (string token)
+        {
+            mPrefsEditor.PutString(PREFERENCE_TOKEN, token);
+            mPrefsEditor.Commit();
+        }
         public void saveAccessIP(string conn)
         {
             mPrefsEditor.PutString(PREFERENCE_CONEXION, conn);
