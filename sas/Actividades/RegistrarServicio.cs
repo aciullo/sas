@@ -249,8 +249,8 @@ namespace sas
             _locationManager = (LocationManager)GetSystemService(LocationService);
             Criteria criteriaForLocationService = new Criteria
             {
-                Accuracy = Accuracy.Coarse,
-                PowerRequirement = Power.Medium
+                Accuracy = Accuracy.NoRequirement,
+                PowerRequirement = Power.NoRequirement
 
 
             };

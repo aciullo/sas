@@ -306,17 +306,17 @@ namespace sas
 
                 // var response = await client.PostAsync(url, new FormUrlEncodedContent(form)).Result);
 
-                var tokenResponse =  client.PostAsync(client.BaseAddress + "/token", new FormUrlEncodedContent(form)).Result;
-                var result = tokenResponse.Content.ReadAsStringAsync();
+                var tokenResponse =   await client.PostAsync(client.BaseAddress + "/token", new FormUrlEncodedContent(form));
+                var result = tokenResponse.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
 
 
-                token = JsonConvert.DeserializeObject<Dictionary<string, string>>(result.Result);
+                token = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
                 string access_token = "";
                 token.TryGetValue("access_token", out access_token);
                 session.saveToken(access_token);
 
-                if (string.IsNullOrEmpty(result.Result) || result.Result == "null" || result.Result.Contains("error"))
+                if (string.IsNullOrEmpty(result) || result == "null" || result.Contains("error"))
                 {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.SetTitle("Aviso");

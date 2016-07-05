@@ -274,12 +274,12 @@ namespace sas
             _locationManager = (LocationManager)GetSystemService(LocationService);
             Criteria criteriaForLocationService = new Criteria
             {
-                Accuracy = Accuracy.Coarse,
-                PowerRequirement = Power.Medium
+                Accuracy = Accuracy.NoRequirement,
+                PowerRequirement = Power.NoRequirement
 
 
             };
-            IList<string> acceptableLocationProviders = _locationManager.GetProviders(criteriaForLocationService, true);
+            IList<string> acceptableLocationProviders = _locationManager.GetProviders (criteriaForLocationService, true);
 
             if (acceptableLocationProviders.Any())
             {
