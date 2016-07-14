@@ -538,8 +538,8 @@ namespace sas
 
                 string movil = user.codMovil;
                 movil = movil.TrimEnd();
-                // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                string url = string.Format("/api/sas_ServiciosApi/00?idmovil={0}", movil);
+                // string url = string.Format("api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
+                string url = string.Format("api/sas_ServiciosApi/00?idmovil={0}", movil);
                 
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
@@ -665,7 +665,7 @@ namespace sas
                 client.BaseAddress = new Uri(IPCONN);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + session.getAccessToken());
-                string url = string.Format("/api/SasDatosApi?idtabla={0}", codtabla);
+                string url = string.Format("api/SasDatosApi?idtabla={0}", codtabla);
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
             }
@@ -740,8 +740,8 @@ namespace sas
         //        // client.BaseAddress = new Uri("http://181.120.121.221:88");
         //        client.BaseAddress = new Uri(IPCONN);
 
-        //        // string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-        //        string url = string.Format("/api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
+        //        // string url = string.Format("api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
+        //        string url = string.Format("api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
 
         //        var response = await client.GetAsync(url);
         //        result = response.Content.ReadAsStringAsync().Result;

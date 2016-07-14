@@ -969,7 +969,7 @@ namespace sas
                 //    client.MaxResponseContentBufferSize = 256000;
                 //    client.BaseAddress = new Uri(IPCONN);
                 //    //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
-                //    string url = string.Format("/api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", regservicio.id_Solicitud, regservicio.codEstado, regservicio.HoraEstado);
+                //    string url = string.Format("api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", regservicio.id_Solicitud, regservicio.codEstado, regservicio.HoraEstado);
                 //    var response = await client.GetAsync(url);
                 //    result = response.Content.ReadAsStringAsync().Result;
                 //    //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
@@ -1073,12 +1073,12 @@ namespace sas
             //    client.BaseAddress = new Uri(IPCONN);
             //    if (servTranslado.codDesenlace == "Null")
             //    {
-            //        var url = string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codInstitucion);
+            //        var url = string.Format("api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codInstitucion);
             //        response = await client.GetAsync(url);
             //    }
             //    else
             //    {
-            //        var url = (string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codInstitucion, servTranslado.codDesenlace));
+            //        var url = (string.Format("api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codInstitucion, servTranslado.codDesenlace));
             //        response = await client.GetAsync(url);
             //    }
             //    //string url = string.Format ("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&IdProductoFinal={3}", servTranslado.id_Solicitud,servTranslado.NumeroSolicitud,servTranslado.codServicioFinal, servTranslado.codProductoFinal);
@@ -1197,7 +1197,7 @@ namespace sas
                 {
                     codtabla = "06";
                 }
-                //string url = string.Format("/api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
+                //string url = string.Format("api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
                 //var response = await client.GetAsync(url);
                 //result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);

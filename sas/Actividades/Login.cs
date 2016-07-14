@@ -213,12 +213,29 @@ namespace sas
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
 
-                var url = string.Format("/api/UsersApi/{0}/{1}", txtUsuario.Text, auth.Encripta(txtClave.Text)); ;
+                var url = string.Format("api/UsersApi/{0}/{1}", txtUsuario.Text, auth.Encripta(txtClave.Text)); ;
 
 
                 var response = await client.GetAsync(url);
 
                 var result = response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode== System.Net.HttpStatusCode.NotFound)
+                {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.SetTitle("Aviso");
+                    builder.SetMessage("Usuario o contraseña incorrecta");
+                    builder.SetCancelable(true);
+                    builder.SetPositiveButton("OK", delegate { return; });
+                    builder.Show();
+
+                    txtUsuario.ShowSoftInputOnFocus = true;
+
+                    btnIngresar.Enabled = true;
+                    return;
+                }
+                
 
                 var deviceUser = JsonConvert.DeserializeObject<List<DeviceUserModel>>(result.Result);
 
@@ -301,22 +318,22 @@ namespace sas
 
                 // string url = string.Format ("/api/DeviceUsersApi/{0}/{1}", txtUsuario.Text, txtClave.Text);
 
-                string url = string.Format("/token");
+                string url = string.Format("token");
 
 
-                // var response = await client.PostAsync(url, new FormUrlEncodedContent(form)).Result);
+                // var tokenResponse = await client.PostAsync(url, new FormUrlEncodedContent(form));
 
-                var tokenResponse =   await client.PostAsync(client.BaseAddress + "/token", new FormUrlEncodedContent(form));
-                var result = tokenResponse.Content.ReadAsStringAsync().Result;
+                var tokenResponse = await client.PostAsync(client.BaseAddress + url, new FormUrlEncodedContent(form));
+                var result = tokenResponse.Content.ReadAsStringAsync();
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
 
 
-                token = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+                token = JsonConvert.DeserializeObject<Dictionary<string, string>>(result.Result);
                 string access_token = "";
                 token.TryGetValue("access_token", out access_token);
                 session.saveToken(access_token);
 
-                if (string.IsNullOrEmpty(result) || result == "null" || result.Contains("error"))
+                if (string.IsNullOrEmpty(result.Result) || result.Result == "null" || result.Result.Contains("error"))
                 {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.SetTitle("Aviso");
@@ -374,7 +391,7 @@ namespace sas
         //    client.MaxResponseContentBufferSize = 256000;
         //    client.BaseAddress = new Uri("http://192.168.0.102:88");
 
-        //    string url = string.Format("/api/DeviceUsersApi/{0}", person.usuario);
+        //    string url = string.Format("api/DeviceUsersApi/{0}", person.usuario);
         //    var response = await client.PutAsync(url, content);
 
         //    result = response.Content.ReadAsStringAsync().Result;

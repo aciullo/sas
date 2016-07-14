@@ -82,7 +82,7 @@ namespace sas
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
 
-                string url = string.Format("/api/UsersApi/{0}", session.getAccessUserId());
+                string url = string.Format("api/UsersApi/{0}", session.getAccessUserId());
                 //var response = await client.PutAsync(url, content);
                 var response = client.PutAsync(client.BaseAddress + url, new FormUrlEncodedContent(person)).Result;
 

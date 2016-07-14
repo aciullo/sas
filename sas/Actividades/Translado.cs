@@ -376,7 +376,7 @@ namespace sas.Actividades
                
                     codtabla = "06";
                
-                //string url = string.Format("/api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
+                //string url = string.Format("api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
                 //var response = await client.GetAsync(url);
                 //result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);

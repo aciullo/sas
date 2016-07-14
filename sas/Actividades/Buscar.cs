@@ -176,7 +176,7 @@ namespace sas.Actividades
         //        //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
 
 
-        //        string url = string.Format("/api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
+        //        string url = string.Format("api/SasDatosApi?idtabla={0}&codigo={1}", codtabla, Id);
         //        var response = await client.GetAsync(url);
         //        result = response.Content.ReadAsStringAsync().Result;
         //        //Items = JsonConvert.DeserializeObject <List<Personas>> (result);

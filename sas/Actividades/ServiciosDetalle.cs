@@ -251,7 +251,7 @@ namespace sas
         //        client.BaseAddress = new Uri("http://181.120.121.221:88");
         //        //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
 
-        //        string url = string.Format("/api/MotivosModelsApi/{0}", servicio.codMotivo1.TrimEnd());
+        //        string url = string.Format("api/MotivosModelsApi/{0}", servicio.codMotivo1.TrimEnd());
         //        var response = await client.GetAsync(url);
         //        result = response.Content.ReadAsStringAsync().Result;
         //        //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
@@ -299,7 +299,7 @@ namespace sas
         //        client.BaseAddress = new Uri("http://181.120.121.221:88");
         //        //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
 
-        //        string url = string.Format("/api/MotivosModelsApi/{0}", servicio.codMotivo2.TrimEnd());
+        //        string url = string.Format("api/MotivosModelsApi/{0}", servicio.codMotivo2.TrimEnd());
         //        var response = await client.GetAsync(url);
         //        result = response.Content.ReadAsStringAsync().Result;
         //        //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
@@ -346,7 +346,7 @@ namespace sas
         //        client.BaseAddress = new Uri("http://181.120.121.221:88");
         //        //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
 
-        //        string url = string.Format("/api/MotivosModelsApi/{0}", servicio.codMotivo3.TrimEnd());
+        //        string url = string.Format("api/MotivosModelsApi/{0}", servicio.codMotivo3.TrimEnd());
         //        var response = await client.GetAsync(url);
         //        result = response.Content.ReadAsStringAsync().Result;
         //        //Items = JsonConvert.DeserializeObject <List<Personas>> (result);

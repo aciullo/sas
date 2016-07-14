@@ -123,11 +123,11 @@ namespace sas
                     var jsonResquest = JsonConvert.SerializeObject(servicio);
                     var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
 
-                    url = string.Format("/api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", item.id_Solicitud, item.codEstado, item.HoraEstado);
+                    url = string.Format("api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", item.id_Solicitud, item.codEstado, item.HoraEstado);
                     response = await client.GetAsync(url);
                     result = response.Content.ReadAsStringAsync().Result;
 
-                    url = string.Format("/api/sas_ServiciosApi/{0}", item.id_Solicitud);
+                    url = string.Format("api/sas_ServiciosApi/{0}", item.id_Solicitud);
                     response = await client.PutAsync(url, content);
                     result = response.Content.ReadAsStringAsync().Result;
                     if (result.Contains("Error"))
@@ -150,7 +150,7 @@ namespace sas
                         
                         jsonResquest = JsonConvert.SerializeObject(item);
                         content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
-                        url = string.Format("/api/ProcesoEstadoServiciosApi");
+                        url = string.Format("api/ProcesoEstadoServiciosApi");
                         response = await client.PostAsync(url, content);
                         result = response.Content.ReadAsStringAsync().Result;
 
@@ -159,8 +159,8 @@ namespace sas
                     if ((!string.IsNullOrEmpty(item.codDesenlace ) ) && (string.IsNullOrEmpty(item.codInstitucion) || item.codInstitucion=="Null"))
                     {
                         item.codInstitucion = "Null";
-                        //url = string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", item.id_Solicitud, item.NumeroSolicitud, item.codInstitucion);
-                        url = (string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", item.id_Solicitud, item.NumeroSolicitud, item.codInstitucion, item.codDesenlace));
+                        //url = string.Format("api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", item.id_Solicitud, item.NumeroSolicitud, item.codInstitucion);
+                        url = (string.Format("api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", item.id_Solicitud, item.NumeroSolicitud, item.codInstitucion, item.codDesenlace));
                         response = await client.GetAsync(url);
                         result = response.Content.ReadAsStringAsync().Result;
 
@@ -190,7 +190,7 @@ namespace sas
                         if ((string.IsNullOrEmpty(item.codDesenlace) || item.codDesenlace=="Null") && (!string.IsNullOrEmpty(item.codInstitucion)))
                         {
                             item.codDesenlace = "Null";
-                            url = string.Format("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", item.id_Solicitud, item.NumeroSolicitud, item.codInstitucion);
+                            url = string.Format("api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", item.id_Solicitud, item.NumeroSolicitud, item.codInstitucion);
                             response = await client.GetAsync(url);
 
                             if (result.Contains("Error"))
