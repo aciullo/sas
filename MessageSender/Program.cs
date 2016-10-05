@@ -10,8 +10,8 @@ namespace MessageSender
 {
     class MessageSender
     {
-        public const string API_KEY = "AIzaSyA9B9EyPB3ywCbhExZDMOWy0MxBG7479ws";
-        public const string MESSAGE = "Hello mundo!";
+        public const string API_KEY = "AIzaSyDOmaN_SlHirOK0TSpeGWe737eo-6HOAkI";
+        public const string MESSAGE = "Hello, Xamarin!";
         
 
         static void Main(string[] args)
@@ -20,8 +20,8 @@ namespace MessageSender
             var jData = new JObject();
 
             jData.Add("message", MESSAGE);
-           jGcmData.Add("to", "/topics/global");
-           // jGcmData.Add("to", "eMfglYQn4H0:APA91bH4P0kHehcxny4ilhaDehCuSk6MBp2ilXVJ4xFPJu8zIey8RrDcoiUN0SdEqRHhvEkzoiIFyoMkJDaS6kh4IK7ydgvyQLnfyrU-uZu-Hza3gHu4hgmXJYX-GJONSFtbfFgweffD");
+            jGcmData.Add("to", "/topics/global");
+            //jGcmData.Add("to", "feyNemQXpNY:APA91bFdYfzvJJPIcehHaKkVjORW7WQhtOVW01QtAYV1xHojIY1Ec0rRhmd8Tx6bs7YWGXSBAIFm5I8tNv8YXXeE38OuULu12NVDLgrbgXxYJbl8-g-i50XWk-mBFsTMypv-czdXkDUS");
             jGcmData.Add("data", jData);
 
             var url = new Uri("https://gcm-http.googleapis.com/gcm/send");
