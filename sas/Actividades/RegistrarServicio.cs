@@ -51,6 +51,7 @@ namespace sas
         Button btnRegistroLocal;
         TextView lblDestinoDesenlace;
         TextView lblDescrpcionDestinoDesenlace;
+        TextView txtaddress;
         EditText txtDestinoDesenlace;
         ProgressBar mProgress;
 
@@ -100,6 +101,7 @@ namespace sas
             btnBuscar = FindViewById<Button>(Resource.Id.btnBuscar);
             btnRegistroLocal = FindViewById<Button>(Resource.Id.btnRegistroLocal);
 
+            txtaddress = FindViewById<TextView>(Resource.Id.textView8);
             //recibir datos de la actividad predecesora
             ID = Intent.Extras.GetInt("ServiciosDet");
             servicio = ServicioManager.GetTask(ID);
@@ -134,34 +136,43 @@ namespace sas
             if (demoServiceConnection != null)
                 binder = demoServiceConnection.Binder;
 
+            InitializeLocationManager();
         }
 
-        protected override void OnStart()
-        {
-            base.OnStart();
+        //protected override void OnStart()
+        //{
+        //    base.OnStart();
 
-            var demoServiceIntent = new Intent("com.xamarin.sas");
-            demoServiceConnection = new DemoServiceConnection(this);
-            ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
-        }
+        //    var demoServiceIntent = new Intent("com.xamarin.sas");
+        //    demoServiceConnection = new DemoServiceConnection(this);
+        //    ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
+        //}
 
         protected override void OnResume()
         {
             base.OnResume();
 
             // _locationManager = GetSystemService(Context.LocationService) as LocationManager;
-            InitializeLocationManager();
+            //InitializeLocationManager();
 
             //if (_locationManager.IsProviderEnabled(LocationManager.GpsProvider))
             if ((!string.IsNullOrEmpty(_locationProvider)))
             {
-                _locationManager.RequestLocationUpdates(_locationProvider, 2000, 1, this);
+                mProgress.Indeterminate = true;
+                mProgress.Visibility = ViewStates.Visible;
+             
+                txtaddress.Text = "Buscando Ubicación";
+                _locationManager.RequestLocationUpdates(_locationProvider, 0, 0, this);
                 Log.Debug(TAG, "Listening for location updates using " + _locationProvider + ".");
             }
             else
             {
                 //do nothing
             }
+         
+            var demoServiceIntent = new Intent("com.xamarin.sas");
+            demoServiceConnection = new DemoServiceConnection(this);
+            ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
         }
 
         protected override void OnDestroy()
@@ -219,7 +230,8 @@ namespace sas
 
                 address = addressList.FirstOrDefault();
                
-            }catch
+            }
+            catch
             {
                 address = null;
 
@@ -238,6 +250,8 @@ namespace sas
                 }
                 // Remove the last comma from the end of the address.
                 _addressText = deviceAddress.ToString();
+                txtaddress.Text = _addressText;
+                  mProgress.Visibility = ViewStates.Gone;
             }
             else
             {
@@ -249,8 +263,7 @@ namespace sas
             _locationManager = (LocationManager)GetSystemService(LocationService);
             Criteria criteriaForLocationService = new Criteria
             {
-                Accuracy = Accuracy.NoRequirement,
-                PowerRequirement = Power.NoRequirement
+                Accuracy = Accuracy.Fine
 
 
             };
@@ -284,12 +297,12 @@ namespace sas
 
         public void OnProviderDisabled(string provider)
         {
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
         }
 
         public void OnProviderEnabled(string provider)
         {
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
         }
 
         public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)

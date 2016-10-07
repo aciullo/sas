@@ -25,7 +25,7 @@ using Newtonsoft.Json.Linq;
 namespace sas
 {
     [Activity(Label = "Servicios", Theme = "@style/MyCustomTheme", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class Servicios  : Activity//, ILocationListener
+    public class Servicios  : Activity, ILocationListener
     {
         private List<ServiciosModel> servicio;
         private DeviceUserModel user;
@@ -296,20 +296,21 @@ namespace sas
         {
             base.OnPause();
             //_locationManager.RemoveUpdates(this);
-            Log.Debug(TAG, "No longer listening for location updates.");
+            //Log.Debug(TAG, "No longer listening for location updates.");
         }
         protected override void OnResume()
         {
             base.OnResume();
 
-            // _locationManager = GetSystemService(Context.LocationService) as LocationManager;
+             _locationManager = GetSystemService(Context.LocationService) as LocationManager;
             InitializeLocationManager();
 
             //if (_locationManager.IsProviderEnabled(LocationManager.GpsProvider))
             if ((!string.IsNullOrEmpty(_locationProvider)) )
             {
+                _locationManager.RequestLocationUpdates(_locationProvider, 0, 0, this);
+                Log.Debug(TAG, "Listening for location updates using " + _locationProvider + ".");
 
-              
             }
             else
             {
@@ -336,36 +337,36 @@ namespace sas
                 }
             }
         }
-        //public void OnLocationChanged(Location location)
-        //{
-        //    _currentLocation = location;
-        //    if (_currentLocation == null)
-        //    {
-        //        _locationText = "Unable to determine your location. Try again in a short while.";
-        //    }
-        //    else
-        //    {
-        //        _locationText = string.Format("{0:f6},{1:f6}", _currentLocation.Latitude, _currentLocation.Longitude);
-        //        // Address address = await ReverseGeocodeCurrentLocation();
-        //        // DisplayAddress(address);
+        public void OnLocationChanged(Location location)
+        {
+            _currentLocation = location;
+            if (_currentLocation == null)
+            {
+                _locationText = "Unable to determine your location. Try again in a short while.";
+            }
+            else
+            {
+                _locationText = string.Format("{0:f6},{1:f6}", _currentLocation.Latitude, _currentLocation.Longitude);
+                // Address address = await ReverseGeocodeCurrentLocation();
+                // DisplayAddress(address);
 
-        //    }
-        //}
+            }
+        }
 
-        //public void OnProviderDisabled(string provider)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public void OnProviderDisabled(string provider)
+        {
+            throw new NotImplementedException();
+        }
 
-        //public void OnProviderEnabled(string provider)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public void OnProviderEnabled(string provider)
+        {
+            throw new NotImplementedException();
+        }
 
-        //public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
-        //{
-        //    Log.Debug(TAG, "{0}, {1}", provider, status);
-        //}
+        public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
+        {
+            Log.Debug(TAG, "{0}, {1}", provider, status);
+        }
         protected override void OnUserLeaveHint()
         {
             base.OnUserLeaveHint();
@@ -544,9 +545,14 @@ namespace sas
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
-                if (!(response.IsSuccessStatusCode))
+                if ((response.ReasonPhrase== "Unauthorized"))
                 {
-                    // return;
+                    Toast.MakeText(this, "La sesión a caducado, vuelva a ingresar", ToastLength.Long).Show();
+                    session.logoutUser();
+                    // StopService(new Intent("com.sas.searchpending"));
+                    StopService(new Intent("com.xamarin.sas"));
+                    Finish();
+                    return;
                 }
 
             }

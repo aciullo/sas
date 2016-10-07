@@ -12,10 +12,10 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 	<uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 	<uses-permission android:name="py.com.futura.sas.permission.C2D_MESSAGE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<permission android:name="py.com.futura.sas.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	<application android:label="Servicios" android:icon="@drawable/Icon">
 		<receiver android:name="com.google.android.gms.gcm.GcmReceiver" android:exported="true" android:permission="com.google.android.c2dm.permission.SEND">

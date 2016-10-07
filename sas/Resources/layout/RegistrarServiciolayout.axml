@@ -11,6 +11,12 @@
         android:stretchColumns="1">
     <!-- everything you already have -->
         <TableRow>
+            <TextView
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView8" />
             <ProgressBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

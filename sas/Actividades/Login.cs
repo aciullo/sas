@@ -272,7 +272,7 @@ namespace sas
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.SetTitle("Aviso");
-                builder.SetMessage("No hay conexión intente más tarde");
+                builder.SetMessage("No hay conexión intente más tarde   " + ex.Message);
                 builder.SetCancelable(true);
                 builder.SetPositiveButton("OK", delegate { return; });
                 builder.Show();
