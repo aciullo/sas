@@ -63,6 +63,48 @@
                 android:layout_height="wrap_content"
                 android:editable="false" />
         </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Dirección:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView9" />
+            <EditText
+                android:inputType="textMultiLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:id="@+id/txtDireccion1" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Tipo:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3" />
+            <EditText
+                android:enabled="true"
+                android:editable="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtTipo" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="Motivos: "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView9" />
+            <EditText
+                android:inputType="textMultiLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtMotivo1"
+                android:editable="false" />
+        </TableRow>
         <TableLayout
             android:minWidth="25px"
             android:minHeight="25px"

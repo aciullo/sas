@@ -22,9 +22,9 @@ namespace sas.Core {
         }
 
 
-        public static IList<ServicioLocalItem> GetTasks ()
+        public static IList<ServicioLocalItem> GetTasks (string idmovil)
 		{
-			return new List<ServicioLocalItem>(ServicioRepositoryADO.GetTasks());
+			return new List<ServicioLocalItem>(ServicioRepositoryADO.GetTasks( idmovil));
 		}
 		
 		public static int SaveTask (ServicioLocalItem item)

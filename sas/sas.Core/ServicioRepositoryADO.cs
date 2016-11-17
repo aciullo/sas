@@ -68,9 +68,9 @@ namespace sas.Core {
         {
             return me.db.GetTaskIdSol(id);
         }
-        public static IEnumerable<ServicioLocalItem> GetTasks ()
+        public static IEnumerable<ServicioLocalItem> GetTasks (string idmovil)
 		{
-			return me.db.GetItems();
+			return me.db.GetItems(idmovil);
 		}
 
 		public static int SaveTask (ServicioLocalItem item)

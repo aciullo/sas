@@ -120,7 +120,7 @@ namespace sas.Core
 
         }
 
-        public IEnumerable<ServicioLocalItem> GetItems()
+        public IEnumerable<ServicioLocalItem> GetItems(string idmovil)
         {
             var tl = new List<ServicioLocalItem>();
 
@@ -137,8 +137,9 @@ namespace sas.Core
                                             "[codMotivo1], [codMotivo2], [codMotivo3], [OtroMotivo], [codTipo], [codInstitucion],"+
                                             " [codDesenlace], [producto], sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , "+
                                             "Glicemia ,IndicacionArribo  " +
-                                            "from [ServicioCab] WHERE [codEstado] <> '009' ";
-                    var r = contents.ExecuteReader();
+                                            "from [ServicioCab] WHERE [codEstado] <> '009' and [codMovil]=?";
+                        contents.Parameters.Add(new SqliteParameter(DbType.String) { Value = idmovil });
+                        var r = contents.ExecuteReader();
                     while (r.Read())
                     {
                         tl.Add(FromReader(r));

@@ -105,6 +105,11 @@ namespace sas
         public async void SincronizarEstados()
         {
             servicios = ServicioItemManager.GetServiciosToSend();
+            //if (servicios.Count == 0)
+            //{
+            //    SendNotification(String.Format("sin datos"));
+
+            //}
             foreach (var item in servicios)
             {
 

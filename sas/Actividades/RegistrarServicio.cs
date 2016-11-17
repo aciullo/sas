@@ -43,6 +43,11 @@ namespace sas
         EditText txtNroSolicitud;
         EditText txtNombrePaciente;
         EditText txtEdad;
+
+        EditText txtDireccion1;
+        EditText txtMotivo1;
+        EditText txtTipo;
+
         Button btnRegistroInicial;
         Button btnVolverBase;
         Button btnTranslado;
@@ -101,6 +106,10 @@ namespace sas
             btnBuscar = FindViewById<Button>(Resource.Id.btnBuscar);
             btnRegistroLocal = FindViewById<Button>(Resource.Id.btnRegistroLocal);
 
+            txtDireccion1 = FindViewById<EditText>(Resource.Id.txtDireccion1);
+            txtMotivo1 = FindViewById<EditText>(Resource.Id.txtMotivo1);
+            txtTipo = FindViewById<EditText>(Resource.Id.txtTipo);
+
             txtaddress = FindViewById<TextView>(Resource.Id.textView8);
             //recibir datos de la actividad predecesora
             ID = Intent.Extras.GetInt("ServiciosDet");
@@ -110,6 +119,13 @@ namespace sas
             txtNroSolicitud.Text = servicio.NumeroSolicitud.ToString();
             txtNombrePaciente.Text = servicio.nombrePaciente;
             txtEdad.Text = servicio.edadPaciente.ToString();
+            txtDireccion1.Text = servicio.direccionReferecia.ToString();
+            txtTipo.Text = servicio.producto.ToString();
+            string cadenamotivo = (!string.IsNullOrEmpty(servicio.codMotivo1)) ? servicio.codMotivo1 : string.Empty;
+            cadenamotivo = cadenamotivo + " " + ((!string.IsNullOrEmpty(servicio.codMotivo2)) ? "," + servicio.codMotivo2 : string.Empty);
+            cadenamotivo = cadenamotivo + " " + ((!string.IsNullOrEmpty(servicio.codMotivo3)) ? "," + servicio.codMotivo3 : string.Empty);
+            cadenamotivo = cadenamotivo + " " + ((!string.IsNullOrEmpty(servicio.OtroMotivo)) ? "," + servicio.OtroMotivo : string.Empty);
+            txtMotivo1.Text = cadenamotivo;
 
             //variables
             codEstadoRecibido =  servicio.codEstado;
@@ -158,10 +174,10 @@ namespace sas
             //if (_locationManager.IsProviderEnabled(LocationManager.GpsProvider))
             if ((!string.IsNullOrEmpty(_locationProvider)))
             {
-                mProgress.Indeterminate = true;
-                mProgress.Visibility = ViewStates.Visible;
+                //mProgress.Indeterminate = true;
+                //mProgress.Visibility = ViewStates.Visible;
              
-                txtaddress.Text = "Buscando Ubicación";
+                //txtaddress.Text = "Buscando Ubicación";
                 _locationManager.RequestLocationUpdates(_locationProvider, 0, 0, this);
                 Log.Debug(TAG, "Listening for location updates using " + _locationProvider + ".");
             }
@@ -553,9 +569,9 @@ namespace sas
                         servicio.codEstado = regservicio.codEstado;
                         servicio.HoraEstado = regservicio.HoraEstado;
                         ServicioManager.SaveTask(servicio);
-                        await GuardarDatos(regservicio);
+                        GuardarDatos(regservicio);
 
-
+                        //si es el ultimo evento
                         Intent i = new Intent(BaseContext, typeof(Servicios));
                         Bundle valuesForActivity = new Bundle();
                         valuesForActivity.PutInt("GPS", 1);
@@ -667,7 +683,7 @@ namespace sas
          
         }
 
-        private async void GuardarEstadoInicial()
+        private void GuardarEstadoInicial()
         {
             string idestado = "";
             switch (btnRegistroInicial.Text)
@@ -716,7 +732,7 @@ namespace sas
                 servicio.codEstado = regservicio.codEstado;
                 servicio.HoraEstado = regservicio.HoraEstado;
                 ServicioManager.SaveTask(servicio);
-                await GuardarDatos(regservicio);
+                GuardarDatos(regservicio);
 
 
 
@@ -836,11 +852,10 @@ namespace sas
                         servicio.codDesenlace = regservicio2.codDesenlace;
                         ServicioManager.SaveTask(servicio);
                         actualizarInstitucionDesenlace(regservicio2);
+                        GuardarDatos(regservicio2);
                     }
 
-
-
-
+                                    
                     Intent intent = new Intent();
                     intent.SetClass(BaseContext, typeof(Servicios));
                     intent.SetFlags(ActivityFlags.ReorderToFront);
@@ -884,6 +899,7 @@ namespace sas
                         servicio.codDesenlace = regservicio.codDesenlace;
                         ServicioManager.SaveTask(servicio);
                         actualizarInstitucionDesenlace(regservicio);
+                     
                     }
 
                     //regTransladoButton.BackgroundColor = Color.Purple;
@@ -924,7 +940,7 @@ namespace sas
                 servicio.HoraEstado = regservicio.HoraEstado;
                 ServicioManager.SaveTask(servicio);
 
-                await GuardarDatos(regservicio);
+                GuardarDatos(regservicio);
 
                 mProgress.Visibility = ViewStates.Gone;
 
@@ -937,8 +953,9 @@ namespace sas
         }
 
 
-        #region "Metodos actualizacion BD"
-        async Task GuardarDatos(RegistrarServicioModel regservicio)
+        #region "Metodos actualizacion BD" 
+        //async Task
+        private void GuardarDatos(RegistrarServicioModel regservicio)
         {
 
             //GetAddress();
@@ -960,16 +977,18 @@ namespace sas
             servicioDetalle.GeoData = _locationText;
             servicioDetalle.Address = _addressText;
             ServicioItemManager.SaveTask(servicioDetalle);
-            Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
+            Toast.MakeText(this, "Registro guardado Correctamente", ToastLength.Long).Show();
 
+            if (demoServiceConnection != null)
+                binder = demoServiceConnection.Binder;
             if (isBound)
             {
                 RunOnUiThread(() =>
                 {
                     binder.GetDemoService().SincronizarEstados();
-                    //string text = binder.GetDemoService().GetText();
+                    string text = binder.GetDemoService().GetText();
                     //Console.WriteLine("{0} returned from DemoService", text);
-                    //Toast.MakeText(this, string.Format( "{0} returned from DemoService", text), ToastLength.Long).Show();
+                    Toast.MakeText(this, string.Format( "{0} returned from DemoService", text), ToastLength.Long).Show();
                 }
 
             );

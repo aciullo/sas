@@ -525,7 +525,7 @@ namespace sas
         {
             string result;
             Toast.MakeText(this, "Buscando servicios...aguarde por favor...", ToastLength.Long).Show();
-
+            string movil = user.codMovil;
             try
             {
 
@@ -537,7 +537,7 @@ namespace sas
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + session.getAccessToken());
 
-                string movil = user.codMovil;
+                
                 movil = movil.TrimEnd();
                 // string url = string.Format("api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
                 string url = string.Format("api/sas_ServiciosApi/00?idmovil={0}", movil);
@@ -566,7 +566,7 @@ namespace sas
             finally
             {
 
-                servicios = ServicioManager.GetTasks();
+                servicios = ServicioManager.GetTasks(user.codMovil);
 
                 lstServicios.ChoiceMode = ChoiceMode.Single;
 
@@ -631,6 +631,14 @@ namespace sas
                         sl.producto = t.producto;
                         ServicioManager.SaveTask(sl);
                     }
+                    //else
+                    //{
+                    //    var item = ServicioManager.GetTaskIdSol(t.id_Solicitud);
+                    //    if (item.codEstado != t.codEstado)
+                    //    {
+
+                    //    }
+                    //}
                     //servlocal = new ServiciosLocalModel(t.id_Solicitud, t.NumeroSolicitud, t.fecha_Llamado, t.hora_Llamado,
                     //                                    t.nombrePaciente, t.Tel, t.edadPaciente, t.nombrePaciente,
                     //                                    t.direccionReferecia, t.direccionReferecia2, t.numeroCasa, t.referencia,
@@ -643,7 +651,7 @@ namespace sas
                     //    datos.InsertServicio(servlocal);
                     //}
                 }
-                servicios = ServicioManager.GetTasks();
+                servicios = ServicioManager.GetTasks(user.codMovil);
                 //waitActivityIndicator.IsRunning = false;
                 //   lstServicios. = servicio;
                 //ListAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleExpandableListItem1, 0, items);

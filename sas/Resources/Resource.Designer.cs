@@ -291,14 +291,14 @@ namespace sas
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f090024
-			public const int Heading = 2131296292;
+			// aapt resource value: 0x7f090028
+			public const int Heading = 2131296296;
 			
-			// aapt resource value: 0x7f090025
-			public const int List = 2131296293;
+			// aapt resource value: 0x7f090029
+			public const int List = 2131296297;
 			
-			// aapt resource value: 0x7f090026
-			public const int List2 = 2131296294;
+			// aapt resource value: 0x7f09002a
+			public const int List2 = 2131296298;
 			
 			// aapt resource value: 0x7f090031
 			public const int Text = 2131296305;
@@ -342,8 +342,8 @@ namespace sas
 			// aapt resource value: 0x7f090006
 			public const int auto = 2131296262;
 			
-			// aapt resource value: 0x7f090021
-			public const int btnBuscar = 2131296289;
+			// aapt resource value: 0x7f090025
+			public const int btnBuscar = 2131296293;
 			
 			// aapt resource value: 0x7f090030
 			public const int btnCerrarSesion = 2131296304;
@@ -357,20 +357,20 @@ namespace sas
 			// aapt resource value: 0x7f09002d
 			public const int btnIniciarServicio = 2131296301;
 			
-			// aapt resource value: 0x7f090022
-			public const int btnRegistrarResultado = 2131296290;
+			// aapt resource value: 0x7f090026
+			public const int btnRegistrarResultado = 2131296294;
 			
-			// aapt resource value: 0x7f09001a
-			public const int btnRegistroInicial = 2131296282;
+			// aapt resource value: 0x7f09001e
+			public const int btnRegistroInicial = 2131296286;
 			
-			// aapt resource value: 0x7f090023
-			public const int btnRegistroLocal = 2131296291;
+			// aapt resource value: 0x7f090027
+			public const int btnRegistroLocal = 2131296295;
 			
-			// aapt resource value: 0x7f09001d
-			public const int btnTranslado = 2131296285;
+			// aapt resource value: 0x7f090021
+			public const int btnTranslado = 2131296289;
 			
-			// aapt resource value: 0x7f09001c
-			public const int btnVolverBase = 2131296284;
+			// aapt resource value: 0x7f090020
+			public const int btnVolverBase = 2131296288;
 			
 			// aapt resource value: 0x7f090007
 			public const int dark = 2131296263;
@@ -381,11 +381,11 @@ namespace sas
 			// aapt resource value: 0x7f090009
 			public const int lblBuscar = 2131296265;
 			
-			// aapt resource value: 0x7f090020
-			public const int lblDescrpcionDestinoDesenlace = 2131296288;
+			// aapt resource value: 0x7f090024
+			public const int lblDescrpcionDestinoDesenlace = 2131296292;
 			
-			// aapt resource value: 0x7f09001e
-			public const int lblDestinoDesenlace = 2131296286;
+			// aapt resource value: 0x7f090022
+			public const int lblDestinoDesenlace = 2131296290;
 			
 			// aapt resource value: 0x7f090008
 			public const int light = 2131296264;
@@ -420,11 +420,11 @@ namespace sas
 			// aapt resource value: 0x7f090004
 			public const int standard = 2131296260;
 			
-			// aapt resource value: 0x7f090019
-			public const int tableLayout1 = 2131296281;
+			// aapt resource value: 0x7f09001d
+			public const int tableLayout1 = 2131296285;
 			
-			// aapt resource value: 0x7f09001b
-			public const int tableLayout2 = 2131296283;
+			// aapt resource value: 0x7f09001f
+			public const int tableLayout2 = 2131296287;
 			
 			// aapt resource value: 0x7f09000d
 			public const int textView3 = 2131296269;
@@ -444,8 +444,8 @@ namespace sas
 			// aapt resource value: 0x7f090014
 			public const int textView8 = 2131296276;
 			
-			// aapt resource value: 0x7f09002a
-			public const int textView9 = 2131296298;
+			// aapt resource value: 0x7f090019
+			public const int textView9 = 2131296281;
 			
 			// aapt resource value: 0x7f09003c
 			public const int toolbar = 2131296316;
@@ -459,11 +459,11 @@ namespace sas
 			// aapt resource value: 0x7f090011
 			public const int txtClave = 2131296273;
 			
-			// aapt resource value: 0x7f09001f
-			public const int txtDestinoDesenlace = 2131296287;
+			// aapt resource value: 0x7f090023
+			public const int txtDestinoDesenlace = 2131296291;
 			
-			// aapt resource value: 0x7f09002b
-			public const int txtDireccion1 = 2131296299;
+			// aapt resource value: 0x7f09001a
+			public const int txtDireccion1 = 2131296282;
 			
 			// aapt resource value: 0x7f090018
 			public const int txtEdad = 2131296280;
@@ -477,14 +477,14 @@ namespace sas
 			// aapt resource value: 0x7f090043
 			public const int txtGlicemia = 2131296323;
 			
-			// aapt resource value: 0x7f090027
-			public const int txtHoraLlamada = 2131296295;
+			// aapt resource value: 0x7f09002b
+			public const int txtHoraLlamada = 2131296299;
 			
 			// aapt resource value: 0x7f090044
 			public const int txtMedico = 2131296324;
 			
-			// aapt resource value: 0x7f09002c
-			public const int txtMotivo1 = 2131296300;
+			// aapt resource value: 0x7f09001c
+			public const int txtMotivo1 = 2131296284;
 			
 			// aapt resource value: 0x7f090016
 			public const int txtNombrePaciente = 2131296278;
@@ -495,8 +495,8 @@ namespace sas
 			// aapt resource value: 0x7f090040
 			public const int txtSAT = 2131296320;
 			
-			// aapt resource value: 0x7f090029
-			public const int txtSolicitante = 2131296297;
+			// aapt resource value: 0x7f09002c
+			public const int txtSolicitante = 2131296300;
 			
 			// aapt resource value: 0x7f09003d
 			public const int txtTA = 2131296317;
@@ -504,8 +504,8 @@ namespace sas
 			// aapt resource value: 0x7f090041
 			public const int txtTemperatura = 2131296321;
 			
-			// aapt resource value: 0x7f090028
-			public const int txtTipo = 2131296296;
+			// aapt resource value: 0x7f09001b
+			public const int txtTipo = 2131296283;
 			
 			// aapt resource value: 0x7f09002e
 			public const int txtTitulo = 2131296302;
