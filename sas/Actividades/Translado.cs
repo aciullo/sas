@@ -300,7 +300,7 @@ namespace sas.Actividades
             servicioDetalle.IndicacionArribo = txtMedico.Text;
             servicioDetalle.codInstitucion = txtDestinoDesenlace.Text;
             ServicioItemManager.SaveTask(servicioDetalle);
-            Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
+            Toast.MakeText(this, "Registro guardado Correctamente", ToastLength.Long).Show();
 
             if (isBound)
             {

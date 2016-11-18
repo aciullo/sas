@@ -315,7 +315,9 @@ namespace sas
             else
             {
                 if (verGPS == 0)
-                { 
+                {
+                    GetIndexDato("07");
+                    GetIndexDato("06");
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.SetTitle("El servicio de localización no se encuentra activo");
                     builder.SetMessage("Por favor habilite el Servicio de Localización y GPS");
@@ -392,7 +394,7 @@ namespace sas
             var cantidad = ServicioManager.CantidadPendiente();
 
 
-            if (cantidad >= 1 && t.codEstado == "001")
+            if (cantidad >= 1 && t.codEstado == "002")
             {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -492,7 +494,7 @@ namespace sas
 
 
 
-            if (t.codEstado != "001")
+            if (t.codEstado != "002")
             {
                 var newActivity = new Intent(this, typeof(RegistrarServicio));
 
@@ -524,7 +526,7 @@ namespace sas
         private async Task LoadServicios()
         {
             string result;
-            Toast.MakeText(this, "Buscando servicios...aguarde por favor...", ToastLength.Long).Show();
+            Toast.MakeText(this, "Buscando servicios...aguarde por favor...", ToastLength.Short).Show();
             string movil = user.codMovil;
             try
             {

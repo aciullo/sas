@@ -55,7 +55,7 @@ namespace sas
             //view.FindViewById<TextView>(Android.Resource.Id.Text2).Text = item.direccionReferecia;
             switch (item.codEstado)
             {
-                case ("001"):
+                case ("002"):
                     estado = "Pendiente";
                     break;
               

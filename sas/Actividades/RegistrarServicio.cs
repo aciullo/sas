@@ -376,11 +376,7 @@ namespace sas
         {
             switch (codEstadoRecibido)
             {
-                case ("001"):
-                    btnRegistroInicial.Text = "Registrar Salida de Base";
-                    btnVolverBase.Visibility = ViewStates.Invisible;
-                    btnTranslado.Visibility = ViewStates.Invisible;
-                    break;
+              
                 case ("002"):
                     btnRegistroInicial.Text = "Registrar Salida de Base";
                     btnVolverBase.Visibility = ViewStates.Invisible;
@@ -852,7 +848,7 @@ namespace sas
                         servicio.codDesenlace = regservicio2.codDesenlace;
                         ServicioManager.SaveTask(servicio);
                         actualizarInstitucionDesenlace(regservicio2);
-                        GuardarDatos(regservicio2);
+                     
                     }
 
                                     
@@ -979,8 +975,7 @@ namespace sas
             ServicioItemManager.SaveTask(servicioDetalle);
             Toast.MakeText(this, "Registro guardado Correctamente", ToastLength.Long).Show();
 
-            if (demoServiceConnection != null)
-                binder = demoServiceConnection.Binder;
+           
             if (isBound)
             {
                 RunOnUiThread(() =>
@@ -994,85 +989,12 @@ namespace sas
             );
             }
 
-                //string result;
-                //try
-                //{
-                //    HttpClient client = new HttpClient();
-                //    client.MaxResponseContentBufferSize = 256000;
-                //    client.BaseAddress = new Uri(IPCONN);
-                //    //var uri = new Uri (string.Format ("http://181.120.121.221:88/api/sas_ServiciosApi/{0}/{1}/{2}", deviceUser.codMovil,"001","P" ));
-                //    string url = string.Format("api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", regservicio.id_Solicitud, regservicio.codEstado, regservicio.HoraEstado);
-                //    var response = await client.GetAsync(url);
-                //    result = response.Content.ReadAsStringAsync().Result;
-                //    //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
-                //    if (result.Contains("Error"))
-                //    {
-                //        Toast.MakeText(this, "Error", ToastLength.Long).Show();
-                //        //using (var datos = new DAServicioDet())
-                //        //{
-                //        //    datos.InsertServicio(regservicio);
-                //        //}
-                //    }
-
-                //    GetAddress();
-
-                //    servicioDetalle = new ServicioItem();
-                //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
-                //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
-                //    servicioDetalle.Nombre = servicio.nombrePaciente;
-                //    servicioDetalle.Fecha = DateTime.Now;
-                //    servicioDetalle.codMovil = movil;
-                //    servicioDetalle.Estado = servicio.Estado;
-                //    servicioDetalle.codEstado = servicio.codEstado;
-                //    servicioDetalle.HoraEstado = servicio.HoraEstado;
-                //    servicioDetalle.codInstitucion = regservicio.codInstitucion;
-                //    servicioDetalle.codDesenlace = regservicio.codDesenlace;
-                //    servicioDetalle.Enviado = true;
-                //    servicioDetalle.AuditUsuario = usuario;
-                //    servicioDetalle.AuditId = servicio.ID;
-                //    servicioDetalle.GeoData = _locationText;
-                //    ServicioItemManager.SaveTask(servicioDetalle);
-                //}
-                //catch (Exception ex)
-                //{
-                //    Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
-
-                //    //using (var datos = new DAServicioDet())
-                //    //{
-                //    //    datos.InsertServicio(regservicio);
-                //    //}
-
-                //    GetAddress();
-
-                //    servicioDetalle = new ServicioItem();
-                //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
-                //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
-                //    servicioDetalle.Nombre = servicio.nombrePaciente;
-                //    servicioDetalle.Fecha = DateTime.Now;
-                //    servicioDetalle.codMovil = movil;
-                //    servicioDetalle.Estado= servicio.Estado;
-                //    servicioDetalle.codEstado = servicio.codEstado;
-                //    servicioDetalle.HoraEstado = servicio.HoraEstado;
-                //    servicioDetalle.codInstitucion = regservicio.codInstitucion;
-                //    servicioDetalle.codDesenlace = regservicio.codDesenlace;
-                //    servicioDetalle.Enviado = false;
-                //    servicioDetalle.AuditUsuario = usuario;
-                //    servicioDetalle.AuditId = servicio.ID;
-                //    servicioDetalle.GeoData = _locationText;
-                //    ServicioItemManager.SaveTask (servicioDetalle);
-
-
-
-                //    return;
-                //}
-                ////waitActivityIndicator.IsRunning = false;
-                //Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
-            }
+           }
 
 
         private void actualizarInstitucionDesenlace(RegistrarServicioModel servTranslado)
         {
-            //GetAddress();
+         
 
             servicioDetalle = new ServicioItem();
             servicioDetalle.id_Solicitud = servicio.id_Solicitud;
@@ -1091,126 +1013,23 @@ namespace sas
             servicioDetalle.GeoData = _locationText;
             ServicioItemManager.SaveTask(servicioDetalle);
             Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
-   
-            //string result;
-            //var jsonResquest = JsonConvert.SerializeObject(servTranslado);
-            //var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
-            //try
-            //{
-            //    //transladoButton.IsEnabled = false;
-            //    HttpClient client = new HttpClient();
-            //    client.MaxResponseContentBufferSize = 256000;
-            //    //	client.BaseAddress = new Uri ("http://181.120.121.221:88");
-            //    System.Net.Http.HttpResponseMessage response;
-            //    client.BaseAddress = new Uri(IPCONN);
-            //    if (servTranslado.codDesenlace == "Null")
-            //    {
-            //        var url = string.Format("api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codInstitucion);
-            //        response = await client.GetAsync(url);
-            //    }
-            //    else
-            //    {
-            //        var url = (string.Format("api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", servTranslado.id_Solicitud, servTranslado.NumeroSolicitud, servTranslado.codInstitucion, servTranslado.codDesenlace));
-            //        response = await client.GetAsync(url);
-            //    }
-            //    //string url = string.Format ("/api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&IdProductoFinal={3}", servTranslado.id_Solicitud,servTranslado.NumeroSolicitud,servTranslado.codServicioFinal, servTranslado.codProductoFinal);
-            //    //?idsolicitud={idsolicitud}&nrosolicitud={nrosolicitud}&destino={destino}&IdProductoFinal={IdProductoFinal}
-            //    //var response= await client.GetAsync(uri);
-            //    result = response.Content.ReadAsStringAsync().Result;
-            //    //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
-            //    // transladoButton.IsEnabled = true;
-            //    //guaardar localmente
-            //    if (result.Contains("Error"))
-            //    {
-            //        Toast.MakeText(this, "Error", ToastLength.Long).Show();
 
-            //        //using (var datos = new DAServicioDet())
-            //        //{
-            //        //    datos.InsertServicio(servTranslado);
-            //        //}
-            //        GetAddress();
+            if (isBound)
+            {
+                RunOnUiThread(() =>
+                {
+                    binder.GetDemoService().SincronizarEstados();
+                    string text = binder.GetDemoService().GetText();
+                    //Console.WriteLine("{0} returned from DemoService", text);
+                    Toast.MakeText(this, string.Format("{0} returned from DemoService", text), ToastLength.Long).Show();
+                }
 
-            //        servicioDetalle = new ServicioItem();
-            //        servicioDetalle.id_Solicitud = servicio.id_Solicitud;
-            //        servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
-            //        servicioDetalle.Nombre = servicio.nombrePaciente;
-            //        servicioDetalle.Fecha = DateTime.Now;
-            //        servicioDetalle.codMovil = movil;
-            //        servicioDetalle.Estado = servicio.Estado;
-            //        servicioDetalle.codEstado = servicio.codEstado;
-            //        servicioDetalle.HoraEstado = servicio.HoraEstado;
-            //        servicioDetalle.codInstitucion = servTranslado.codInstitucion;
-            //        servicioDetalle.codDesenlace = servTranslado.codDesenlace;
-            //        servicioDetalle.Enviado = false;
-            //        servicioDetalle.AuditUsuario = usuario;
-            //        servicioDetalle.AuditId = servicio.ID;
-            //        servicioDetalle.GeoData = _locationText;
-            //        ServicioItemManager.SaveTask(servicioDetalle);
-            //        return;
-            //    }
-
-            //    GetAddress();
-
-            //    servicioDetalle = new ServicioItem();
-            //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
-            //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
-            //    servicioDetalle.Nombre = servicio.nombrePaciente;
-            //    servicioDetalle.Fecha = DateTime.Now;
-            //    servicioDetalle.codMovil = movil;
-            //    servicioDetalle.Estado = servicio.Estado;
-            //    servicioDetalle.codEstado = servicio.codEstado;
-            //    servicioDetalle.HoraEstado = servicio.HoraEstado;
-            //    servicioDetalle.codInstitucion = servTranslado.codInstitucion;
-            //    servicioDetalle.codDesenlace = servTranslado.codDesenlace;
-            //    servicioDetalle.Enviado = true;
-            //    servicioDetalle.AuditUsuario = usuario;
-            //    servicioDetalle.AuditId = servicio.ID;
-            //    servicioDetalle.GeoData = _locationText;
-            //    ServicioItemManager.SaveTask(servicioDetalle);
-            //}
-            //catch (Exception ex)
-            //{
-            //    //guaardar localmente
-            //    Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
-            //    // transladoButton.IsEnabled = true;
-            //    // waitActivityIndicator.IsRunning = false;
-            //    //using (var datos = new DAServicioDet())
-            //    //{
-            //    //    datos.InsertServicio(servTranslado);
-            //    //}
-
-
-            //    GetAddress();
-
-            //    servicioDetalle = new ServicioItem();
-            //    servicioDetalle.id_Solicitud = servicio.id_Solicitud;
-            //    servicioDetalle.NumeroSolicitud = servicio.NumeroSolicitud;
-            //    servicioDetalle.Nombre = servicio.nombrePaciente;
-            //    servicioDetalle.Fecha = DateTime.Now;
-            //    servicioDetalle.codMovil = movil;
-            //    servicioDetalle.Estado = servicio.Estado;
-            //    servicioDetalle.codEstado = servicio.codEstado;
-            //    servicioDetalle.HoraEstado = servicio.HoraEstado;
-            //    servicioDetalle.codInstitucion = servTranslado.codInstitucion;
-            //    servicioDetalle.codDesenlace = servTranslado.codDesenlace;
-            //    servicioDetalle.Enviado = false;
-            //    servicioDetalle.AuditUsuario = usuario;
-            //    servicioDetalle.AuditId = servicio.ID;
-            //    servicioDetalle.GeoData = _locationText;
-            //    ServicioItemManager.SaveTask(servicioDetalle);
-
-
-            //    return;
-            //}
-
-            //Toast.MakeText(this, "Registro guardado Correctamtne", ToastLength.Long).Show();
-            //// waitActivityIndicator.IsRunning = false;
-            ////await Navigation.PushAsync (new PersonasPage(persona));
-
+            );
+            }
         }
         #endregion
 
-      async Task GetIndexDato(string Id)
+        async Task GetIndexDato(string Id)
         {
             //string result;
             var busqueda = new SasDatosItem();

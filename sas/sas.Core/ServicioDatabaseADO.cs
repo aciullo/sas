@@ -362,7 +362,7 @@ namespace sas.Core
                 connection.Open();
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = "SELECT count(id_solicitud) cantidad from [ServicioCab] WHERE codestado <>'001' and codestado <> '009' ";
+                    command.CommandText = "SELECT count(id_solicitud) cantidad from [ServicioCab] WHERE codestado <>'002' and codestado <> '009' ";
                     var r = command.ExecuteReader();
                     if (r.HasRows)
                     {

@@ -39,7 +39,7 @@ namespace sas.Core
                        "CREATE TABLE [ServiciosDet] (_id INTEGER PRIMARY KEY ASC, id_solicitud INTEGER, " +
                     " NumeroSolicitud INTEGER, Nombre NTEXT, Fecha NTEXT, codMovil NTEXT, Estado NTEXT, " +
                     " codEstado NTEXT, HoraEstado NTEXT, codInstitucion NTEXT, codDesenlace NTEXT, Enviado INTEGER, " +
-                    "AuditUsuario NTEXT, AuditId INTEGER,GeoData NTEXT, Address NTEXT, sv_ta NTEXT, sv_fc NTEXT, sv_tempe NTEXT, sv_fresp NTEXT, SAT NTEXT, Glasgow NTEXT, Glicemia NTEXT );" ,
+                    "AuditUsuario NTEXT, AuditId INTEGER,GeoData NTEXT, Address NTEXT, sv_ta NTEXT, sv_fc NTEXT, sv_tempe NTEXT, sv_fresp NTEXT, SAT NTEXT, Glasgow NTEXT, Glicemia NTEXT, IndicacionArribo NTEXT );" ,
                 };
 				foreach (var command in commands) {
 					using (var c = connection.CreateCommand ()) {
@@ -80,7 +80,7 @@ namespace sas.Core
             t.SAT = r["SAT"].ToString();
             t.Glasgow = r["Glasgow"].ToString();
             t.Glicemia = r["Glicemia"].ToString();
-
+            t.IndicacionArribo = r["IndicacionArribo"].ToString();
             return t;
 		}
 
@@ -94,7 +94,7 @@ namespace sas.Core
 				using (var contents = connection.CreateCommand ()) {
 					contents.CommandText = "SELECT [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " + 
                                            " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], AuditUsuario , " +
-                                           " AuditId ,GeoData,Address, sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia   from [ServiciosDet]";
+                                           " AuditId ,GeoData,Address, sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia,IndicacionArribo   from [ServiciosDet]";
 					var r = contents.ExecuteReader ();
 					while (r.Read ()) {
 						tl.Add (FromReader(r));
@@ -118,7 +118,7 @@ namespace sas.Core
                 {
                     contents.CommandText = "SELECT [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
                                            " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado] , AuditUsuario , " +
-                                           " AuditId ,GeoData,Address, sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia " +
+                                           " AuditId ,GeoData,Address, sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia, IndicacionArribo " +
                                            " from [ServiciosDet] WHERE [Enviado] = 0  ";
                     var r = contents.ExecuteReader();
                     while (r.Read())
@@ -141,7 +141,7 @@ namespace sas.Core
 				using (var command = connection.CreateCommand ()) {
 					command.CommandText = "SELECT  [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
                                           " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], AuditUsuario , " +
-                                          " AuditId ,GeoData,Address, sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia  from [ServiciosDet] WHERE [_id] = ?";
+                                          " AuditId ,GeoData,Address, sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia, IndicacionArribo  from [ServiciosDet] WHERE [_id] = ?";
 					command.Parameters.Add (new SqliteParameter (DbType.Int32) { Value = id });
 					var r = command.ExecuteReader ();
 					while (r.Read ()) {
@@ -169,7 +169,7 @@ namespace sas.Core
                 {
                     contents.CommandText = "SELECT  [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
                                            " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], AuditUsuario , " +
-                                           " AuditId ,GeoData,Address , sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia from [ServiciosDet] WHERE [AuditId] = ?";
+                                           " AuditId ,GeoData,Address , sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia, IndicacionArribo from [ServiciosDet] WHERE [AuditId] = ?";
                     contents.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = id });
                     var r = contents.ExecuteReader();
                     while (r.Read())
@@ -208,7 +208,7 @@ namespace sas.Core
 					using (var command = connection.CreateCommand ()) {
 						command.CommandText = "INSERT INTO [ServiciosDet] (id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, " + 
                                               " Estado, codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado], " +
-                                              " AuditUsuario , AuditId ,GeoData,Address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
+                                              " AuditUsuario , AuditId ,GeoData,Address, sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia, IndicacionArribo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ? , ? , ?, ?, ?, ?, ?, ?, ?)";
                         //command.CommandText = "INSERT INTO [Servicios] (_id], [Nombre], [NroServicio], [Enviado]) VALUES (? ,?, ?, ?)";
                         command.Parameters.Add (new SqliteParameter (DbType.Int32) { Value = item.id_Solicitud });
                         command.Parameters.Add (new SqliteParameter (DbType.Int32) { Value = item.NumeroSolicitud });
@@ -225,6 +225,16 @@ namespace sas.Core
                         command.Parameters.Add(new SqliteParameter(DbType.Int32) { Value = item.AuditId });
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.GeoData });
                         command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.Address });
+
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.sv_ta });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.sv_fc });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.sv_tempe });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.sv_fresp });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.SAT });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.Glasgow });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.Glicemia });
+                        command.Parameters.Add(new SqliteParameter(DbType.String) { Value = item.IndicacionArribo });
+
 
                         r = command.ExecuteNonQuery ();
 					}

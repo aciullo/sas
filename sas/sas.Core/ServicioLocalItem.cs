@@ -50,5 +50,6 @@ namespace sas.Core {
         public string Glasgow { get; set; }
         public string Glicemia { get; set; }
         public string IndicacionArribo { get; set; }
+        public bool Enviado { get; set; }
     }
 }
