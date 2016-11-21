@@ -5,9 +5,9 @@ using System.IO;
 namespace sas.Core {
 
     public class ServicioItemRepositoryADO {
-		ServicioDatabase db = null;
+		//ServicioDatabase db = null;
         DetServicioDatabase dbdet = null;
-        SasDatosDatabase dbdatos = null;
+       // SasDatosDatabase dbdatos = null;
         protected static string dbLocation;		
 		protected static ServicioItemRepositoryADO me;		
 

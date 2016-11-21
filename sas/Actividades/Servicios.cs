@@ -104,6 +104,7 @@ namespace sas
             lstServicios = FindViewById<ListView>(Resource.Id.android_lstServicios);
             txtTitulo = FindViewById<TextView>(Resource.Id.txtTitulo);
             btnCerrarSesion = FindViewById<Button>(Resource.Id.btnCerrarSesion);
+
             if (user != null)
             {
                 txtTitulo.Text = string.Format("Bienvenid@  {0}", user.nombres);
@@ -111,11 +112,13 @@ namespace sas
 
             if (Intent.Extras == null)
             {
+               
                 verGPS = 1;
             }
            else
             {
-
+                GetIndexDato("07");
+                GetIndexDato("06");
                 verGPS = Intent.Extras.GetInt("GPS");
             }
             
@@ -424,26 +427,26 @@ namespace sas
                 return;
             }
 
-            if (t.codEstado == "008")
-            {
-                //
-                if (! (!(string.IsNullOrEmpty(t.codInstitucion)) && t.codInstitucion != "Null"))
-                {
+            //if (t.codEstado == "008")
+            //{
+            //    //
+            //    if (! (!(string.IsNullOrEmpty(t.codInstitucion)) && t.codInstitucion != "Null"))
+            //    {
 
-                    Finish();
+            //        Finish();
 
                      
-                    //        var newActivity = new Intent(this, typeof(RegistrarServicio));
+            //        //        var newActivity = new Intent(this, typeof(RegistrarServicio));
 
-                    //        Bundle valuesForActivity = new Bundle();
-                    //        valuesForActivity.PutInt("ServiciosDet", t.ID);
-                    //        newActivity.PutExtras(valuesForActivity);
+            //        //        Bundle valuesForActivity = new Bundle();
+            //        //        valuesForActivity.PutInt("ServiciosDet", t.ID);
+            //        //        newActivity.PutExtras(valuesForActivity);
 
-                    //        //newActivity.PutExtra("ServiciosDet", t.ID);
-                    //        StartActivity(newActivity);
-                    //        return;
-                }
-            }
+            //        //        //newActivity.PutExtra("ServiciosDet", t.ID);
+            //        //        StartActivity(newActivity);
+            //        //        return;
+            //    }
+            //}
             //    else
             //    {
             //        Toast.MakeText(this, "Servicio Finalizado", ToastLength.Long).Show();
@@ -494,28 +497,28 @@ namespace sas
 
 
 
-            if (t.codEstado != "002")
-            {
-                var newActivity = new Intent(this, typeof(RegistrarServicio));
+            //if (t.codEstado != "002")
+            //{
+            var newActivity2 = new Intent(this, typeof(RegistrarServicio));
 
-                Bundle valuesForActivity = new Bundle();
-                valuesForActivity.PutInt("ServiciosDet", t.ID);
-                newActivity.PutExtras(valuesForActivity);
+            Bundle valuesForActivity2 = new Bundle();
+            valuesForActivity2.PutInt("ServiciosDet", t.ID);
+            newActivity2.PutExtras(valuesForActivity2);
 
-                //newActivity.PutExtra("ServiciosDet", t.ID);
-                StartActivity(newActivity);
+            //newActivity.PutExtra("ServiciosDet", t.ID);
+            StartActivity(newActivity2);
 
-            }
-            else
-            {
-                var newActivity = new Intent(this, typeof(ServiciosDetalle));
-                // newActivity.PutExtra("ServiciosDet", t.ID);
-                Bundle valuesForActivity = new Bundle();
-                valuesForActivity.PutInt("ServiciosDet", t.ID);
-                newActivity.PutExtras(valuesForActivity);
-                StartActivity(newActivity);
+            //}
+            //else
+            //{
+            //var newActivity2 = new Intent(this, typeof(ServiciosDetalle));
+            //// newActivity.PutExtra("ServiciosDet", t.ID);
+            //Bundle valuesForActivity2 = new Bundle();
+            //valuesForActivity2.PutInt("ServiciosDet", t.ID);
+            //newActivity2.PutExtras(valuesForActivity2);
+            //StartActivity(newActivity2);
 
-            }
+            //}
 
 
 

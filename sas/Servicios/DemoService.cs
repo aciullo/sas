@@ -125,17 +125,21 @@ namespace sas
                 try
                 {
                     var servicio = ServicioManager.GetTaskIdSol(item.id_Solicitud);
-                    var jsonResquest = JsonConvert.SerializeObject(item);
+                    var jsonResquest = JsonConvert.SerializeObject(servicio);
                     var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
 
-                    url = string.Format("api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", item.id_Solicitud, item.codEstado, item.HoraEstado);
+                    url = string.Format("api/UpdServiciosApi?idsolicitud={0}&codestado={1}&hora={2}", item.id_Solicitud, item.codEstado, item.HoraEstado.Trim());
                     response = await client.GetAsync(url);
                     result = response.Content.ReadAsStringAsync().Result;
 
-                    url = string.Format("api/sas_ServiciosApi/{0}", item.id_Solicitud);
+                    if  (!(string.IsNullOrEmpty(servicio.SAT) | string.IsNullOrEmpty(servicio.sv_fc) | string.IsNullOrEmpty(servicio.sv_fresp)
+                        | string.IsNullOrEmpty(servicio.sv_ta) | string.IsNullOrEmpty(servicio.sv_tempe) | string.IsNullOrEmpty(servicio.IndicacionArribo)
+                        | string.IsNullOrEmpty(servicio.Glasgow) | string.IsNullOrEmpty(servicio.Glicemia)))
+                    { 
+                    url = string.Format("api/sas_ServiciosApi/{0}", servicio.id_Solicitud);
                     response = await client.PutAsync(url, content);
                     result = response.Content.ReadAsStringAsync().Result;
-
+                    }
                     if (result.Contains("Error"))
                     {
                       //  Toast.MakeText(this, "Error", ToastLength.Long).Show();
@@ -150,7 +154,7 @@ namespace sas
                         servicioDetalle.ID = item.ID;
                         servicioDetalle.Enviado = true;
                         ServicioItemManager.SaveTask(servicioDetalle);
-                        Log.Debug("SasService", String.Format("Enviando {0}", item.NumeroSolicitud));
+                        Log.Debug("SasService", String.Format("Enviando {0}, estado {0}", item.NumeroSolicitud, item.codEstado));
                         SendNotification(String.Format("Enviando {0}", item.NumeroSolicitud));
 
                         
@@ -166,7 +170,7 @@ namespace sas
                     {
                         item.codInstitucion = "Null";
                         //url = string.Format("api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}", item.id_Solicitud, item.NumeroSolicitud, item.codInstitucion);
-                        url = (string.Format("api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", item.id_Solicitud, item.NumeroSolicitud, item.codInstitucion, item.codDesenlace));
+                        url = (string.Format("api/ABMServiciosApi?idsolicitud={0}&nrosolicitud={1}&destino={2}&desenlace={3}", item.id_Solicitud, item.NumeroSolicitud, item.codInstitucion.Trim(), item.codDesenlace.Trim()));
                         response = await client.GetAsync(url);
                         result = response.Content.ReadAsStringAsync().Result;
 
@@ -185,7 +189,7 @@ namespace sas
                             servicioDetalle.ID = item.ID;
                             servicioDetalle.Enviado = true;
                             ServicioItemManager.SaveTask(servicioDetalle);
-                            Log.Debug("SasService", String.Format("Enviando {0}", item.NumeroSolicitud));
+                            Log.Debug("SasService", String.Format("Enviando {0}, estado {1}", item.NumeroSolicitud, item.codEstado ));
                             SendNotification(String.Format("Enviando {0}", item.NumeroSolicitud));
 
                            
@@ -215,7 +219,7 @@ namespace sas
                                 servicioDetalle.ID = item.ID;
                                 servicioDetalle.Enviado = true;
                                 ServicioItemManager.SaveTask(servicioDetalle);
-                                Log.Debug("SasService", String.Format("Enviando {0}", item.NumeroSolicitud));
+                                Log.Debug("SasService", String.Format("Enviando {0}, estado {1}", item.NumeroSolicitud, item.codEstado));
                                 SendNotification(String.Format("Enviando {0}", item.NumeroSolicitud));
 
                                
@@ -236,11 +240,11 @@ namespace sas
                 }
                 finally
                 {
-                    Thread.Sleep(5000);
+                  //Thread.Sleep(5000);
                    
-                   // Log.Debug("SasService", "Stopping foreground");
-                  //  StopForeground(true);
-                  //  StopSelf();
+                   Log.Debug("SasService", "Stopping foreground");
+                    StopForeground(true);
+                    StopSelf();
 
                 }
 

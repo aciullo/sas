@@ -25,7 +25,7 @@ namespace sas.Core {
 			// instantiate the database	
 			db = new ServicioDatabase(dbLocation);
 
-            dbdet = new DetServicioDatabase(dbLocation);
+            //dbdet = new DetServicioDatabase(dbLocation);
 
             dbdatos = new SasDatosDatabase(dbLocation);
 
@@ -92,35 +92,35 @@ namespace sas.Core {
             return me.db.CantidadPendiente();
         }
 
-        // servios det 
-        public static ServicioItem GetServicio(int id)
-        {
-            return me.dbdet.GetItem(id);
-        }
+        // servicios det 
+        //public static ServicioItem GetServicio(int id)
+        //{
+        //    return me.dbdet.GetItem(id);
+        //}
 
-        public static IEnumerable<ServicioItem> GetItemByForeingID(int id)
-        {
-            return me.dbdet.GetItemByForeingID(id);
-        }
-        public static IEnumerable<ServicioItem> GetServicios()
-        {
-            return me.dbdet.GetItems();
-        }
+        //public static IEnumerable<ServicioItem> GetItemByForeingID(int id)
+        //{
+        //    return me.dbdet.GetItemByForeingID(id);
+        //}
+        //public static IEnumerable<ServicioItem> GetServicios()
+        //{
+        //    return me.dbdet.GetItems();
+        //}
 
-        public static IEnumerable<ServicioItem> GetServiciosToSend()
-        {
-            return me.dbdet.GetItemsToSend();
-        }
+        //public static IEnumerable<ServicioItem> GetServiciosToSend()
+        //{
+        //    return me.dbdet.GetItemsToSend();
+        //}
 
-        public static int SaveTaskDet(ServicioItem item)
-        {
-            return me.dbdet.SaveItem(item);
-        }
+        //public static int SaveTaskDet(ServicioItem item)
+        //{
+        //    return me.dbdet.SaveItem(item);
+        //}
 
-        public static int DeleteTaskDet(int id)
-        {
-            return me.dbdet.DeleteItem(id);
-        }
+        //public static int DeleteTaskDet(int id)
+        //{
+        //    return me.dbdet.DeleteItem(id);
+        //}
 
         //sas datos
         public static int SaveTaskDatos(SasDatosItem item)

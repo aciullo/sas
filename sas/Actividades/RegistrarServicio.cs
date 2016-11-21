@@ -101,8 +101,8 @@ namespace sas
             lblDestinoDesenlace = FindViewById<TextView>(Resource.Id.lblDestinoDesenlace);
             lblDescrpcionDestinoDesenlace = FindViewById<TextView>(Resource.Id.lblDescrpcionDestinoDesenlace);
             txtDestinoDesenlace = FindViewById<EditText>(Resource.Id.txtDestinoDesenlace);
-            mProgress = FindViewById<ProgressBar>(Resource.Id.mProgress);
-            mProgress.Visibility = ViewStates.Invisible;
+           mProgress = FindViewById<ProgressBar>(Resource.Id.mProgress);
+           mProgress.Visibility = ViewStates.Invisible;
             btnBuscar = FindViewById<Button>(Resource.Id.btnBuscar);
             btnRegistroLocal = FindViewById<Button>(Resource.Id.btnRegistroLocal);
 
@@ -132,8 +132,7 @@ namespace sas
             codInstitucionRecibido = servicio.codInstitucion;
             codDesenlace = servicio.codDesenlace;
 
-            //mostrar botones segun ÚLTIMO estado
-            LoadStateButtons(codEstadoRecibido);
+           
 
             //asignar los eventos a los controles
             btnRegistroInicial.Click += BtnRegistroInicial_Click;
@@ -153,16 +152,19 @@ namespace sas
                 binder = demoServiceConnection.Binder;
 
             InitializeLocationManager();
+
+            //mostrar botones segun ÚLTIMO estado
+            LoadStateButtons(codEstadoRecibido);
         }
 
-        //protected override void OnStart()
-        //{
-        //    base.OnStart();
+        protected override void OnStart()
+        {
+            base.OnStart();
 
-        //    var demoServiceIntent = new Intent("com.xamarin.sas");
-        //    demoServiceConnection = new DemoServiceConnection(this);
-        //    ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
-        //}
+            var demoServiceIntent = new Intent("com.xamarin.sas");
+            demoServiceConnection = new DemoServiceConnection(this);
+            ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
+        }
 
         protected override void OnResume()
         {
@@ -185,10 +187,10 @@ namespace sas
             {
                 //do nothing
             }
-         
-            var demoServiceIntent = new Intent("com.xamarin.sas");
-            demoServiceConnection = new DemoServiceConnection(this);
-            ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
+
+            //var demoServiceIntent = new Intent("com.xamarin.sas");
+            //demoServiceConnection = new DemoServiceConnection(this);
+            //ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
         }
 
         protected override void OnDestroy()
@@ -267,7 +269,7 @@ namespace sas
                 // Remove the last comma from the end of the address.
                 _addressText = deviceAddress.ToString();
                 txtaddress.Text = _addressText;
-                  mProgress.Visibility = ViewStates.Gone;
+                 // mProgress.Visibility = ViewStates.Gone;
             }
             else
             {
@@ -563,25 +565,31 @@ namespace sas
                         //actualizar localmente
                         servicio.ID = ID;
                         servicio.codEstado = regservicio.codEstado;
+                        servicio.Estado = regservicio.Estado;
                         servicio.HoraEstado = regservicio.HoraEstado;
                         ServicioManager.SaveTask(servicio);
                         GuardarDatos(regservicio);
 
                         //si es el ultimo evento
-                        Intent i = new Intent(BaseContext, typeof(Servicios));
-                        Bundle valuesForActivity = new Bundle();
-                        valuesForActivity.PutInt("GPS", 1);
-                        i.PutExtras(valuesForActivity);
-                        // Closing all the Activities
-                        i.SetFlags(ActivityFlags.ClearTask);
+                        //Intent i = new Intent(BaseContext, typeof(Servicios));
+                        //Bundle valuesForActivity = new Bundle();
+                        //valuesForActivity.PutInt("GPS", 1);
+                        //i.PutExtras(valuesForActivity);
+                        //// Closing all the Activities
+                        //i.SetFlags(ActivityFlags.ClearTask);
 
-                        // Add new Flag to start new Activity
-                        i.SetFlags(ActivityFlags.NewTask);
+                        //// Add new Flag to start new Activity
+                        //i.SetFlags(ActivityFlags.NewTask);
 
-                        // Staring service Activity
-                        BaseContext.StartActivity(i);
+                        //// Staring service Activity
+                        //BaseContext.StartActivity(i);
 
-                
+
+                        //Finish();
+                        Intent intent = new Intent();
+                        intent.SetClass(BaseContext, typeof(Servicios));
+                        intent.SetFlags(ActivityFlags.ReorderToFront);
+                        StartActivity(intent);
                         Finish();
                     }
                     break;
@@ -670,8 +678,9 @@ namespace sas
             builder.SetCancelable(true);
             builder.SetPositiveButton("Si", delegate
             {
-                mProgress.Indeterminate = true;
-                mProgress.Visibility = ViewStates.Visible;
+                //mProgress.Indeterminate = true;
+                // mProgress.Visibility = ViewStates.Visible;
+              
                 GuardarEstadoInicial();
              });
             builder.SetNegativeButton("No", delegate { return; });
@@ -728,6 +737,9 @@ namespace sas
                 servicio.codEstado = regservicio.codEstado;
                 servicio.HoraEstado = regservicio.HoraEstado;
                 ServicioManager.SaveTask(servicio);
+
+             
+
                 GuardarDatos(regservicio);
 
 
@@ -750,7 +762,7 @@ namespace sas
                 //    await GuardarDatos(regservicio);
 
                 //}
-                mProgress.Visibility = ViewStates.Gone;
+                //mProgress.Visibility = ViewStates.Gone;
                 Intent intent = new Intent();
                 intent.SetClass(BaseContext, typeof(Servicios));
                 intent.SetFlags(ActivityFlags.ReorderToFront);
@@ -770,8 +782,9 @@ namespace sas
             builder.SetPositiveButton("Si", delegate
             {
 
-                mProgress.Indeterminate = true;
-                mProgress.Visibility = ViewStates.Visible;
+                //mProgress.Indeterminate = true;
+                //  mProgress.Visibility = ViewStates.Visible;
+       
                 GuardarResultados();
 
             });
@@ -819,7 +832,7 @@ namespace sas
                     if (string.IsNullOrEmpty(txtDestinoDesenlace.Text))
                     {
                         Toast.MakeText(this, "Debe ingresar un desenlace", ToastLength.Long).Show();
-                        mProgress.Visibility = ViewStates.Gone;
+                       // mProgress.Visibility = ViewStates.Gone;
                         return;
                     }
                     else
@@ -867,7 +880,7 @@ namespace sas
                     if (string.IsNullOrEmpty(txtDestinoDesenlace.Text))
                     {
                         Toast.MakeText(this, "Debe ingresar una institución", ToastLength.Long).Show();
-                        mProgress.Visibility = ViewStates.Gone;
+                       // mProgress.Visibility = ViewStates.Gone;
                         return;
                     }
                     else
@@ -938,7 +951,7 @@ namespace sas
 
                 GuardarDatos(regservicio);
 
-                mProgress.Visibility = ViewStates.Gone;
+               // mProgress.Visibility = ViewStates.Gone;
 
                 Intent intent = new Intent();
                 intent.SetClass(BaseContext, typeof(Servicios));
@@ -975,21 +988,21 @@ namespace sas
             ServicioItemManager.SaveTask(servicioDetalle);
             Toast.MakeText(this, "Registro guardado Correctamente", ToastLength.Long).Show();
 
-           
+
             if (isBound)
             {
                 RunOnUiThread(() =>
                 {
                     binder.GetDemoService().SincronizarEstados();
-                    string text = binder.GetDemoService().GetText();
+                   // string text = binder.GetDemoService().GetText();
                     //Console.WriteLine("{0} returned from DemoService", text);
-                    Toast.MakeText(this, string.Format( "{0} returned from DemoService", text), ToastLength.Long).Show();
+                  //  Toast.MakeText(this, string.Format("{0} returned from DemoService", text), ToastLength.Long).Show();
                 }
 
             );
             }
 
-           }
+        }
 
 
         private void actualizarInstitucionDesenlace(RegistrarServicioModel servTranslado)
@@ -1019,9 +1032,9 @@ namespace sas
                 RunOnUiThread(() =>
                 {
                     binder.GetDemoService().SincronizarEstados();
-                    string text = binder.GetDemoService().GetText();
+                    //string text = binder.GetDemoService().GetText();
                     //Console.WriteLine("{0} returned from DemoService", text);
-                    Toast.MakeText(this, string.Format("{0} returned from DemoService", text), ToastLength.Long).Show();
+                   // Toast.MakeText(this, string.Format("{0} returned from DemoService", text), ToastLength.Long).Show();
                 }
 
             );

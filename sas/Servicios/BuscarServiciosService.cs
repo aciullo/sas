@@ -104,7 +104,7 @@ namespace sas
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + session.getAccessToken());
                 // string url = string.Format("api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
-                string url = string.Format("api/sas_ServiciosApi/{0}/{1}/{2}", movil.TrimEnd(), "001", "P");
+                string url = string.Format("api/sas_ServiciosApi/{0}/{1}/{2}", movil.TrimEnd(), "002", "D");
                 var response = await client.GetAsync(url);
                 result = response.Content.ReadAsStringAsync().Result;
                 //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
