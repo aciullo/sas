@@ -556,45 +556,51 @@ namespace sas
                     }
                     else
                     {
-                        //conectar servicio
-                        var demoServiceIntent = new Intent("com.xamarin.sas");
-                        demoServiceConnection = new DemoServiceConnection(this);
-                        ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
 
-                        Toast.MakeText(this, "Servicio Finalizado", ToastLength.Long).Show();
-                       
-                       var regservicio = new RegistrarServicioModel
-                        {
-                            id_Solicitud = servicio.id_Solicitud,
-                            NumeroSolicitud = servicio.NumeroSolicitud,
-                            HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now),
-                            codEstado = "009",
-                            Estado = "C"
-                        };
-                        //actualizar localmente
-                        servicio.ID = ID;
-                        servicio.codEstado = regservicio.codEstado;
-                        servicio.Estado = regservicio.Estado;
-                        servicio.HoraEstado = regservicio.HoraEstado;
-                        ServicioManager.SaveTask(servicio);
-                        GuardarDatos(regservicio);
+                        btnRegistrarResultado.Text = "Finalizar Servicio";
+                        btnRegistrarResultado.Visibility = ViewStates.Visible;
+                        btnRegistrarResultado.Enabled = true;
 
-                        //si es el ultimo evento
-                        Intent i = new Intent(BaseContext, typeof(Servicios));
-                        Bundle valuesForActivity = new Bundle();
-                        valuesForActivity.PutInt("GPS", 1);
-                        i.PutExtras(valuesForActivity);
-                        // Closing all the Activities
-                        i.SetFlags(ActivityFlags.ClearTask);
+                        btnRegistroInicial.Visibility = ViewStates.Invisible;
+                        btnVolverBase.Visibility = ViewStates.Invisible;
+                        btnTranslado.Visibility = ViewStates.Invisible;
+                        //Toast.MakeText(this, "Servicio Finalizado", ToastLength.Long).Show();
 
-                        // Add new Flag to start new Activity
-                        i.SetFlags(ActivityFlags.NewTask);
+                        //comentado 221116
+                        //var regservicio = new RegistrarServicioModel
+                        // {
+                        //     id_Solicitud = servicio.id_Solicitud,
+                        //     NumeroSolicitud = servicio.NumeroSolicitud,
+                        //     HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now),
+                        //     codEstado = "009",
+                        //     Estado = "C"
+                        // };
+                        // //actualizar localmente
+                        // servicio.ID = ID;
+                        // servicio.codEstado = regservicio.codEstado;
+                        // servicio.Estado = regservicio.Estado;
+                        // servicio.HoraEstado = regservicio.HoraEstado;
+                        // ServicioManager.SaveTask(servicio);
+                        // GuardarDatos(regservicio);
 
-                        // Staring service Activity
-                        BaseContext.StartActivity(i);
+                        // //si es el ultimo evento
+                        // Intent i = new Intent(BaseContext, typeof(Servicios));
+                        // Bundle valuesForActivity = new Bundle();
+                        // valuesForActivity.PutInt("GPS", 1);
+                        // i.PutExtras(valuesForActivity);
+                        // // Closing all the Activities
+                        // i.SetFlags(ActivityFlags.ClearTask);
+
+                        // // Add new Flag to start new Activity
+                        // i.SetFlags(ActivityFlags.NewTask);
+
+                        // // Staring service Activity
+                        // BaseContext.StartActivity(i);
 
 
-                        Finish();
+                        // Finish();
+                        //hasta comentado 221116
+
                         //Intent intent = new Intent();
                         //intent.SetClass(BaseContext, typeof(Servicios));
                         //intent.SetFlags(ActivityFlags.ReorderToFront);
@@ -934,7 +940,10 @@ namespace sas
                     //regTransladoButton.BackgroundColor = Color.Green;
                     btnRegistrarResultado.Text = "Registrar Llegada a Base";
                     break;
+                case "Finalizar Servicio":
+                    idestado = "009";
 
+                    break;
                 default:
                     idestado = "";
                     break;
@@ -948,7 +957,7 @@ namespace sas
                     NumeroSolicitud = servicio.NumeroSolicitud,
                     HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now),
                     codEstado = idestado,
-                    Estado = servicio.Estado
+                    Estado = (idestado=="009") ? "C" : servicio.Estado
 
                 };
 
@@ -956,6 +965,7 @@ namespace sas
                 servicio.ID = ID;
                 servicio.codEstado = regservicio.codEstado;
                 servicio.HoraEstado = regservicio.HoraEstado;
+
                 ServicioManager.SaveTask(servicio);
 
                 GuardarDatos(regservicio);
@@ -986,7 +996,7 @@ namespace sas
             servicioDetalle.codMovil = movil;
             servicioDetalle.Estado = servicio.Estado;
             servicioDetalle.codEstado = servicio.codEstado;
-            servicioDetalle.HoraEstado = servicio.HoraEstado;
+            servicioDetalle.HoraEstado = regservicio.HoraEstado;
             servicioDetalle.codInstitucion = regservicio.codInstitucion;
             servicioDetalle.codDesenlace = regservicio.codDesenlace;
             servicioDetalle.Enviado = false;
