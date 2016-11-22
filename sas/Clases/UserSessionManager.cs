@@ -26,7 +26,7 @@ namespace sas.Clases
         public static string PREFERENCE_USER = "PREFERENCE_USER";
         public static string PREFERENCE_IDMOVIL = "PREFERENCE_IDMOVIL";
         public static string PREFERENCE_TOKEN = "TOKEN";
-
+        public static string PREFERENCE_GOOGLETOKEN = "GOOGLETOKEN";
         public static string PREFERENCE_CONEXION = "PREFERENCE_CONEXION";
         // All Shared Preferences Keys
         private static String IS_LOGIN = "IsLoggedIn";
@@ -64,6 +64,18 @@ namespace sas.Clases
         {
             mPrefsEditor.PutString(PREFERENCE_CONEXION, conn);
             mPrefsEditor.Commit();
+        }
+
+
+        public void saveGoogleToken(string gtoken)
+        {
+            mPrefsEditor.PutString(PREFERENCE_GOOGLETOKEN, gtoken);
+            mPrefsEditor.Commit();
+        }
+
+        public string getGoogleToken()
+        {
+            return mSharedPrefs.GetString(PREFERENCE_GOOGLETOKEN, "");
         }
 
         public string getAccessKey()
@@ -160,13 +172,14 @@ namespace sas.Clases
     * */
         public void logoutUser()
         {
+
+
+
+
             // Clearing all data from Shared Preferences
             mPrefsEditor.Clear();
             mPrefsEditor.Commit();
 
-            
-            
-            
             // After logout redirect user to Loing Activity
             Intent i = new Intent(mContext, typeof(MainActivity));
 
@@ -181,5 +194,7 @@ namespace sas.Clases
 
             
         }
+
+       
 }
 }

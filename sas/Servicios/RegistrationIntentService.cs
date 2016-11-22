@@ -46,6 +46,7 @@ namespace sas
             }
         }
 
+        
         void SendRegistrationToAppServer(string token)
         {
 
@@ -54,7 +55,7 @@ namespace sas
             //recuperar la base para la coneccion
             IPCONN = session.getAccessConn();
             access_token = session.getAccessToken();
-
+            session.saveGoogleToken(token);
             // Add custom implementation here as needed.
             string result;
 
@@ -106,6 +107,13 @@ namespace sas
         {
             var pubSub = GcmPubSub.GetInstance(this);
             pubSub.Subscribe(token, "/topics/global",null);
+            pubSub.Unsubscribe(token, "/topics/global");
+        }
+
+        void UbSubscribe(string token)
+        {
+            var pubSub = GcmPubSub.GetInstance(this);
+            pubSub.Unsubscribe(token, "/topics/global");
         }
     }
 }

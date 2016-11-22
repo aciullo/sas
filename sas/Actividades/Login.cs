@@ -111,44 +111,44 @@ namespace sas
         
         
 
-        public bool IsPlayServicesAvailable()
-        {
-            string msgText = "";
-            //AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            //builder.SetTitle("Aviso");
+        //public bool IsPlayServicesAvailable()
+        //{
+        //    string msgText = "";
+        //    //AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //    //builder.SetTitle("Aviso");
 
-            //builder.SetCancelable(true);
-            //builder.SetPositiveButton("OK", delegate { return; });
+        //    //builder.SetCancelable(true);
+        //    //builder.SetPositiveButton("OK", delegate { return; });
 
-            int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
-            if (resultCode != ConnectionResult.Success)
-            {
-                if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
-                {
-                    msgText = GoogleApiAvailability.Instance.GetErrorString(resultCode);
-                    //builder.SetMessage(msgText);
-                    //builder.Show();
-                }
-                else
-                {
-                    msgText = "Sorry, this device is not supported";
-                    //builder.SetMessage(msgText);
-                    //builder.Show();
-                    //Finish();
-                }
-                Log.Debug("gcm", msgText);
-                return false;
-            }
-            else
-            {
-                msgText = "Google Play Services is available.";
-                //builder.SetMessage(msgText);
-                //builder.Show();
-                Log.Debug("gcm", msgText);
+        //    int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
+        //    if (resultCode != ConnectionResult.Success)
+        //    {
+        //        if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
+        //        {
+        //            msgText = GoogleApiAvailability.Instance.GetErrorString(resultCode);
+        //            //builder.SetMessage(msgText);
+        //            //builder.Show();
+        //        }
+        //        else
+        //        {
+        //            msgText = "Sorry, this device is not supported";
+        //            //builder.SetMessage(msgText);
+        //            //builder.Show();
+        //            //Finish();
+        //        }
+        //        Log.Debug("gcm", msgText);
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        msgText = "Google Play Services is available.";
+        //        //builder.SetMessage(msgText);
+        //        //builder.Show();
+        //        Log.Debug("gcm", msgText);
 
-                return true;
-            }
-        }
+        //        return true;
+        //    }
+        //}
         private async void BtnIngresar_Click(object sender, EventArgs e)
         {
 
@@ -239,7 +239,11 @@ namespace sas
 
                 var deviceUser = JsonConvert.DeserializeObject<List<DeviceUserModel>>(result.Result);
 
-             
+                //if (IsPlayServicesAvailable())
+                //{
+                //    var intent = new Intent(this, typeof(RegistrationIntentService));
+                //    StartService(intent);
+                //}
 
                 session.createLoginSession((deviceUser[0].nombres + " " + deviceUser[0].apellidos), deviceUser[0].codMovil, access_token, deviceUser[0].usuario);
 

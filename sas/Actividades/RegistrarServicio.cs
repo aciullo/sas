@@ -155,6 +155,7 @@ namespace sas
 
             //mostrar botones segun ÚLTIMO estado
             LoadStateButtons(codEstadoRecibido);
+
         }
 
         protected override void OnStart()
@@ -164,6 +165,9 @@ namespace sas
             var demoServiceIntent = new Intent("com.xamarin.sas");
             demoServiceConnection = new DemoServiceConnection(this);
             ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
+
+
+           
         }
 
         protected override void OnResume()
@@ -552,7 +556,12 @@ namespace sas
                     }
                     else
                     {
-                       Toast.MakeText(this, "Servicio Finalizado", ToastLength.Long).Show();
+                        //conectar servicio
+                        var demoServiceIntent = new Intent("com.xamarin.sas");
+                        demoServiceConnection = new DemoServiceConnection(this);
+                        ApplicationContext.BindService(demoServiceIntent, demoServiceConnection, Bind.AutoCreate);
+
+                        Toast.MakeText(this, "Servicio Finalizado", ToastLength.Long).Show();
                        
                        var regservicio = new RegistrarServicioModel
                         {
@@ -571,26 +580,26 @@ namespace sas
                         GuardarDatos(regservicio);
 
                         //si es el ultimo evento
-                        //Intent i = new Intent(BaseContext, typeof(Servicios));
-                        //Bundle valuesForActivity = new Bundle();
-                        //valuesForActivity.PutInt("GPS", 1);
-                        //i.PutExtras(valuesForActivity);
-                        //// Closing all the Activities
-                        //i.SetFlags(ActivityFlags.ClearTask);
+                        Intent i = new Intent(BaseContext, typeof(Servicios));
+                        Bundle valuesForActivity = new Bundle();
+                        valuesForActivity.PutInt("GPS", 1);
+                        i.PutExtras(valuesForActivity);
+                        // Closing all the Activities
+                        i.SetFlags(ActivityFlags.ClearTask);
 
-                        //// Add new Flag to start new Activity
-                        //i.SetFlags(ActivityFlags.NewTask);
+                        // Add new Flag to start new Activity
+                        i.SetFlags(ActivityFlags.NewTask);
 
-                        //// Staring service Activity
-                        //BaseContext.StartActivity(i);
+                        // Staring service Activity
+                        BaseContext.StartActivity(i);
 
 
-                        //Finish();
-                        Intent intent = new Intent();
-                        intent.SetClass(BaseContext, typeof(Servicios));
-                        intent.SetFlags(ActivityFlags.ReorderToFront);
-                        StartActivity(intent);
                         Finish();
+                        //Intent intent = new Intent();
+                        //intent.SetClass(BaseContext, typeof(Servicios));
+                        //intent.SetFlags(ActivityFlags.ReorderToFront);
+                        //StartActivity(intent);
+                        //Finish();
                     }
                     break;
 

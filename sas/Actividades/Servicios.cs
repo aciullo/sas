@@ -158,7 +158,7 @@ namespace sas
                     msgText = "Sorry, this device is not supported";
                     //builder.SetMessage(msgText);
                     //builder.Show();
-                   
+
                 }
                 return false;
             }
@@ -189,8 +189,13 @@ namespace sas
             }
             if (item.TitleFormatted.ToString() == "Cerrar Sesión")
             {
+                //para cerrar sesión y desuscribir el push de google
+                var intent = new Intent(this, typeof(UnRegistrationIntentService));
+                StartService(intent);
+
                 session.logoutUser();
-               // StopService(new Intent("com.sas.searchpending"));
+                                
+                // StopService(new Intent("com.sas.searchpending"));
                 StopService(new Intent("com.xamarin.sas"));
                 Finish();
             }
@@ -204,7 +209,8 @@ namespace sas
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.SetTitle("Información");
-                builder.SetMessage("Futura Software Versión 1.0 Copyright © 2016 - Virginio González");
+               
+                builder.SetMessage("Futura Software Versión 1.0 Copyright © 2016" + this.Application.ApplicationInfo.ToString());
                 builder.SetPositiveButton("OK", delegate
                 { return; });
                 builder.SetCancelable(false);
@@ -427,26 +433,26 @@ namespace sas
                 return;
             }
 
-            //if (t.codEstado == "008")
-            //{
-            //    //
-            //    if (! (!(string.IsNullOrEmpty(t.codInstitucion)) && t.codInstitucion != "Null"))
-            //    {
+            if (t.codEstado == "008")
+            {
+                //
+                if (!(!(string.IsNullOrEmpty(t.codInstitucion)) && t.codInstitucion != "Null"))
+                {
 
-            //        Finish();
+                    Finish();
 
-                     
-            //        //        var newActivity = new Intent(this, typeof(RegistrarServicio));
 
-            //        //        Bundle valuesForActivity = new Bundle();
-            //        //        valuesForActivity.PutInt("ServiciosDet", t.ID);
-            //        //        newActivity.PutExtras(valuesForActivity);
+                    //        var newActivity = new Intent(this, typeof(RegistrarServicio));
 
-            //        //        //newActivity.PutExtra("ServiciosDet", t.ID);
-            //        //        StartActivity(newActivity);
-            //        //        return;
-            //    }
-            //}
+                    //        Bundle valuesForActivity = new Bundle();
+                    //        valuesForActivity.PutInt("ServiciosDet", t.ID);
+                    //        newActivity.PutExtras(valuesForActivity);
+
+                    //        //newActivity.PutExtra("ServiciosDet", t.ID);
+                    //        StartActivity(newActivity);
+                    //        return;
+                }
+            }
             //    else
             //    {
             //        Toast.MakeText(this, "Servicio Finalizado", ToastLength.Long).Show();
@@ -553,7 +559,12 @@ namespace sas
                 if ((response.ReasonPhrase== "Unauthorized"))
                 {
                     Toast.MakeText(this, "La sesión a caducado, vuelva a ingresar", ToastLength.Long).Show();
-                    session.logoutUser();
+
+                    //para cerrar sesión y desuscribir el push de google
+                    var intent = new Intent(this, typeof(UnRegistrationIntentService));
+                    StartService(intent);
+
+                    //session.logoutUser();
                     // StopService(new Intent("com.sas.searchpending"));
                     StopService(new Intent("com.xamarin.sas"));
                     Finish();
