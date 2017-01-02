@@ -210,7 +210,7 @@ namespace sas
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.SetTitle("Información");
                
-                builder.SetMessage("Futura Software Versión 1.0 Copyright © 2016" + this.Application.ApplicationInfo.ToString());
+                builder.SetMessage("Futura Software Versión "+ PackageManager.GetPackageInfo(PackageName, 0).VersionName + "  Copyright © 2016");
                 builder.SetPositiveButton("OK", delegate
                 { return; });
                 builder.SetCancelable(false);

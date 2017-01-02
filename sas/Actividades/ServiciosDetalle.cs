@@ -78,7 +78,7 @@ namespace sas
             txtNombrePaciente.Text = servicio.nombrePaciente;
             txtEdad.Text = servicio.edadPaciente.ToString();
             txtSolicitante.Text = servicio.nombreSolicitante;
-            txtDireccion1.Text = servicio.direccionReferecia + ", " + servicio.direccionReferecia2 + " Nro Casa" + servicio.numeroCasa;
+           // txtDireccion1.Text = servicio.direccionReferecia + ", " + servicio.direccionReferecia2 + " Nro Casa" + servicio.numeroCasa;
             txtHoraLlamada.Text = servicio.hora_Llamado;
             txtTipo.Text = servicio.producto;
             //if (!string.IsNullOrEmpty(servicio.codMotivo1))
@@ -93,7 +93,13 @@ namespace sas
             //{
             //    await LoadMotivo3();
             //}
-            string cadenamotivo = (!string.IsNullOrEmpty(servicio.codMotivo1)) ? servicio.codMotivo1 : string.Empty ;
+
+            string cadena = (!string.IsNullOrEmpty(servicio.direccionReferecia)) ? servicio.direccionReferecia : string.Empty;
+            cadena = cadena + " " + ((!string.IsNullOrEmpty(servicio.direccionReferecia2)) ? "," + servicio.direccionReferecia2 : string.Empty);
+            cadena = cadena + " " + ((!string.IsNullOrEmpty(servicio.numeroCasa)) ? ", Nro: " + servicio.numeroCasa : string.Empty);
+            txtDireccion1.Text = cadena;
+
+          string cadenamotivo = (!string.IsNullOrEmpty(servicio.codMotivo1)) ? servicio.codMotivo1 : string.Empty ;
             cadenamotivo = cadenamotivo + " " + ((!string.IsNullOrEmpty(servicio.codMotivo2)) ? "," + servicio.codMotivo2 : string.Empty);
             cadenamotivo = cadenamotivo + " " + ((!string.IsNullOrEmpty(servicio.codMotivo3)) ? "," + servicio.codMotivo3 : string.Empty);
             cadenamotivo = cadenamotivo + " " + ((!string.IsNullOrEmpty(servicio.OtroMotivo)) ? "," + servicio.OtroMotivo : string.Empty);

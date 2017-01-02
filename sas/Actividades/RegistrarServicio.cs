@@ -119,8 +119,15 @@ namespace sas
             txtNroSolicitud.Text = servicio.NumeroSolicitud.ToString();
             txtNombrePaciente.Text = servicio.nombrePaciente;
             txtEdad.Text = servicio.edadPaciente.ToString();
-            txtDireccion1.Text = servicio.direccionReferecia.ToString();
+            //txtDireccion1.Text = servicio.direccionReferecia.ToString();
             txtTipo.Text = servicio.producto.ToString();
+
+            string cadena = (!string.IsNullOrEmpty(servicio.direccionReferecia)) ? servicio.direccionReferecia : string.Empty;
+            cadena = cadena + " " + ((!string.IsNullOrEmpty(servicio.direccionReferecia2)) ? "," + servicio.direccionReferecia2 : string.Empty);
+            cadena = cadena + " " + ((!string.IsNullOrEmpty(servicio.numeroCasa)) ? ", Nro: " + servicio.numeroCasa : string.Empty);
+
+            txtDireccion1.Text = cadena;
+
             string cadenamotivo = (!string.IsNullOrEmpty(servicio.codMotivo1)) ? servicio.codMotivo1 : string.Empty;
             cadenamotivo = cadenamotivo + " " + ((!string.IsNullOrEmpty(servicio.codMotivo2)) ? "," + servicio.codMotivo2 : string.Empty);
             cadenamotivo = cadenamotivo + " " + ((!string.IsNullOrEmpty(servicio.codMotivo3)) ? "," + servicio.codMotivo3 : string.Empty);

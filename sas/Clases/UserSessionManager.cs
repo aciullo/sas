@@ -36,8 +36,8 @@ namespace sas.Clases
             this.mContext = context;
             mSharedPrefs = PreferenceManager.GetDefaultSharedPreferences(mContext);
             mPrefsEditor = mSharedPrefs.Edit();
-            // string conn = "http://sasa.futura.com.py:88/futura/";
-             string conn = "http://futura.com.py:88/sas_futura/";
+            string conn = "http://sasa.futura.com.py:88/futura/";
+           //  string conn = "http://futura.com.py:88/sas_futura/";
           
             if (string.IsNullOrEmpty(getAccessConn()) || getAccessConn()!= conn)
             {
