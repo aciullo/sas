@@ -19,12 +19,14 @@
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<permission android:name="py.com.futura.sas.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	<application android:label="Servicios" android:icon="@drawable/Icon">
-		<receiver android:name="com.google.android.gms.gcm.GcmReceiver" android:exported="true" android:permission="com.google.android.c2dm.permission.SEND">
+    
+		<receiver android:name="com.google.android.gms.gcm.GcmReceiver" android:enabled="true" android:exported="true" android:permission="com.google.android.c2dm.permission.SEND">
 			<intent-filter>
 				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
 				<action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 				<category android:name="py.com.futura.sas" />
 			</intent-filter>
 		</receiver>
+   
 	</application>
 </manifest>

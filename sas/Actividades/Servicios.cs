@@ -125,51 +125,51 @@ namespace sas
      
             lstServicios.ItemClick += LstServicios_ItemClick; ;
 
-            if (IsPlayServicesAvailable())
-            {
-                var intent = new Intent(this, typeof(RegistrationIntentService));
-                StartService(intent);
-            }
+            //if (IsPlayServicesAvailable())
+            //{
+            //    var intent = new Intent(this, typeof(RegistrationIntentService));
+            //    StartService(intent);
+            //}
 
 
 
         }
 
-        public bool IsPlayServicesAvailable()
-        {
-            string msgText = "";
-            //AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            //builder.SetTitle("Aviso");
+        //public bool IsPlayServicesAvailable()
+        //{
+        //    string msgText = "";
+        //    //AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //    //builder.SetTitle("Aviso");
 
-            //builder.SetCancelable(true);
-            //builder.SetPositiveButton("OK", delegate { return; });
+        //    //builder.SetCancelable(true);
+        //    //builder.SetPositiveButton("OK", delegate { return; });
 
-            int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
-            if (resultCode != ConnectionResult.Success)
-            {
-                if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
-                {
-                    msgText = GoogleApiAvailability.Instance.GetErrorString(resultCode);
-                    //builder.SetMessage(msgText);
-                    //builder.Show();
-                }
-                else
-                {
-                    msgText = "Sorry, this device is not supported";
-                    //builder.SetMessage(msgText);
-                    //builder.Show();
+        //    int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
+        //    if (resultCode != ConnectionResult.Success)
+        //    {
+        //        if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
+        //        {
+        //            msgText = GoogleApiAvailability.Instance.GetErrorString(resultCode);
+        //            //builder.SetMessage(msgText);
+        //            //builder.Show();
+        //        }
+        //        else
+        //        {
+        //            msgText = "Sorry, this device is not supported";
+        //            //builder.SetMessage(msgText);
+        //            //builder.Show();
 
-                }
-                return false;
-            }
-            else
-            {
-                msgText = "Google Play Services is available.";
-                //builder.SetMessage(msgText);
-                //builder.Show();
-                return true;
-            }
-        }
+        //        }
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        msgText = "Google Play Services is available.";
+        //        //builder.SetMessage(msgText);
+        //        //builder.Show();
+        //        return true;
+        //    }
+        //}
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             MenuInflater.Inflate(Resource.Menu.home, menu);

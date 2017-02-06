@@ -7,7 +7,9 @@ using Android.Util;
 
 namespace sas
 {
+    [BroadcastReceiver(Permission = "com.google.android.c2dm.permission.SEND")]
     [Service(Exported = false), IntentFilter(new[] { "com.google.android.c2dm.intent.RECEIVE" })]
+    [Android.Runtime.Preserve(AllMembers =true)]
     public class MyGcmListenerService : GcmListenerService
     {
         public override void OnMessageReceived(string from, Bundle data)
