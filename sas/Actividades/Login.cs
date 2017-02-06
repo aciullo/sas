@@ -41,7 +41,7 @@ namespace sas
                    {"expires_in", ""},
                   };
 
-        protected override void OnCreate(Bundle bundle)
+        protected async override void  OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
@@ -85,26 +85,13 @@ namespace sas
             //    mProgress.IncrementProgressBy(mProgressStatus);
             //};
 
- 
 
+           
             if (session.isLoggedIn())
             {
-                //StartService(new Intent("com.sas.searchpending"));
-                StartService(new Intent("com.xamarin.sas"));
-                Intent newActivity = new Intent(this, typeof(Servicios));
-                    Bundle valuesForActivity = new Bundle();
-                    valuesForActivity.PutInt("GPS", 0);
-                    newActivity.PutExtras(valuesForActivity);
-                    StartActivity(newActivity);
-
-
-                //if (IsPlayServicesAvailable())
-                //{
-                //    var intent = new Intent(this, typeof(RegistrationIntentService));
-                //    StartService(intent);
-                //}
-
-                Finish();
+                //verificar token 
+                await VerificarSesion();
+              
             }
           
         }
@@ -371,46 +358,111 @@ namespace sas
                 return;
             }
         }
-        #region "codigo comentado"
-        //actualizar idregistro
-        //string result;
-
-        //var person = new SimpledeviceUser();
-        //person.usuario = "01";
-        //person.pass = "1234";
-        //person.codMovil = "10";
-        //person.nombres = "Pepe";
-        //person.apellidos = "Gonzalez";
-        //person.idRegistro="prueba2";
 
 
+        private async Task VerificarSesion()
+        {
+            string result;
 
-        //var jsonResquest = JsonConvert.SerializeObject(person);
-        //var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
+            try
+            {
 
-        //try
-        //{
+                HttpClient client = new HttpClient();
+                client.MaxResponseContentBufferSize = 256000;
 
-        //    HttpClient client = new HttpClient();
-        //    client.MaxResponseContentBufferSize = 256000;
-        //    client.BaseAddress = new Uri("http://192.168.0.102:88");
-
-        //    string url = string.Format("api/DeviceUsersApi/{0}", person.usuario);
-        //    var response = await client.PutAsync(url, content);
-
-        //    result = response.Content.ReadAsStringAsync().Result;
-
-        //}
-        //catch (Exception ex)
-        //{
-
-        //    Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
-        //    return;
-        //}
+                // client.BaseAddress = new Uri("http://181.120.121.221:88");
+                client.BaseAddress = new Uri(IPCONN);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + session.getAccessToken());
 
 
-        //Toast.MakeText(this, "Guardado Correctamente" , ToastLength.Long).Show();
-        #endregion
-    }
+                // string url = string.Format("api/sas_ServiciosApi/{0}/{1}/{2}", user.codMovil.TrimEnd(), "001", "P");
+                string url = string.Format("api/UsersApi/{0}", session.getAccessUserId());
+
+                var response = await client.GetAsync(url);
+                result = response.Content.ReadAsStringAsync().Result;
+                //Items = JsonConvert.DeserializeObject <List<Personas>> (result);
+                if ((response.ReasonPhrase == "Unauthorized"))
+                {
+                    Toast.MakeText(this, "La sesión a caducado, vuelva a ingresar", ToastLength.Long).Show();
+
+                    //para cerrar sesión y desuscribir el push de google
+                    var intent = new Intent(this, typeof(UnRegistrationIntentService));
+                    StartService(intent);
+
+                    //session.logoutUser();
+                    // StopService(new Intent("com.sas.searchpending"));
+                    StopService(new Intent("com.xamarin.sas"));
+                    //Finish();
+                    return;
+                }
+
+                //StartService(new Intent("com.sas.searchpending"));
+                StartService(new Intent("com.xamarin.sas"));
+                Intent newActivity = new Intent(this, typeof(Servicios));
+                Bundle valuesForActivity = new Bundle();
+                valuesForActivity.PutInt("GPS", 0);
+                newActivity.PutExtras(valuesForActivity);
+                StartActivity(newActivity);
+
+
+                //if (IsPlayServicesAvailable())
+                //{
+                //    var intent = new Intent(this, typeof(RegistrationIntentService));
+                //    StartService(intent);
+                //}
+
+                Finish();
+
+            }
+            catch (Exception ex)
+            {
+
+                Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+
+                return;
+            }
+        }
+            #region "codigo comentado"
+            //actualizar idregistro
+            //string result;
+
+            //var person = new SimpledeviceUser();
+            //person.usuario = "01";
+            //person.pass = "1234";
+            //person.codMovil = "10";
+            //person.nombres = "Pepe";
+            //person.apellidos = "Gonzalez";
+            //person.idRegistro="prueba2";
+
+
+
+            //var jsonResquest = JsonConvert.SerializeObject(person);
+            //var content = new StringContent(jsonResquest, Encoding.UTF8, "text/json");
+
+            //try
+            //{
+
+            //    HttpClient client = new HttpClient();
+            //    client.MaxResponseContentBufferSize = 256000;
+            //    client.BaseAddress = new Uri("http://192.168.0.102:88");
+
+            //    string url = string.Format("api/DeviceUsersApi/{0}", person.usuario);
+            //    var response = await client.PutAsync(url, content);
+
+            //    result = response.Content.ReadAsStringAsync().Result;
+
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+            //    return;
+            //}
+
+
+            //Toast.MakeText(this, "Guardado Correctamente" , ToastLength.Long).Show();
+            #endregion
+        }
 }
 

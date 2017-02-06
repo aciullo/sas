@@ -107,10 +107,10 @@ namespace sas
         {
             var pubSub = GcmPubSub.GetInstance(this);
             pubSub.Subscribe(token, "/topics/global",null);
-            pubSub.Unsubscribe(token, "/topics/global");
+            //pubSub.Unsubscribe(token, "/topics/global");
         }
 
-        void UbSubscribe(string token)
+        void UnSubscribe(string token)
         {
             var pubSub = GcmPubSub.GetInstance(this);
             pubSub.Unsubscribe(token, "/topics/global");
