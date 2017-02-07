@@ -125,11 +125,11 @@ namespace sas
      
             lstServicios.ItemClick += LstServicios_ItemClick; ;
 
-            if (IsPlayServicesAvailable())
-            {
-                var intent = new Intent(this, typeof(RegistrationIntentService));
-                StartService(intent);
-            }
+            //if (IsPlayServicesAvailable())
+            //{
+            //    var intent = new Intent(this, typeof(RegistrationIntentService));
+            //    StartService(intent);
+            //}
 
 
 

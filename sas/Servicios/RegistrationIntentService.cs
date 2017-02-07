@@ -39,7 +39,7 @@ namespace sas
                     SendRegistrationToAppServer(token);
                     Subscribe(token);
                     
-                    WakefulBroadcastReceiver.CompleteWakefulIntent(intent);
+                   // WakefulBroadcastReceiver.CompleteWakefulIntent(intent);
                 }
             }
             catch (Exception e)

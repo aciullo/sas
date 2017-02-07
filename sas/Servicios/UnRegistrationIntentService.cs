@@ -34,7 +34,8 @@ namespace sas
 
                     //recuperar la base para la coneccion
                     googleToken = session.getGoogleToken();
-                   
+                    var instanceID = InstanceID.GetInstance(this);
+                    instanceID.DeleteInstanceID();
 
                     Log.Info("RegistrationIntentService", "GCM UnRegistration Token: " + googleToken);
                    
@@ -48,6 +49,8 @@ namespace sas
                 Log.Debug("RegistrationIntentService", "Failed to get a registration token");
                 return;
             }
+
+          
         }
               
 
