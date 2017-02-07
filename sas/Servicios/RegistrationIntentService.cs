@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Text;
 using sas.Clases;
 using System.Collections.Generic;
+using Android.Support.V4.Content;
 
 namespace sas
 {
@@ -37,6 +38,8 @@ namespace sas
                     Log.Info("RegistrationIntentService", "GCM Registration Token: " + token);
                     SendRegistrationToAppServer(token);
                     Subscribe(token);
+                    
+                    WakefulBroadcastReceiver.CompleteWakefulIntent(intent);
                 }
             }
             catch (Exception e)

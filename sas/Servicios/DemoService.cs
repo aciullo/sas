@@ -36,7 +36,7 @@ namespace sas
         {
             Log.Debug("sas", "DemoService started");
 
-           // StartServiceInForeground();
+            //StartServiceInForeground();
 
             //DoWork ();
             //if (timerSinc == null)

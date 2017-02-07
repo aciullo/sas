@@ -7,9 +7,9 @@ using Android.Util;
 
 namespace sas
 {
-    [BroadcastReceiver(Permission = "com.google.android.c2dm.permission.SEND")]
+   
     [Service(Exported = false), IntentFilter(new[] { "com.google.android.c2dm.intent.RECEIVE" })]
-    [Android.Runtime.Preserve(AllMembers =true)]
+   
     public class MyGcmListenerService : GcmListenerService
     {
         public override void OnMessageReceived(string from, Bundle data)
@@ -18,6 +18,7 @@ namespace sas
             Log.Debug("MyGcmListenerService", "From:    " + from);
             Log.Debug("MyGcmListenerService", "Message: " + message);
             SendNotification(message);
+           
         }
 
         void SendNotification(string message)
@@ -35,6 +36,11 @@ namespace sas
 
             var notificationManager = (NotificationManager)GetSystemService(Context.NotificationService);
             notificationManager.Notify(0, notificationBuilder.Build());
+
+            AlarmManager manager = (AlarmManager)GetSystemService(Context.AlarmService);
+            manager.Set(AlarmType.RtcWakeup, System.DateTime.UtcNow.Millisecond + 5000, pendingIntent);
+            // manager.set(AlarmManager.RTC, System.currentTimeMillis() + 5000, yourIntent);
+          
         }
     }
 }
