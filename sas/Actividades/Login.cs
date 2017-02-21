@@ -226,11 +226,7 @@ namespace sas
 
                 var deviceUser = JsonConvert.DeserializeObject<List<DeviceUserModel>>(result.Result);
 
-                if (IsPlayServicesAvailable())
-                {
-                    var intent = new Intent(this, typeof(RegistrationIntentService));
-                    StartService(intent);
-                }
+              
 
                 session.createLoginSession((deviceUser[0].nombres + " " + deviceUser[0].apellidos), deviceUser[0].codMovil, access_token, deviceUser[0].usuario);
 
@@ -246,13 +242,15 @@ namespace sas
                 valuesForActivity.PutInt("GPS", 0);
                 newActivity.PutExtras(valuesForActivity);
                 StartActivity(newActivity);
-               // Toast.MakeText(this, "OK", ToastLength.Long).Show();
+                // Toast.MakeText(this, "OK", ToastLength.Long).Show();
                 //btnIngresar.Enabled = true;
-                //if (IsPlayServicesAvailable())
-                //{
-                //    var intent = new Intent(this, typeof(RegistrationIntentService));
-                //    StartService(intent);
-                //}
+                if (IsPlayServicesAvailable())
+                {
+                    var intent = new Intent(this, typeof(RegistrationIntentService));
+                    StartService(intent);
+                }
+
+
                 Finish();
 
             }
