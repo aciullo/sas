@@ -325,6 +325,24 @@ namespace sas.Core
             }
         }
 
+        public int DeleteAllSendedItem()
+        {
+            lock (locker)
+            {
+                int r;
+                connection = new SqliteConnection("Data Source=" + path);
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "DELETE FROM [ServicioCab];";
+                    r = command.ExecuteNonQuery();
+                }
+                connection.Close();
+                GC.Collect();
+                return r;
+            }
+        }
+
         public bool CheckIsDataAlreadyInDBorNot(string TableName,
         string dbfield, string fieldValue)
         {

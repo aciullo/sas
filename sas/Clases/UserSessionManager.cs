@@ -208,7 +208,13 @@ namespace sas.Clases
                 ServicioItemManager.DeleteTask(item.ID);
             }
 
+            servicios = ServicioItemManager.GetServiciosToSend();
 
+            if (servicios.Count() == 0)
+            {
+                ServicioManager.DeleteAllSendedTask();
+
+            }
         }
 
        

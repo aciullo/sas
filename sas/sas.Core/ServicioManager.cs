@@ -37,6 +37,11 @@ namespace sas.Core {
 			return ServicioRepositoryADO.DeleteTask(id);
 		}
 
+        public static int DeleteAllSendedTask()
+        {
+            return ServicioRepositoryADO.DeleteAllSendedTask();
+        }
+
         public static bool CheckIsDataAlreadyInDBorNot(string TableName, string dbfield, string fieldValue)
         {
             

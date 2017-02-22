@@ -82,6 +82,12 @@ namespace sas.Core {
 		{
 			return me.db.DeleteItem(id);
 		}
+
+        public static int DeleteAllSendedTask()
+        {
+            return me.db.DeleteAllSendedItem();
+        }
+
         public static bool CheckIsDataAlreadyInDBorNot(string TableName, string dbfield, string fieldValue)
         {
             return me.db.CheckIsDataAlreadyInDBorNot(TableName, dbfield, fieldValue);
