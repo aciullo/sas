@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="?android:listPreferredItemHeight"
+      android:divider="?android:dividerVertical"
+      android:dividerPadding="8dp"
+      android:showDividers="middle">
     <LinearLayout
         android:id="@+id/Text"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dip">
+        android:paddingLeft="?android:listPreferredItemPaddingLeft"
+        android:paddingRight="?android:listPreferredItemPaddingRight"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:background="?android:selectableItemBackground">
         <TextView
             android:id="@+id/Text1"
             android:layout_width="wrap_content"
@@ -22,55 +32,64 @@
             android:layout_height="wrap_content"
             android:textSize="18dip"
             android:textColor="#FF267F00"
-            android:paddingLeft="100dip" />
+            android:paddingLeft="70dip" />
         <TextView
             android:id="@+id/Text3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dip"
             android:textColor="#FF267F00"
-            android:paddingLeft="100dip" />
+            android:paddingLeft="70dip" />
         <TextView
             android:id="@+id/Text4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dip"
             android:textColor="#FF267F00"
-            android:paddingLeft="100dip" />
+            android:paddingLeft="70dip" />
         <TextView
             android:id="@+id/Text5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dip"
             android:textColor="#FF267F00"
-            android:paddingLeft="100dip" />
+            android:paddingLeft="70dip" />
         <TextView
             android:id="@+id/Text6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dip"
             android:textColor="#FF267F00"
-            android:paddingLeft="100dip" />
+            android:paddingLeft="70dip" />
         <TextView
             android:id="@+id/Text7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dip"
             android:textColor="#FF267F00"
-            android:paddingLeft="100dip" />
+            android:paddingLeft="70dip" />
         <TextView
             android:id="@+id/Text8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dip"
             android:textColor="#FF267F00"
-            android:paddingLeft="100dip" />
+            android:paddingLeft="70dip" />
         <TextView
             android:id="@+id/Text9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dip"
             android:textColor="#FF267F00"
-            android:paddingLeft="100dip" />
+            android:paddingLeft="70dip" />
+   
+
     </LinearLayout>
-</RelativeLayout>
+ <ImageButton
+        android:id="@+id/secondary_action"
+        style="?android:borderlessButtonStyle"
+        android:layout_width="@dimen/standard_touch_target_size"
+        android:layout_height="match_parent"
+        android:src="@drawable/shutdown"
+        android:contentDescription="@string/fin_content_description" />
+</LinearLayout>

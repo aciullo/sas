@@ -137,8 +137,6 @@
     <Compile Include="Servicios\BuscarServiciosService.cs" />
     <Compile Include="Clases\BusquedaAdapter.cs" />
     <Compile Include="Clases\clsAutenticacion.cs" />
-    <Compile Include="Clases\DAServicioCab.cs" />
-    <Compile Include="Clases\DAServicioDet.cs" />
     <Compile Include="Clases\DemoMessengerService.cs" />
     <Compile Include="Servicios\DemoService.cs" />
     <Compile Include="Clases\DetServicioLocalAdapter.cs" />
@@ -259,6 +257,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\shutdown.9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\dimens.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

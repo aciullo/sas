@@ -573,26 +573,9 @@ namespace sas
                     return;
                 }
 
-            }
-            catch (Exception ex)
-            {
-
-                Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
-
-                return;
-            }
-            finally
-            {
-
-                servicios = ServicioManager.GetTasks(user.codMovil);
-
-                lstServicios.ChoiceMode = ChoiceMode.Single;
-
-                lstServicios.Adapter = new ServicesAdapter(this, servicios);
-            }
-
-            try
-            {
+    
+            //try
+            //{
                 if (string.IsNullOrEmpty(result) || result == "null")
                 {
                     // servicio = new List<ServiciosModel>();
@@ -669,23 +652,46 @@ namespace sas
                     //    datos.InsertServicio(servlocal);
                     //}
                 }
-                servicios = ServicioManager.GetTasks(user.codMovil);
+
+
+                //servicios = ServicioManager.GetTasks(user.codMovil);
                 //waitActivityIndicator.IsRunning = false;
                 //   lstServicios. = servicio;
                 //ListAdapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleExpandableListItem1, 0, items);
                 //lstServicios.Adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleExpandableListItem1,  items);
-                lstServicios.ChoiceMode = ChoiceMode.Single;
-                lstServicios.Adapter = new ServicesAdapter(this, servicios);
+                //lstServicios.ChoiceMode = ChoiceMode.Single;
+               // lstServicios.Adapter = new ServicesAdapter(this, servicios);
                 //  RunOnUiThread(() => lstServicios.Adapter = new ServicesAdapter(this, servicio));
+                //}
+                //catch (Exception ex)
+                //{
+                //    Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+                //    return;
+                //}
+
             }
             catch (Exception ex)
             {
-                Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+
+                Toast.MakeText(this, "No hay conexión intente más tarde", ToastLength.Long).Show();
+
                 return;
             }
+            finally
+            {
+
+                servicios = ServicioManager.GetTasks(user.codMovil);
+
+                lstServicios.ChoiceMode = ChoiceMode.Single;
+
+                //lstServicios.Adapter = new ServicesAdapter(this, servicios);
+
+                lstServicios.Adapter = new RegistroServicioLocalAdapter(this, servicios);
+            }
+
         }
 
-       
+
         private async void GetIndexDato(string codtabla)
         {
             

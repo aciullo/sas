@@ -3,4 +3,6 @@
     <string name="Hello">Hello World, Click Me!</string>
     <string name="ApplicationName">sas</string>
     <string name="codMovil">""</string>
+  <string name="fin_content_description">Finalizar</string>
+  <string name="touched_secondary_message">Touched secondary list item target (delete).</string>
 </resources>

@@ -40,17 +40,69 @@ namespace sas.Clases
         {
             var item = items[position];
 
-            View view = convertView;
-            if (view == null) // no view to re-use, create new
-                view = context.LayoutInflater.Inflate(Resource.Layout.ServicioLocalView, null);
-            view.FindViewById<TextView>(Resource.Id.Text1).Text = item.ID.ToString();
-            view.FindViewById<TextView>(Resource.Id.Text2).Text = "Paciente  " + item.nombrePaciente;
-            view.FindViewById<TextView>(Resource.Id.Text3).Text = "Cod Estado  " + item.codEstado;
-            view.FindViewById<TextView>(Resource.Id.Text4).Text = "Hora Estado " + item.HoraEstado;
-            view.FindViewById<TextView>(Resource.Id.Text5).Text = "Estado "  + item.Estado;
-            view.FindViewById<TextView>(Resource.Id.Text6).Text = "Desenlace  " + item.codDesenlace;
-            view.FindViewById<TextView>(Resource.Id.Text7).Text = "Intitución " + item.codInstitucion;
+            string estado = "";
+            switch (item.codEstado)
+            {
+                case ("002"):
+                    estado = "Pendiente";
+                    break;
+
+                case "009":
+                    estado = "Concluído";
+                    break;
+                default:
+                    estado = "En Proceso";
+                    break;
+
+            }
+
+            View view;
+
+            if (item.codEstado != "008")
+            { 
+            // TWO LINE LIST ITEM
+            view = context.LayoutInflater.Inflate(Android.Resource.Layout.TwoLineListItem, null);
+            view.FindViewById<TextView>(Android.Resource.Id.Text1).Text = estado + ", " + item.nombrePaciente;
+            view.FindViewById<TextView>(Android.Resource.Id.Text2).Text = item.direccionReferecia;
+            }
+
+            else
+
+            { 
+
+                view = convertView;
+                if (view == null) // no view to re-use, create new
+                    view = context.LayoutInflater.Inflate(Resource.Layout.ServicioLocalView,parent,false);
+                view.FindViewById<TextView>(Resource.Id.Text1).Text = item.ID.ToString();
+                view.FindViewById<TextView>(Resource.Id.Text2).Text = "Paciente  " + item.nombrePaciente;
+                view.FindViewById<TextView>(Resource.Id.Text3).Text = "Cod Estado  " + item.codEstado;
+                view.FindViewById<TextView>(Resource.Id.Text4).Text = "Hora Estado " + item.HoraEstado;
+                view.FindViewById<TextView>(Resource.Id.Text5).Text = "Estado "  + item.Estado;
+                view.FindViewById<TextView>(Resource.Id.Text6).Text = "Desenlace  " + item.codDesenlace;
+                view.FindViewById<TextView>(Resource.Id.Text7).Text = "Intitución " + item.codInstitucion;
+
+                view.FindViewById(Resource.Id.Text).Click += delegate {
+                    Toast.MakeText(context, "tab list", ToastLength.Short).Show();
+                };
+
+                view.FindViewById(Resource.Id.secondary_action).Click += delegate {
+                    Toast.MakeText(context, Resource.String.touched_secondary_message, ToastLength.Short).Show();
+                };
+
+                
+            }
+
+            //if (item.Estado != "008")
+            //{
+            //    view.FindViewById(Resource.Id.secondary_action).Visibility = ViewStates.Invisible;
+
+            //}
+
+
         
+
+
+
 
             return view;
         }
