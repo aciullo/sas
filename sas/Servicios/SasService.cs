@@ -49,7 +49,7 @@ namespace sas
 
         void StartServiceInForeground()
         {
-            var ongoing = new Notification(Resource.Drawable.Icon, "Enviando datos al servidor");
+            var ongoing = new Notification(Resource.Drawable.icon, "Enviando datos al servidor");
             var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(Servicios)), 0);
             ongoing.SetLatestEventInfo(this, "SasService", "SasService is running in the foreground", pendingIntent);
 
@@ -66,7 +66,7 @@ namespace sas
         void SendNotification(string mensaje)
         {
             var nMgr = (NotificationManager)GetSystemService(NotificationService);
-            var notification = new Notification(Resource.Drawable.Icon, mensaje);
+            var notification = new Notification(Resource.Drawable.icon, mensaje);
             var pendingIntent = PendingIntent.GetActivity(this, 0, new Intent(this, typeof(Servicios)), 0);
             notification.SetLatestEventInfo(this, "sas Service Notification", mensaje, pendingIntent);
             

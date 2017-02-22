@@ -53,7 +53,7 @@ namespace sas
 
         void StartServiceInForeground()
         {
-            var ongoing = new Notification(Resource.Drawable.Icon, "Sas en Segundo Plano");
+            var ongoing = new Notification(Resource.Drawable.icon, "Sas en Segundo Plano");
             // newActivity.PutExtra("ServiciosDet", servicio.ID);
             var newActivity = new Intent(this, typeof(Servicios));
             Bundle valuesForActivity = new Bundle();

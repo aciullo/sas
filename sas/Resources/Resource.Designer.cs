@@ -273,10 +273,13 @@ namespace sas
 			public const int ic_stat_ic_notification = 2130837547;
 			
 			// aapt resource value: 0x7f02002c
-			public const int Icon = 2130837548;
+			public const int icon = 2130837548;
 			
 			// aapt resource value: 0x7f02002d
 			public const int notification = 2130837549;
+			
+			// aapt resource value: 0x7f02002e
+			public const int shutdown = 2130837550;
 			
 			static Drawable()
 			{
