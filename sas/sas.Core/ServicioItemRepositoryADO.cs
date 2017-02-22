@@ -79,6 +79,10 @@ namespace sas.Core {
             return me.dbdet.GetItemsToSend();
         }
 
+        public static IEnumerable<ServicioItem> GetServiciosSended()
+        {
+            return me.dbdet.GetItemsSended();
+        }
         public static int SaveTaskDet(ServicioItem item)
         {
             return me.dbdet.SaveItem(item);

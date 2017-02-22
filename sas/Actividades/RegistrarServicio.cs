@@ -754,14 +754,14 @@ namespace sas
                     codEstado = idestado,
                     Estado = servicio.Estado
                 };
-                //actualizar localmente
+                //actualizar localmente SERVICIO CAB
                 servicio.ID = ID;
                 servicio.codEstado = regservicio.codEstado;
                 servicio.HoraEstado = regservicio.HoraEstado;
                 ServicioManager.SaveTask(servicio);
 
              
-
+                //GUARDA EN SERVICIO DETALLE
                 GuardarDatos(regservicio);
 
 

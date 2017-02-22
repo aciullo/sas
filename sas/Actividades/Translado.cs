@@ -261,7 +261,7 @@ namespace sas.Actividades
             //actualizar localmente
             servicio.ID = ID;
             servicio.codEstado = "005";
-            servicio.HoraEstado = DateTime.Now.ToString("H:mm");
+            servicio.HoraEstado = DateTime.Now.ToString("H:mm:ss");
             servicio.Estado = servicio.Estado;
             servicio.sv_ta = txtTA.Text;
             servicio.sv_fc = txtFC.Text;

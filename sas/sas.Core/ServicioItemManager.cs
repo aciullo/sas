@@ -33,6 +33,11 @@ namespace sas.Core
             return new List<ServicioItem>(ServicioItemRepositoryADO.GetServiciosToSend());
         }
 
+        public static IList<ServicioItem> GetServiciosSended()
+        {
+            return new List<ServicioItem>(ServicioItemRepositoryADO.GetServiciosSended());
+        }
+
         public static int SaveTask (ServicioItem item)
 		{
 			return ServicioItemRepositoryADO.SaveTaskDet(item);

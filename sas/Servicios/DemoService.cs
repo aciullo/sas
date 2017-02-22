@@ -23,8 +23,8 @@ namespace sas
     public class DemoService : Service
     {
         DemoServiceBinder binder;
-        IList<ServicioItem> servicios;
-        ServicioItem servicioDetalle;
+        //IList<ServicioItem> servicios;
+        //ServicioItem servicioDetalle;
         private System.Timers.Timer timer;
         private System.Timers.Timer timerSinc;
         private int counter = 0, incrementby = 1;
@@ -104,6 +104,9 @@ namespace sas
 
         public async void SincronizarEstados()
         {
+            IList<ServicioItem> servicios;
+            ServicioItem servicioDetalle;
+
             servicios = ServicioItemManager.GetServiciosToSend();
             //if (servicios.Count == 0)
             //{
@@ -132,13 +135,14 @@ namespace sas
                     response = await client.GetAsync(url);
                     result = response.Content.ReadAsStringAsync().Result;
 
-                    if  (!(string.IsNullOrEmpty(servicio.SAT) | string.IsNullOrEmpty(servicio.sv_fc) | string.IsNullOrEmpty(servicio.sv_fresp)
-                        | string.IsNullOrEmpty(servicio.sv_ta) | string.IsNullOrEmpty(servicio.sv_tempe) | string.IsNullOrEmpty(servicio.IndicacionArribo)
-                        | string.IsNullOrEmpty(servicio.Glasgow) | string.IsNullOrEmpty(servicio.Glicemia)))
+                    if  ( !string.IsNullOrEmpty(servicio.SAT)      | !string.IsNullOrEmpty(servicio.sv_fc) 
+                        | !string.IsNullOrEmpty(servicio.sv_fresp) | !string.IsNullOrEmpty(servicio.sv_ta) 
+                        | !string.IsNullOrEmpty(servicio.sv_tempe) | !string.IsNullOrEmpty(servicio.IndicacionArribo)
+                        | !string.IsNullOrEmpty(servicio.Glasgow)  | !string.IsNullOrEmpty(servicio.Glicemia))
                     { 
-                    url = string.Format("api/sas_ServiciosApi/{0}", servicio.id_Solicitud);
-                    response = await client.PutAsync(url, content);
-                    result = response.Content.ReadAsStringAsync().Result;
+                        url = string.Format("api/sas_ServiciosApi/{0}", servicio.id_Solicitud);
+                        response = await client.PutAsync(url, content);
+                        result = response.Content.ReadAsStringAsync().Result;
                     }
                     if (result.Contains("Error"))
                     {
@@ -154,8 +158,8 @@ namespace sas
                         servicioDetalle.ID = item.ID;
                         servicioDetalle.Enviado = true;
                         ServicioItemManager.SaveTask(servicioDetalle);
-                        Log.Debug("SasService", String.Format("Enviando {0}, estado {0}", item.NumeroSolicitud, item.codEstado));
-                        SendNotification(String.Format("Enviando {0}", item.NumeroSolicitud));
+                        Log.Debug("SasService", String.Format("Enviando {0}, estado {1}", item.NumeroSolicitud, item.codEstado));
+                        SendNotification(item.NumeroSolicitud, String.Format("Enviando {0}, estado {1}", item.NumeroSolicitud, item.codEstado));
 
                         
                         jsonResquest = JsonConvert.SerializeObject(item);
@@ -190,9 +194,9 @@ namespace sas
                             servicioDetalle.Enviado = true;
                             ServicioItemManager.SaveTask(servicioDetalle);
                             Log.Debug("SasService", String.Format("Enviando {0}, estado {1}", item.NumeroSolicitud, item.codEstado ));
-                            SendNotification(String.Format("Enviando {0}", item.NumeroSolicitud));
+                            SendNotification(item.NumeroSolicitud, String.Format("Enviando {0}, estado {1}", item.NumeroSolicitud, item.codEstado));
 
-                           
+
                         }
                     }
                     else
@@ -220,9 +224,9 @@ namespace sas
                                 servicioDetalle.Enviado = true;
                                 ServicioItemManager.SaveTask(servicioDetalle);
                                 Log.Debug("SasService", String.Format("Enviando {0}, estado {1}", item.NumeroSolicitud, item.codEstado));
-                                SendNotification(String.Format("Enviando {0}", item.NumeroSolicitud));
+                                SendNotification(item.NumeroSolicitud, String.Format("Enviando {0}, estado {1}", item.NumeroSolicitud, item.codEstado));
 
-                               
+
                             }
                         }
                     }
@@ -255,7 +259,7 @@ namespace sas
           
         }
 
-        void SendNotification(string mensaje)
+        void SendNotification(int notid, string mensaje)
         {
             var nMgr = (NotificationManager)GetSystemService(NotificationService);
             //var notification = new Notification(Resource.Drawable.Icon, mensaje);
@@ -266,7 +270,7 @@ namespace sas
                 .SetContentText(mensaje)
                 .SetSmallIcon(Resource.Drawable.Icon);
 
-            nMgr.Notify(0, built.Build());
+            nMgr.Notify(notid, built.Build());
         }
 
         public override void OnDestroy ()
@@ -308,6 +312,7 @@ namespace sas
             }
             return false;
         }
+
 
         void SendNotification ()
 		{

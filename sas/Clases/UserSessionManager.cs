@@ -11,6 +11,7 @@ using Android.Views;
 using Android.Widget;
 using Android.Preferences;
 using Java.Util.Prefs;
+using sas.Core;
 
 namespace sas.Clases
 {
@@ -36,8 +37,8 @@ namespace sas.Clases
             this.mContext = context;
             mSharedPrefs = PreferenceManager.GetDefaultSharedPreferences(mContext);
             mPrefsEditor = mSharedPrefs.Edit();
-            string conn = "http://sasa.futura.com.py:88/futura/";
-           // string conn = "http://futura.com.py:88/sas_futura/";
+           // string conn = "http://sasa.futura.com.py:88/futura/";
+            string conn = "http://futura.com.py:88/sas_futura/";
           
             if (string.IsNullOrEmpty(getAccessConn()) || getAccessConn()!= conn)
             {
@@ -179,8 +180,11 @@ namespace sas.Clases
             // Clearing all data from Shared Preferences
             mPrefsEditor.Clear();
             mPrefsEditor.Commit();
+            
+            //delete sended files from local repository
+            clearItemsSended();
 
-            // After logout redirect user to Loing Activity
+           // After logout redirect user to Loing Activity
             Intent i = new Intent(mContext, typeof(MainActivity));
 
             // Closing all the Activities
@@ -193,6 +197,18 @@ namespace sas.Clases
             mContext.StartActivity(i);
 
             
+        }
+
+        private void clearItemsSended()
+        {
+            //delete sended files from local repository
+            IList<ServicioItem> servicios = ServicioItemManager.GetServiciosSended();
+            foreach (var item in servicios)
+            {
+                ServicioItemManager.DeleteTask(item.ID);
+            }
+
+
         }
 
        

@@ -132,6 +132,32 @@ namespace sas.Core
             return tl;
         }
 
+
+        public IEnumerable<ServicioItem> GetItemsSended()
+        {
+            var tl = new List<ServicioItem>();
+
+            lock (locker)
+            {
+                connection = new SqliteConnection("Data Source=" + path);
+                connection.Open();
+                using (var contents = connection.CreateCommand())
+                {
+                    contents.CommandText = "SELECT [_id], id_solicitud, NumeroSolicitud, Nombre, Fecha, codMovil, Estado, " +
+                                           " codEstado, HoraEstado, codInstitucion, codDesenlace, [Enviado] , AuditUsuario , " +
+                                           " AuditId ,GeoData,Address, sv_ta , sv_fc , sv_tempe , sv_fresp , SAT , Glasgow , Glicemia, IndicacionArribo " +
+                                           " from [ServiciosDet] WHERE [Enviado] = 1  ";
+                    var r = contents.ExecuteReader();
+                    while (r.Read())
+                    {
+                        tl.Add(FromReader(r));
+                    }
+                }
+                connection.Close();
+                GC.Collect();
+            }
+            return tl;
+        }
         public ServicioItem GetItem (int id) 
 		{
 			var t = new ServicioItem();

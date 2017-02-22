@@ -189,11 +189,13 @@ namespace sas
             }
             if (item.TitleFormatted.ToString() == "Cerrar Sesión")
             {
+
+
                 //para cerrar sesión y desuscribir el push de google
                 var intent = new Intent(this, typeof(UnRegistrationIntentService));
                 StartService(intent);
 
-                session.logoutUser();
+                //session.logoutUser();
                                 
                 // StopService(new Intent("com.sas.searchpending"));
                 StopService(new Intent("com.xamarin.sas"));
@@ -433,26 +435,26 @@ namespace sas
                 return;
             }
 
-            if (t.codEstado == "008")
-            {
-                //
-                if (!(!(string.IsNullOrEmpty(t.codInstitucion)) && t.codInstitucion != "Null"))
-                {
+            //if (t.codEstado == "008")
+            //{
+            //    //
+            //    if (!(!(string.IsNullOrEmpty(t.codInstitucion)) && t.codInstitucion != "Null"))
+            //    {
 
-                    Finish();
+            //        Finish();
 
 
-                    //        var newActivity = new Intent(this, typeof(RegistrarServicio));
+            //        //        var newActivity = new Intent(this, typeof(RegistrarServicio));
 
-                    //        Bundle valuesForActivity = new Bundle();
-                    //        valuesForActivity.PutInt("ServiciosDet", t.ID);
-                    //        newActivity.PutExtras(valuesForActivity);
+            //        //        Bundle valuesForActivity = new Bundle();
+            //        //        valuesForActivity.PutInt("ServiciosDet", t.ID);
+            //        //        newActivity.PutExtras(valuesForActivity);
 
-                    //        //newActivity.PutExtra("ServiciosDet", t.ID);
-                    //        StartActivity(newActivity);
-                    //        return;
-                }
-            }
+            //        //        //newActivity.PutExtra("ServiciosDet", t.ID);
+            //        //        StartActivity(newActivity);
+            //        //        return;
+            //    }
+            //}
             //    else
             //    {
             //        Toast.MakeText(this, "Servicio Finalizado", ToastLength.Long).Show();
