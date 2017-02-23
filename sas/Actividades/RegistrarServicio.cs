@@ -750,7 +750,7 @@ namespace sas
                 {
                     id_Solicitud = servicio.id_Solicitud,
                     NumeroSolicitud = servicio.NumeroSolicitud,
-                    HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now),
+                    HoraEstado = string.Format("{0:HH:mm:ss}", System.DateTime.Now),
                     codEstado = idestado,
                     Estado = servicio.Estado
                 };
@@ -962,7 +962,7 @@ namespace sas
                 {
                     id_Solicitud = servicio.id_Solicitud,
                     NumeroSolicitud = servicio.NumeroSolicitud,
-                    HoraEstado = string.Format("{0:HH:mm}", System.DateTime.Now),
+                    HoraEstado = string.Format("{0:HH:mm:ss}", System.DateTime.Now),
                     codEstado = idestado,
                     Estado = (idestado=="009") ? "C" : servicio.Estado
 
