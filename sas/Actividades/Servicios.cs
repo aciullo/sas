@@ -684,9 +684,9 @@ namespace sas
 
                 lstServicios.ChoiceMode = ChoiceMode.Single;
 
-                //lstServicios.Adapter = new ServicesAdapter(this, servicios);
+                lstServicios.Adapter = new ServicesAdapter(this, servicios);
 
-                lstServicios.Adapter = new RegistroServicioLocalAdapter(this, servicios);
+               // lstServicios.Adapter = new RegistroServicioLocalAdapter(this, servicios);
             }
 
         }
