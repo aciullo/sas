@@ -39,10 +39,10 @@ namespace sas.Clases
             mPrefsEditor = mSharedPrefs.Edit();
            // string conn = "http://sasa.futura.com.py:88/futura/";
             string conn = "http://futura.com.py:88/sas_futura/";
-          
+            
             if (string.IsNullOrEmpty(getAccessConn()) || getAccessConn()!= conn)
             {
-                saveAccessIP(conn);
+                saveAccessConn(conn);
             }
             
 
@@ -61,7 +61,7 @@ namespace sas.Clases
             mPrefsEditor.PutString(PREFERENCE_TOKEN, token);
             mPrefsEditor.Commit();
         }
-        public void saveAccessIP(string conn)
+        public void saveAccessConn(string conn)
         {
             mPrefsEditor.PutString(PREFERENCE_CONEXION, conn);
             mPrefsEditor.Commit();

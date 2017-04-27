@@ -94,6 +94,7 @@ namespace sas
         {
             if (NetworkConnected(this))
             {
+
                 var t = new Thread(() => { SincronizarEstados(); });
                 t.Start();
             }
