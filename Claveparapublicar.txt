@@ -1,3 +1,5 @@
 AppFutura01
 
-Alias: sasFutura
+Alias: sasmobile
+
+C:\Program Files\Java\jdk1.8.0_101\\bin\keytool.exe

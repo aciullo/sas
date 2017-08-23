@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SasAndroid", "SasAndroid\SasAndroid.csproj", "{B9D91D16-8AFD-4970-84C0-0D51C330B00E}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SasSharedCode", "SasSharedCode\SasSharedCode.shproj", "{579BD547-2865-4254-B242-8EB4DDB25288}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageSender", "MessageSender\MessageSender.csproj", "{90C5CFCA-6158-4767-8549-248188470822}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{BA3B46DA-D5EC-46BA-A561-E0C1C598E93F}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -29,6 +31,10 @@ Global
 		{90C5CFCA-6158-4767-8549-248188470822}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90C5CFCA-6158-4767-8549-248188470822}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90C5CFCA-6158-4767-8549-248188470822}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA3B46DA-D5EC-46BA-A561-E0C1C598E93F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA3B46DA-D5EC-46BA-A561-E0C1C598E93F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA3B46DA-D5EC-46BA-A561-E0C1C598E93F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA3B46DA-D5EC-46BA-A561-E0C1C598E93F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
